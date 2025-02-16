@@ -1,9 +1,17 @@
 #include <SFML/Graphics.hpp>
-#include <vector>
+#include <vector>   
 #include <string>
 
 int main()
 {
+
+    int lvl = 0;
+    int xp = 250;
+    int xp_to_max = (lvl + 1) * (lvl + 100) * 5;
+    const int totalSegments = 20;
+    const int segmentWidth = 49;
+    const int segmentHeight = 10;
+
     sf::RenderWindow window(sf::VideoMode(1000, 800), "Ariadne");
 
     sf::Font font;
@@ -14,13 +22,13 @@ int main()
 
     sf::RectangleShape statsBackground(sf::Vector2f(200.f, 120.f));
     statsBackground.setFillColor(sf::Color(100, 100, 100, 200));
-    statsBackground.setPosition(10.f, 10.f);
+    statsBackground.setPosition(10.f, 30.f);
 
     sf::Text statsText;
     statsText.setFont(font);
     statsText.setCharacterSize(18);
     statsText.setFillColor(sf::Color::White);
-    statsText.setPosition(20.f, 20.f);
+    statsText.setPosition(20.f, 40.f);
     statsText.setLineSpacing(1.5f);
     statsText.setString(
         "LVL: 5\n"
@@ -41,8 +49,7 @@ int main()
     inputBox.setPosition(10.f, 750.f);
 
     std::vector<std::string> terminalMessages = {
-        "Welcome to the dungeon!\n"
-    };
+        "Welcome to the dungeon!\n"};
 
     sf::Text terminalText;
     terminalText.setFont(font);
@@ -84,9 +91,10 @@ int main()
                 }
             }
         }
+        int filledSegments = static_cast<int>((static_cast<float>(xp) / xp_to_max) * totalSegments);
 
         std::string terminalDisplay;
-        for (const auto& msg : terminalMessages)
+        for (const auto &msg : terminalMessages)
         {
             terminalDisplay += msg + "\n";
         }
@@ -95,6 +103,19 @@ int main()
         inputText.setString("> " + userInput);
 
         window.clear();
+
+        for (int i = 0; i < totalSegments; i++)
+        {
+            sf::RectangleShape segment(sf::Vector2f(segmentWidth - 6, segmentHeight));
+            segment.setPosition(10.f + i * segmentWidth, 10.f);
+
+            if (i < filledSegments)
+                segment.setFillColor(sf::Color(0, 255, 0));
+            else
+                segment.setFillColor(sf::Color(50, 50, 50));
+
+            window.draw(segment);
+        }
         window.draw(statsBackground);
         window.draw(statsText);
         window.draw(terminalBackground);
