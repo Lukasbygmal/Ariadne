@@ -1,0 +1,4 @@
+CREATE TABLE Users (user_id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255) NOT NULL, xp INT NOT NULL, hp INT NOT NULL, strength_stat INT NOT NULL, dexterity_stat INT NOT NULL, agility_stat INT NOT NULL, armor_stat INT NOT NULL);
+CREATE TABLE Items (item_id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255) NOT NULL, type VARCHAR(50) NOT NULL, attributes JSON);
+CREATE TABLE Equipment (equipment_id INT PRIMARY KEY AUTO_INCREMENT, user_id INT, item_id INT, slot VARCHAR(50), FOREIGN KEY (user_id) REFERENCES Users(user_id), FOREIGN KEY (item_id) REFERENCES Items(item_id), UNIQUE (user_id, slot));
+CREATE TABLE Inventory (inventory_id INT PRIMARY KEY AUTO_INCREMENT, user_id INT, item_id INT, slot INT, FOREIGN KEY (user_id) REFERENCES Users(user_id), FOREIGN KEY (item_id) REFERENCES Items(item_id), UNIQUE (user_id, slot));
