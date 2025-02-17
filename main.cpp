@@ -8,6 +8,13 @@ int main()
     int lvl = 0;
     int xp = 250;
     int xp_to_max = (lvl + 1) * (lvl + 100) * 5;
+    int max_hp = 100;
+    int current_hp = 60;
+    int strength = 15;
+    int intelligence = 12;
+    int agility = 14;
+    int armor = 69;
+
     const int totalSegments = 20;
     const int segmentWidth = 49;
     const int segmentHeight = 10;
@@ -20,23 +27,52 @@ int main()
         return -1;
     }
 
-    sf::RectangleShape statsBackground(sf::Vector2f(200.f, 120.f));
+    sf::RectangleShape statsBackground(sf::Vector2f(370.f, 210.f));
     statsBackground.setFillColor(sf::Color(100, 100, 100, 200));
-    statsBackground.setPosition(10.f, 30.f);
+    statsBackground.setPosition(620.f, 580.f);
 
-    sf::Text statsText;
-    statsText.setFont(font);
-    statsText.setCharacterSize(18);
-    statsText.setFillColor(sf::Color::White);
-    statsText.setPosition(20.f, 40.f);
-    statsText.setLineSpacing(1.5f);
-    statsText.setString(
-        "LVL: 5\n"
-        "HP: 100\n"
-        "STR: 15\n"
-        "DEX: 12\n"
-        "AGI: 14\n"
-        "ARMOR: 8");
+     sf::Text levelText;
+     levelText.setFont(font);
+     levelText.setCharacterSize(24);
+     levelText.setFillColor(sf::Color::White);
+     levelText.setString("Lvl " + std::to_string(lvl));
+     levelText.setPosition(800.f - levelText.getGlobalBounds().width / 2, 590.f);
+ 
+     sf::Text hpText;
+     hpText.setFont(font);
+     hpText.setCharacterSize(20);
+     hpText.setFillColor(sf::Color::White);
+     hpText.setString(std::to_string(current_hp) + " / " + std::to_string(max_hp) + "HP");
+     hpText.setPosition(800.f - hpText.getGlobalBounds().width / 2, 620.f);
+ 
+     sf::Text strengthText;
+     strengthText.setFont(font);
+     strengthText.setCharacterSize(20);
+     strengthText.setFillColor(sf::Color::White);
+     strengthText.setString("Strength: " + std::to_string(strength));
+     strengthText.setPosition(640.f, 660.f);
+ 
+     sf::Text intelligenceText;
+     intelligenceText.setFont(font);
+     intelligenceText.setCharacterSize(20);
+     intelligenceText.setFillColor(sf::Color::White);
+     intelligenceText.setString("Intelligence: " + std::to_string(intelligence));
+     intelligenceText.setPosition(840.f, 660.f);
+ 
+     sf::Text agilityText;
+     agilityText.setFont(font);
+     agilityText.setCharacterSize(20);
+     agilityText.setFillColor(sf::Color::White);
+     agilityText.setString("Agility: " + std::to_string(agility));
+     agilityText.setPosition(640.f, 700.f);
+ 
+     sf::Text armorText;
+     armorText.setFont(font);
+     armorText.setCharacterSize(20);
+     armorText.setFillColor(sf::Color::White);
+     armorText.setString("Armor: " + std::to_string(armor));
+     armorText.setPosition(840.f, 700.f);
+
 
     std::string userInput;
 
@@ -117,7 +153,12 @@ int main()
             window.draw(segment);
         }
         window.draw(statsBackground);
-        window.draw(statsText);
+        window.draw(levelText);
+        window.draw(hpText);
+        window.draw(strengthText);
+        window.draw(intelligenceText);
+        window.draw(agilityText);
+        window.draw(armorText);
         window.draw(terminalBackground);
         window.draw(terminalText);
         window.draw(inputBox);
