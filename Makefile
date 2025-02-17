@@ -8,7 +8,7 @@ CXXFLAGS = -c -Wall
 LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
 
 # Source files
-SRCS = main.cpp
+SRCS = main.cpp parse_input.cpp
 
 # Object files
 OBJS = $(SRCS:.cpp=.o)

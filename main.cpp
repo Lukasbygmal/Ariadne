@@ -1,6 +1,8 @@
 #include <SFML/Graphics.hpp>
-#include <vector>   
+#include <vector>
 #include <string>
+#include <iostream>
+#include "parse_input.h"
 
 int main()
 {
@@ -31,48 +33,47 @@ int main()
     statsBackground.setFillColor(sf::Color(100, 100, 100, 200));
     statsBackground.setPosition(620.f, 580.f);
 
-     sf::Text levelText;
-     levelText.setFont(font);
-     levelText.setCharacterSize(24);
-     levelText.setFillColor(sf::Color::White);
-     levelText.setString("Lvl " + std::to_string(lvl));
-     levelText.setPosition(800.f - levelText.getGlobalBounds().width / 2, 590.f);
- 
-     sf::Text hpText;
-     hpText.setFont(font);
-     hpText.setCharacterSize(20);
-     hpText.setFillColor(sf::Color::White);
-     hpText.setString(std::to_string(current_hp) + " / " + std::to_string(max_hp) + "HP");
-     hpText.setPosition(800.f - hpText.getGlobalBounds().width / 2, 620.f);
- 
-     sf::Text strengthText;
-     strengthText.setFont(font);
-     strengthText.setCharacterSize(20);
-     strengthText.setFillColor(sf::Color::White);
-     strengthText.setString("Strength: " + std::to_string(strength));
-     strengthText.setPosition(640.f, 660.f);
- 
-     sf::Text intelligenceText;
-     intelligenceText.setFont(font);
-     intelligenceText.setCharacterSize(20);
-     intelligenceText.setFillColor(sf::Color::White);
-     intelligenceText.setString("Intelligence: " + std::to_string(intelligence));
-     intelligenceText.setPosition(840.f, 660.f);
- 
-     sf::Text agilityText;
-     agilityText.setFont(font);
-     agilityText.setCharacterSize(20);
-     agilityText.setFillColor(sf::Color::White);
-     agilityText.setString("Agility: " + std::to_string(agility));
-     agilityText.setPosition(640.f, 700.f);
- 
-     sf::Text armorText;
-     armorText.setFont(font);
-     armorText.setCharacterSize(20);
-     armorText.setFillColor(sf::Color::White);
-     armorText.setString("Armor: " + std::to_string(armor));
-     armorText.setPosition(840.f, 700.f);
+    sf::Text levelText;
+    levelText.setFont(font);
+    levelText.setCharacterSize(24);
+    levelText.setFillColor(sf::Color::White);
+    levelText.setString("Lvl " + std::to_string(lvl));
+    levelText.setPosition(800.f - levelText.getGlobalBounds().width / 2, 590.f);
 
+    sf::Text hpText;
+    hpText.setFont(font);
+    hpText.setCharacterSize(20);
+    hpText.setFillColor(sf::Color::White);
+    hpText.setString(std::to_string(current_hp) + " / " + std::to_string(max_hp) + "HP");
+    hpText.setPosition(800.f - hpText.getGlobalBounds().width / 2, 620.f);
+
+    sf::Text strengthText;
+    strengthText.setFont(font);
+    strengthText.setCharacterSize(20);
+    strengthText.setFillColor(sf::Color::White);
+    strengthText.setString("Strength: " + std::to_string(strength));
+    strengthText.setPosition(640.f, 660.f);
+
+    sf::Text intelligenceText;
+    intelligenceText.setFont(font);
+    intelligenceText.setCharacterSize(20);
+    intelligenceText.setFillColor(sf::Color::White);
+    intelligenceText.setString("Intelligence: " + std::to_string(intelligence));
+    intelligenceText.setPosition(840.f, 660.f);
+
+    sf::Text agilityText;
+    agilityText.setFont(font);
+    agilityText.setCharacterSize(20);
+    agilityText.setFillColor(sf::Color::White);
+    agilityText.setString("Agility: " + std::to_string(agility));
+    agilityText.setPosition(640.f, 700.f);
+
+    sf::Text armorText;
+    armorText.setFont(font);
+    armorText.setCharacterSize(20);
+    armorText.setFillColor(sf::Color::White);
+    armorText.setString("Armor: " + std::to_string(armor));
+    armorText.setPosition(840.f, 700.f);
 
     std::string userInput;
 
@@ -115,7 +116,17 @@ int main()
                 }
                 else if (event.text.unicode == '\r')
                 {
-                    terminalMessages.push_back("> " + userInput + "\n");
+                    std::tuple<bool, bool> result;
+                    if (parse_input(userInput, result))
+                    {
+                        terminalMessages.push_back("You " + userInput + "\n");
+                        std::cout << "Success!\n";
+                    }
+                    else
+                    {
+                        terminalMessages.push_back("You realize you cannot " + userInput + " and start questioning your sanity!\n");
+                        std::cout << "Invalid command. Try again.\n";
+                    }
                     userInput.clear();
 
                     if (terminalMessages.size() > 7)
