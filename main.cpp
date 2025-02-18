@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include "parse_input.h"
+#include "room.h"
 
 int main()
 {
@@ -28,6 +29,16 @@ int main()
     {
         return -1;
     }
+
+    sf::RectangleShape roomBackground(sf::Vector2f(600.f, 400.f));
+    roomBackground.setFillColor(sf::Color(100, 100, 100, 200));
+    roomBackground.setPosition(10.f, 170.f);
+
+    sf::Text roomText;
+    roomText.setFont(font);
+    roomText.setCharacterSize(20);
+    roomText.setFillColor(sf::Color::White);
+    roomText.setPosition(20.f, 180.f);
 
     sf::RectangleShape statsBackground(sf::Vector2f(370.f, 210.f));
     statsBackground.setFillColor(sf::Color(100, 100, 100, 200));
@@ -100,6 +111,10 @@ int main()
     inputText.setFillColor(sf::Color::Black);
     inputText.setPosition(20.f, 760.f);
 
+    Room current_room(5);
+    std::string roomInfo = current_room.to_string();
+    roomText.setString(roomInfo);
+
     while (window.isOpen())
     {
         sf::Event event;
@@ -121,6 +136,10 @@ int main()
                     {
                         terminalMessages.push_back("You " + userInput + "\n");
                         std::cout << "Success!\n";
+                        Room new_room(5);
+                        current_room = new_room;
+                        std::string roomInfo = current_room.to_string();
+                        roomText.setString(roomInfo);
                     }
                     else
                     {
@@ -163,6 +182,8 @@ int main()
 
             window.draw(segment);
         }
+        window.draw(roomBackground);
+        window.draw(roomText);
         window.draw(statsBackground);
         window.draw(levelText);
         window.draw(hpText);
