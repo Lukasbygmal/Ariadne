@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include "parse_input.h"
+#include "handle_action.h"
 #include "room.h"
 
 int main()
@@ -131,11 +132,13 @@ int main()
                 }
                 else if (event.text.unicode == '\r')
                 {
-                    std::tuple<bool, bool> result;
+                    Action result("null");
+
                     if (parse_input(userInput, result))
                     {
                         terminalMessages.push_back("You " + userInput + "\n");
                         std::cout << "Success!\n";
+                        handle_action(result);
                         Room new_room(5);
                         current_room = new_room;
                         std::string roomInfo = current_room.to_string();

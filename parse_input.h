@@ -3,7 +3,8 @@
 
 #include <string>
 #include <tuple>
+#include "handle_action.h"
 
-bool parse_input(const std::string& input, std::tuple<bool, bool>& result);
+bool parse_input(const std::string &input, Action &result);
 
 #endif
