@@ -5,19 +5,11 @@
 #include "parse_input.h"
 #include "handle_action.h"
 #include "room.h"
+#include "player.h"
 
 int main()
 {
-
-    int lvl = 0;
-    int xp = 250;
-    int xp_to_max = (lvl + 1) * (lvl + 100) * 5;
-    int max_hp = 100;
-    int current_hp = 60;
-    int strength = 15;
-    int intelligence = 12;
-    int agility = 14;
-    int armor = 69;
+    Player player("legend27");
 
     const int totalSegments = 20;
     const int segmentWidth = 49;
@@ -49,42 +41,36 @@ int main()
     levelText.setFont(font);
     levelText.setCharacterSize(24);
     levelText.setFillColor(sf::Color::White);
-    levelText.setString("Lvl " + std::to_string(lvl));
-    levelText.setPosition(800.f - levelText.getGlobalBounds().width / 2, 590.f);
+    levelText.setPosition(800.f, 590.f);
 
     sf::Text hpText;
     hpText.setFont(font);
     hpText.setCharacterSize(20);
     hpText.setFillColor(sf::Color::White);
-    hpText.setString(std::to_string(current_hp) + " / " + std::to_string(max_hp) + "HP");
-    hpText.setPosition(800.f - hpText.getGlobalBounds().width / 2, 620.f);
+    hpText.setPosition(800.f, 620.f);
 
     sf::Text strengthText;
     strengthText.setFont(font);
     strengthText.setCharacterSize(20);
     strengthText.setFillColor(sf::Color::White);
-    strengthText.setString("Strength: " + std::to_string(strength));
     strengthText.setPosition(640.f, 660.f);
 
     sf::Text intelligenceText;
     intelligenceText.setFont(font);
     intelligenceText.setCharacterSize(20);
     intelligenceText.setFillColor(sf::Color::White);
-    intelligenceText.setString("Intelligence: " + std::to_string(intelligence));
     intelligenceText.setPosition(840.f, 660.f);
 
     sf::Text agilityText;
     agilityText.setFont(font);
     agilityText.setCharacterSize(20);
     agilityText.setFillColor(sf::Color::White);
-    agilityText.setString("Agility: " + std::to_string(agility));
     agilityText.setPosition(640.f, 700.f);
 
     sf::Text armorText;
     armorText.setFont(font);
     armorText.setCharacterSize(20);
     armorText.setFillColor(sf::Color::White);
-    armorText.setString("Armor: " + std::to_string(armor));
     armorText.setPosition(840.f, 700.f);
 
     std::string userInput;
@@ -160,7 +146,19 @@ int main()
                 }
             }
         }
-        int filledSegments = static_cast<int>((static_cast<float>(xp) / xp_to_max) * totalSegments);
+
+        levelText.setString("Lvl " + std::to_string(player.getLevel()));
+        levelText.setPosition(800.f - levelText.getGlobalBounds().width / 2, 590.f);
+
+        hpText.setString(std::to_string(player.getCurrentHP()) + " / " + std::to_string(player.getMaxHP()) + "HP");
+        hpText.setPosition(800.f - hpText.getGlobalBounds().width / 2, 620.f);
+
+        strengthText.setString("Strength: " + std::to_string(player.getStrength()));
+        intelligenceText.setString("Intelligence: " + std::to_string(player.getIntelligence()));
+        agilityText.setString("Agility: " + std::to_string(player.getAgility()));
+        armorText.setString("Armor: " + std::to_string(player.getArmor()));
+
+        int filledSegments = static_cast<int>((static_cast<float>(player.getXP()) / player.getXPToMax()) * totalSegments);
 
         std::string terminalDisplay;
         for (const auto &msg : terminalMessages)
