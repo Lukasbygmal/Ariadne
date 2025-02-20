@@ -3,7 +3,6 @@
 std::random_device Room::rd;
 std::mt19937 Room::rng(Room::rd());
 
-
 Room::Room(int difficulty)
 {
     rng.seed(rd());
@@ -15,9 +14,10 @@ Room::Room(int difficulty)
     std::uniform_int_distribution<int> monsterDist(0, difficulty);
 
     type = typeDist(rng);
-    path_l = pathDist(rng);
-    path_m = pathDist(rng);
-    path_r = pathDist(rng);
+    path_n = pathDist(rng);
+    path_e = pathDist(rng);
+    path_s = pathDist(rng);
+    path_w = pathDist(rng);
 
     if (chestDist(rng))
         chest = 1;
@@ -35,9 +35,10 @@ std::string Room::to_string() const
 {
     std::string roomInfo = "Room:\n\n";
     roomInfo += "Type: " + std::to_string(type) + "\n\n";
-    roomInfo += "Paths: " + std::to_string(path_l) + ", " +
-                std::to_string(path_m) + ", " +
-                std::to_string(path_r) + "\n\n";
+    roomInfo += "Paths: " + std::to_string(path_s) + ", " +
+                std::to_string(path_n) + ", " +
+                std::to_string(path_e) + ", " +
+                std::to_string(path_w) + "\n\n";
     if (chest)
         roomInfo += "Chest: " + std::to_string(*chest) + "\n\n";
     if (corpse)

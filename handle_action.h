@@ -4,6 +4,7 @@
 #include <iostream>
 #include <optional>
 #include <string>
+#include "dungeon.h"
 
 struct Action
 {
@@ -26,6 +27,6 @@ struct Action
     }
 };
 
-void handle_action(const Action &action);
+void handle_action(const Action &action, Dungeon &dungeon);
 
 #endif // HANDLE_ACTION_H

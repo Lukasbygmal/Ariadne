@@ -12,9 +12,10 @@ private:
     static std::random_device rd;
 
     int type;
-    int path_l;
-    int path_m;
-    int path_r;
+    int path_n;
+    int path_e;
+    int path_s;
+    int path_w;
     std::optional<int> chest;
     std::optional<int> corpse;
     std::optional<int> engraving;
@@ -27,4 +28,4 @@ public:
     std::string to_string() const;
 };
 
-#endif // ROOM_H
+#endif
