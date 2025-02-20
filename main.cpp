@@ -12,6 +12,7 @@ int main()
 {
     Player player("legend27");
     Dungeon dungeon(6, 2);
+    GameMode mode = DUNGEON;
 
     const int totalSegments = 20;
     const int segmentWidth = 49;
@@ -99,6 +100,8 @@ int main()
     inputText.setCharacterSize(18);
     inputText.setFillColor(sf::Color::Black);
     inputText.setPosition(20.f, 760.f);
+
+    roomText.setString(dungeon.getCurrentRoom().to_string());
 
     while (window.isOpen())
     {
