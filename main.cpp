@@ -6,10 +6,12 @@
 #include "handle_action.h"
 #include "room.h"
 #include "player.h"
+#include "dungeon.h"
 
 int main()
 {
     Player player("legend27");
+    Dungeon dungeon(6, 2);
 
     const int totalSegments = 20;
     const int segmentWidth = 49;
@@ -98,10 +100,6 @@ int main()
     inputText.setFillColor(sf::Color::Black);
     inputText.setPosition(20.f, 760.f);
 
-    Room current_room(5);
-    std::string roomInfo = current_room.to_string();
-    roomText.setString(roomInfo);
-
     while (window.isOpen())
     {
         sf::Event event;
@@ -124,11 +122,8 @@ int main()
                     {
                         terminalMessages.push_back("You " + userInput + "\n");
                         std::cout << "Success!\n";
-                        handle_action(result);
-                        Room new_room(5);
-                        current_room = new_room;
-                        std::string roomInfo = current_room.to_string();
-                        roomText.setString(roomInfo);
+                        handle_action(result, dungeon);
+                        roomText.setString(dungeon.getCurrentRoom().to_string());
                     }
                     else
                     {

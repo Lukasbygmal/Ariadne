@@ -4,12 +4,11 @@
 #include <sstream>
 #include <algorithm>
 #include <cctype>
-#include "handle_action.h"
 
 bool parse_input(const std::string &input, Action &action)
 {
     std::vector<std::string> valid_verbs = {"go", "rest", "investigate", "search", "open", "pray"};
-    std::vector<std::string> valid_directions = {"left", "right", "middle"};
+    std::vector<std::string> valid_directions = {"north", "west", "east", "south"};
     std::vector<std::string> valid_objects = {"chest", "engraving", "corpse"};
 
     std::istringstream iss(input);
