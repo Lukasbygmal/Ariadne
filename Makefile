@@ -8,7 +8,7 @@ CXXFLAGS = -c -Wall
 LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
 
 # Source files
-SRCS = main.cpp parse_input.cpp room.cpp handle_action.cpp player.cpp monster.cpp dungeon.cpp
+SRCS = main.cpp parse_input.cpp room.cpp handle_action.cpp player.cpp monster.cpp dungeon.cpp game.cpp game_ui.cpp
 
 # Object files
 OBJS = $(SRCS:.cpp=.o)
