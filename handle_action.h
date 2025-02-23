@@ -3,7 +3,8 @@
 
 #include "action.h"
 #include "dungeon.h"
+#include "game.h"
 
-void handle_action(const Action &action, Dungeon &dungeon);
+void handle_action(const Action &action, Game &game);
 
 #endif

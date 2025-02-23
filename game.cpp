@@ -3,9 +3,8 @@
 #include <iostream>
 
 Game::Game()
-    : player("legend27"), dungeon(6, 2), mode(GameMode::DUNGEON), window(sf::VideoMode(1000, 800), "Ariadne")
+    : player("legend27"), mode(GameMode::MENU), window(sf::VideoMode(1000, 800), "Ariadne")
 {
-    terminalMessages.push_back("Welcome to the dungeon!\n");
     ui.initialize();
 }
 
@@ -27,7 +26,7 @@ void Game::handleCommand(const std::string &command)
     {
         addMessage("You " + command + "\n");
         std::cout << "Success!\n";
-        handle_action(result, dungeon);
+        handle_action(result, *this);
     }
     else
     {
@@ -47,7 +46,25 @@ void Game::addMessage(const std::string &message)
 
 void Game::update()
 {
-    //not sure what to do here
+    // not sure what to do here
+}
+
+void Game::changeMode(GameMode newMode)
+{
+    mode = newMode;
+}
+
+void Game::enterDungeon(int size, int difficulty)
+{
+    dungeon.emplace(size, difficulty);
+    changeMode(GameMode::DUNGEON);
+}
+
+void Game::leaveDungeon()
+{
+    dungeon.reset();
+    changeMode(GameMode::MENU);
+    addMessage("You escaped the dungeon\n");
 }
 
 void Game::run()
