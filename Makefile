@@ -2,7 +2,7 @@
 CXX = g++
 
 # Compiler flags
-CXXFLAGS = -c -Wall
+CXXFLAGS = -c -Wall -g
 
 # Linker flags
 LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
@@ -35,4 +35,8 @@ run: $(TARGET)
 clean:
 	rm -f $(OBJS) $(TARGET)
 
-.PHONY: all clean run
+# Debug the program with gdb
+gdb: $(TARGET)
+	gdb ./$(TARGET)
+
+.PHONY: all clean run gdb

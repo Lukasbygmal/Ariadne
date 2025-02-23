@@ -7,7 +7,6 @@
 #include "game_ui.h"
 #include <SFML/Graphics.hpp>
 #include <string>
-#include <optional>
 
 class Game
 {
@@ -16,8 +15,8 @@ public:
     void run();
 
     const Player &getPlayer() const { return player; }
-    const std::optional<Dungeon> &getDungeon() const { return dungeon; }
-    std::optional<Dungeon> &getDungeon() { return dungeon; }
+    const Dungeon &getDungeon() const { return dungeon; }
+    Dungeon &getDungeon() { return dungeon; }
     GameMode getMode() const { return mode; }
 
     void handleCommand(const std::string &command);
@@ -32,7 +31,7 @@ private:
     void update();
 
     Player player;
-    std::optional<Dungeon> dungeon;
+    Dungeon dungeon;
     GameMode mode;
     GameUI ui;
     std::vector<std::string> terminalMessages;

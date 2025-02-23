@@ -3,7 +3,7 @@
 #include <iostream>
 
 Game::Game()
-    : player("legend27"), mode(GameMode::MENU), window(sf::VideoMode(1000, 800), "Ariadne")
+    : player("legend27"), dungeon(6, 2), mode(GameMode::MENU), window(sf::VideoMode(1000, 800), "Ariadne") // Initialize dungeon with default values
 {
     ui.initialize();
 }
@@ -56,13 +56,12 @@ void Game::changeMode(GameMode newMode)
 
 void Game::enterDungeon(int size, int difficulty)
 {
-    dungeon.emplace(size, difficulty);
+    dungeon = Dungeon(size, difficulty);
     changeMode(GameMode::DUNGEON);
 }
 
 void Game::leaveDungeon()
 {
-    dungeon.reset();
     changeMode(GameMode::MENU);
     addMessage("You escaped the dungeon\n");
 }
