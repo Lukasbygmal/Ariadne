@@ -102,9 +102,9 @@ void GameUI::handleInput(const sf::Event &event, Game &game)
 void GameUI::updateStats(const Game &game)
 {
     const Player &player = game.getPlayer();
-    if (game.getDungeon())
+    if (game.getMode() == GameMode::DUNGEON)
     {
-        roomText.setString(game.getDungeon()->getCurrentRoom().to_string());
+        roomText.setString(game.getDungeon().getCurrentRoom().to_string());
     }
     else
     {

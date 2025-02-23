@@ -18,11 +18,11 @@ void handle_action(const Action &action, Game &game)
             game.enterDungeon(8, 5);
         }
     }
-    else if (action.verb == "go" && action.direction && game.getDungeon())
+    else if (action.verb == "go" && action.direction)
     {
         std::cout << "Go(" << *action.direction << ")" << std::endl;
 
-        auto &dungeon = *game.getDungeon();
+        Dungeon &dungeon = game.getDungeon();
         if (*action.direction == "east")
         {
             dungeon.goEast();
