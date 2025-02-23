@@ -102,9 +102,14 @@ void GameUI::handleInput(const sf::Event &event, Game &game)
 void GameUI::updateStats(const Game &game)
 {
     const Player &player = game.getPlayer();
-    const Dungeon &dungeon = game.getDungeon();
-
-    roomText.setString(dungeon.getCurrentRoom().to_string());
+    if (game.getDungeon())
+    {
+        roomText.setString(game.getDungeon()->getCurrentRoom().to_string());
+    }
+    else
+    {
+        roomText.setString("The Ink & Anvil Tavern");
+    }
 
     levelText.setString("Lvl " + std::to_string(player.getLevel()));
     levelText.setPosition(800.f - levelText.getGlobalBounds().width / 2, 590.f);

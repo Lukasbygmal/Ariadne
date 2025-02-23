@@ -1,24 +1,41 @@
 #include <iostream>
 #include "handle_action.h"
 
-void handle_action(const Action &action, Dungeon &dungeon)
+void handle_action(const Action &action, Game &game)
 {
-    if (action.verb == "go" && action.direction)
+    if (action.verb == "enter" && action.object)
+    {
+        if (*action.object == "easy")
+        {
+            game.enterDungeon(4, 1);
+        }
+        else if (*action.object == "medium")
+        {
+            game.enterDungeon(6, 3);
+        }
+        else if (*action.object == "hard")
+        {
+            game.enterDungeon(8, 5);
+        }
+    }
+    else if (action.verb == "go" && action.direction && game.getDungeon())
     {
         std::cout << "Go(" << *action.direction << ")" << std::endl;
-        if (action.direction == "east")
+
+        auto &dungeon = *game.getDungeon();
+        if (*action.direction == "east")
         {
             dungeon.goEast();
         }
-        if (action.direction == "west")
+        else if (*action.direction == "west")
         {
             dungeon.goWest();
         }
-        if (action.direction == "north")
+        else if (*action.direction == "north")
         {
             dungeon.goNorth();
         }
-        if (action.direction == "south")
+        else if (*action.direction == "south")
         {
             dungeon.goSouth();
         }
