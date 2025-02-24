@@ -106,9 +106,13 @@ void GameUI::updateStats(const Game &game)
     {
         roomText.setString(game.getDungeon().getCurrentRoom().to_string());
     }
-    else
+    else if (game.getMode() == GameMode::MENU)
     {
         roomText.setString("The Ink & Anvil Tavern");
+    }
+    else if (game.getMode() == GameMode::BATTLE)
+    {
+        roomText.setString("You are in a battle!");
     }
 
     levelText.setString("Lvl " + std::to_string(player.getLevel()));

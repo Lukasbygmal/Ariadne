@@ -24,6 +24,7 @@ public:
     const std::vector<std::string> &getMessages() const { return terminalMessages; }
     void enterDungeon(int size, int difficulty);
     void leaveDungeon();
+    void checkRoomHazards();
 
 private:
     void changeMode(GameMode newMode);

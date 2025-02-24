@@ -1,6 +1,7 @@
 #include "game.h"
 #include "handle_action.h"
 #include <iostream>
+#include <optional>
 
 Game::Game()
     : player("legend27"), dungeon(6, 2), mode(GameMode::MENU), window(sf::VideoMode(1000, 800), "Ariadne") // Initialize dungeon with default values
@@ -64,6 +65,26 @@ void Game::leaveDungeon()
 {
     changeMode(GameMode::MENU);
     addMessage("You escaped the dungeon\n");
+}
+
+void Game::checkRoomHazards()
+{
+    Room *current = dungeon.returnCurrentRoom();
+
+    std::optional<int> trap = current->getTrap();
+    if (trap)
+    {
+        int damage = *trap; //This should be changed once trap class is implemented
+        player.receiveDamage(damage);
+        addMessage("You triggered a trap! You take " + std::to_string(damage) + " damage (before armor).\n");
+    }
+
+    std::optional<int> monster = current->getMonster();
+    if (monster)
+    {
+        addMessage("A monster appears before you! Prepare for battle!\n");
+        changeMode(GameMode::BATTLE);
+    }
 }
 
 void Game::run()
