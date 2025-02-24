@@ -31,6 +31,16 @@ Room::Room(int difficulty)
         monster = monsterDist(rng);
 }
 
+std::optional<int> Room::getMonster() const
+{
+    return monster;
+}
+
+std::optional<int> Room::getTrap() const
+{
+    return trap;
+}
+
 std::string Room::to_string() const
 {
     std::string roomInfo = "Room:\n\n";

@@ -39,6 +39,7 @@ void handle_action(const Action &action, Game &game)
         {
             dungeon.goSouth();
         }
+        game.checkRoomHazards();
     }
     else if (action.verb == "investigate" && action.object)
     {
