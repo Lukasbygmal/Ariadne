@@ -74,7 +74,7 @@ void Game::checkRoomHazards()
     std::optional<int> trap = current->getTrap();
     if (trap)
     {
-        int damage = *trap; //This should be changed once trap class is implemented
+        int damage = *trap; // This should be changed once trap class is implemented
         player.receiveDamage(damage);
         addMessage("You triggered a trap! You take " + std::to_string(damage) + " damage (before armor).\n");
     }
@@ -85,6 +85,45 @@ void Game::checkRoomHazards()
         addMessage("A monster appears before you! Prepare for battle!\n");
         changeMode(GameMode::BATTLE);
     }
+}
+
+void Game::startBattle()
+{
+    // start timer
+    // change mode to battle
+    // change current_word
+    // correct_words == 0
+}
+
+void Game::handleBattleInput(const std::string &input)
+{ // takes String input
+    // if input == current_word
+    // correct_words ++;
+    // change current_word
+    //
+}
+
+void Game::changeCurrentWord()
+{
+    // for now just make it into "test"
+}
+
+void Game::endRound()
+{
+    // check how many correct_words
+    // deal damage/parry
+    // if player is dead (do something)
+    // if monster hp ==0: endBattle()
+    // restart timer
+    // correct_words == 0
+}
+
+void Game::endBattle()
+{
+    // change mode to dungeon
+    // award xp
+    // remove monster from room
+    //
 }
 
 void Game::run()

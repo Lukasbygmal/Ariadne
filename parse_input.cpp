@@ -73,7 +73,7 @@ bool parse_input(const std::string &input, Action &action, GameMode mode)
 
     case GameMode::BATTLE:
     {
-        // TODO: Implement battle mode parsing
+        action = Action(words[0],std::nullopt, std::nullopt);
         return false;
     }
 
