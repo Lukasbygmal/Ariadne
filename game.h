@@ -8,6 +8,13 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 
+enum class GameMode
+{
+    MENU,
+    DUNGEON,
+    BATTLE
+};
+
 class Game
 {
 public:
@@ -25,11 +32,17 @@ public:
     void enterDungeon(int size, int difficulty);
     void leaveDungeon();
     void checkRoomHazards();
+    void startBattle();
+    void handleBattleInput(const std::string &input);
+    
 
 private:
     void changeMode(GameMode newMode);
     void processEvents();
     void update();
+    void changeCurrentWord();
+    void endRound();
+    void endBattle();
 
     Player player;
     Dungeon dungeon;
