@@ -73,6 +73,7 @@ void handle_action(const Action &action, Game &game)
         break;
 
     case GameMode::BATTLE:
+        game.handleBattleInput(action.verb);
         break;
     }
 }

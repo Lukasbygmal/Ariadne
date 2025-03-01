@@ -21,8 +21,12 @@ private:
     Player player;
     Dungeon dungeon;
     GameMode mode;
+    std::string current_word;
+    int correct_attacks;
+    int correct_parry;
     sf::RenderWindow window;
     std::vector<std::string> terminalMessages;
+    sf::Clock battleClock; 
 
     sf::Font font;
     sf::RectangleShape roomBackground;
