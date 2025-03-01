@@ -1,12 +1,12 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "player.h"
-#include "dungeon.h"
-#include "parse_input.h"
-#include "game_ui.h"
 #include <SFML/Graphics.hpp>
 #include <string>
+#include <vector>
+#include <optional>
+#include "player.h"
+#include "dungeon.h"
 
 enum class GameMode
 {
@@ -17,39 +17,65 @@ enum class GameMode
 
 class Game
 {
+private:
+    Player player;
+    Dungeon dungeon;
+    GameMode mode;
+    sf::RenderWindow window;
+    std::vector<std::string> terminalMessages;
+
+    sf::Font font;
+    sf::RectangleShape roomBackground;
+    sf::RectangleShape statsBackground;
+    sf::RectangleShape terminalBackground;
+    sf::RectangleShape inputBox;
+    sf::Text roomText;
+    sf::Text levelText;
+    sf::Text hpText;
+    sf::Text strengthText;
+    sf::Text intelligenceText;
+    sf::Text agilityText;
+    sf::Text armorText;
+    sf::Text terminalText;
+    sf::Text inputText;
+
+    std::string userInput;
+
+    const int totalSegments = 20;
+    const float segmentWidth = 49;
+    const float segmentHeight = 10;
+
+    void initializeUI();
+    void initializeText();
+    void updateUI();
+    void renderXPBar();
+
 public:
     Game();
-    void run();
 
-    const Player &getPlayer() const { return player; }
-    const Dungeon &getDungeon() const { return dungeon; }
-    Dungeon &getDungeon() { return dungeon; }
-    GameMode getMode() const { return mode; }
-
+    void processEvents();
+    void handleInput(const sf::Event &event);
     void handleCommand(const std::string &command);
     void addMessage(const std::string &message);
-    const std::vector<std::string> &getMessages() const { return terminalMessages; }
+    void update();
+    void render();
+    void run();
+
+    void changeMode(GameMode newMode);
     void enterDungeon(int size, int difficulty);
     void leaveDungeon();
     void checkRoomHazards();
+
     void startBattle();
     void handleBattleInput(const std::string &input);
-    
-
-private:
-    void changeMode(GameMode newMode);
-    void processEvents();
-    void update();
     void changeCurrentWord();
     void endRound();
     void endBattle();
 
-    Player player;
-    Dungeon dungeon;
-    GameMode mode;
-    GameUI ui;
-    std::vector<std::string> terminalMessages;
-    sf::RenderWindow window;
+    GameMode getMode() const;
+    const Player &getPlayer() const;
+    Dungeon &getDungeon();
+    const std::vector<std::string> &getMessages() const;
 };
 
 #endif
