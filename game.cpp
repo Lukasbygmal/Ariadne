@@ -140,8 +140,15 @@ void Game::addMessage(const std::string &message)
 }
 
 void Game::update()
-{
-    // not sure if i need this
+{   
+    if (mode == GameMode::BATTLE){
+        sf::Time time = battleClock.getElapsedTime();
+        sf::Time end_time = sf::seconds(10.0f);
+        if(time> end_time){
+            endRound();
+        }
+    }
+   
 }
 
 void Game::updateUI()
@@ -248,48 +255,75 @@ void Game::checkRoomHazards()
     if (monster)
     {
         addMessage("A monster appears before you! Prepare for battle!\n");
-        changeMode(GameMode::BATTLE);
+        startBattle();
     }
 }
 
 void Game::startBattle()
 {
+    std::cout << "startBattle()\n";
     // start timer
-    // change mode to battle
+    battleClock.restart();
+    changeMode(GameMode::BATTLE);
     // change current_word
-    // correct_words == 0
+    changeCurrentWord();
+    // correct_words = 0
+    correct_attacks = 0;
+    correct_parry = 0;
 }
 
 void Game::handleBattleInput(const std::string &input)
 {
-    // takes String input
-    // if input == current_word
-    // correct_words ++;
-    // change current_word
-    //
+    if (input == current_word) // should eventually have based on a flag if it is backwards (parry)
+    {
+        correct_attacks++; //or correct_parry
+        changeCurrentWord();
+    }
 }
 
 void Game::changeCurrentWord()
 {
+    current_word = "test"; 
+    std::cout << "Current_word ==" << current_word << "\n";
     // for now just make it into "test"
 }
 
 void Game::endRound()
 {
-    // check how many correct_words
-    // deal damage/parry
+    std::cout << "EndRound() \n";
+    // need to think how i do with attack and defense phase
+    for (int i = 0; i < correct_attacks; i++)
+    {
+        //deal damage to monster
+    }
+    int missed_parry = 5 - correct_parry; //need to think if i want 2 for loops, one for parry and one for succesful monster attack?
+    for (int i = 0; i < missed_parry; i++)
+    {
+        //deal damage to player
+    }
+    
     // if player is dead (do something)
+    
     // if monster hp ==0: endBattle()
+    if (true)//true for now so that i can end battle
+    {
+        endBattle();
+        return;
+    }
+    
+    battleClock.restart();
     // restart timer
-    // correct_words == 0
+    correct_attacks = 0;
+    correct_parry = 0;
 }
 
 void Game::endBattle()
 {
+    std::cout << "EndBattle() correct_attack:" << correct_attacks << "\n";
+    changeMode(GameMode::DUNGEON);
     // change mode to dungeon
     // award xp
     // remove monster from room
-    //
 }
 
 void Game::run()

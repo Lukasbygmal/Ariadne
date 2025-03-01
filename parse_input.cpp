@@ -74,7 +74,7 @@ bool parse_input(const std::string &input, Action &action, GameMode mode)
     case GameMode::BATTLE:
     {
         action = Action(words[0],std::nullopt, std::nullopt);
-        return false;
+        return true;
     }
 
     default:
