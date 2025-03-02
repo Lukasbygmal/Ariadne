@@ -11,7 +11,7 @@ Room::Room(int difficulty)
     std::uniform_int_distribution<int> pathDist(0, 3);
     std::uniform_int_distribution<int> chestDist(0, 1);
     std::uniform_int_distribution<int> optionalDist(0, 5);
-    std::uniform_int_distribution<int> monsterDist(0, difficulty);
+    std::uniform_int_distribution<int> monsterDist(0, 3);
 
     type = typeDist(rng);
     path_n = pathDist(rng);
@@ -28,10 +28,27 @@ Room::Room(int difficulty)
     if (optionalDist(rng) == 1)
         trap = pathDist(rng);
     if (optionalDist(rng) == 1)
-        monster = monsterDist(rng);
+    {
+        int monster_type = monsterDist(rng);
+        switch (monster_type)
+        {
+        case 0:
+            monster = new Skeleton(difficulty);
+            break;
+        case 1:
+            monster = new Goblin(difficulty);
+            break;
+        case 2:
+            monster = new Minotaur(difficulty);
+            break;
+        case 3:
+            monster = new Wolf(difficulty);
+            break;
+        }
+    }
 }
 
-std::optional<int> Room::getMonster() const
+std::optional<Monster *> Room::getMonster() const
 {
     return monster;
 }
@@ -58,7 +75,7 @@ std::string Room::to_string() const
     if (trap)
         roomInfo += "Trap: " + std::to_string(*trap) + "\n\n";
     if (monster)
-        roomInfo += "Monster: " + std::to_string(*monster) + "\n\n";
+        roomInfo += "Monster: " + monster.value()->to_string() + "\n\n";
 
     return roomInfo;
 }

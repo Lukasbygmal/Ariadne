@@ -140,15 +140,16 @@ void Game::addMessage(const std::string &message)
 }
 
 void Game::update()
-{   
-    if (mode == GameMode::BATTLE){
+{
+    if (mode == GameMode::BATTLE)
+    {
         sf::Time time = battleClock.getElapsedTime();
         sf::Time end_time = sf::seconds(10.0f);
-        if(time> end_time){
+        if (time > end_time)
+        {
             endRound();
         }
     }
-   
 }
 
 void Game::updateUI()
@@ -251,10 +252,11 @@ void Game::checkRoomHazards()
         player.receiveDamage(damage);
         addMessage("You triggered a trap! You take " + std::to_string(damage) + " damage (before armor).\n");
     }
-    std::optional<int> monster = current->getMonster();
+    std::optional<Monster *> monster = current->getMonster();
     if (monster)
     {
-        addMessage("A monster appears before you! Prepare for battle!\n");
+        std::string monster_name = monster.value()->to_string();
+        addMessage("A " + monster_name + " appears before you! Prepare for battle!\n");
         startBattle();
     }
 }
@@ -276,14 +278,14 @@ void Game::handleBattleInput(const std::string &input)
 {
     if (input == current_word) // should eventually have based on a flag if it is backwards (parry)
     {
-        correct_attacks++; //or correct_parry
+        correct_attacks++; // or correct_parry
         changeCurrentWord();
     }
 }
 
 void Game::changeCurrentWord()
 {
-    current_word = "test"; 
+    current_word = "test";
     std::cout << "Current_word ==" << current_word << "\n";
     // for now just make it into "test"
 }
@@ -294,23 +296,23 @@ void Game::endRound()
     // need to think how i do with attack and defense phase
     for (int i = 0; i < correct_attacks; i++)
     {
-        //deal damage to monster
+        // deal damage to monster
     }
-    int missed_parry = 5 - correct_parry; //need to think if i want 2 for loops, one for parry and one for succesful monster attack?
+    int missed_parry = 5 - correct_parry; // need to think if i want 2 for loops, one for parry and one for succesful monster attack?
     for (int i = 0; i < missed_parry; i++)
     {
-        //deal damage to player
+        // deal damage to player
     }
-    
+
     // if player is dead (do something)
-    
+
     // if monster hp ==0: endBattle()
-    if (true)//true for now so that i can end battle
+    if (true) // true for now so that i can end battle
     {
         endBattle();
         return;
     }
-    
+
     battleClock.restart();
     // restart timer
     correct_attacks = 0;
