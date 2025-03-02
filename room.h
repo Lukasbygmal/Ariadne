@@ -4,6 +4,7 @@
 #include <random>
 #include <optional>
 #include <string>
+#include "monster.h"
 
 class Room
 {
@@ -20,11 +21,11 @@ private:
     std::optional<int> corpse;
     std::optional<int> engraving;
     std::optional<int> trap;
-    std::optional<int> monster;
+    std::optional<Monster *> monster;
 
 public:
     Room(int difficulty);
-    std::optional<int> getMonster() const;
+    std::optional<Monster *> getMonster() const;
     std::optional<int> getTrap() const;
 
     std::string to_string() const;
