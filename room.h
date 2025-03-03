@@ -26,6 +26,7 @@ private:
 public:
     Room(int difficulty);
     std::optional<Monster *> getMonster() const;
+    void killMonster();
     std::optional<int> getTrap() const;
 
     std::string to_string() const;

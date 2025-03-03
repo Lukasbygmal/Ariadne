@@ -23,10 +23,11 @@ private:
     GameMode mode;
     std::string current_word;
     int correct_attacks;
-    int correct_parry;
+    int correct_parrys;
+    bool battle_mode; // true for attack, false for parry
     sf::RenderWindow window;
     std::vector<std::string> terminalMessages;
-    sf::Clock battleClock; 
+    sf::Clock battleClock;
 
     sf::Font font;
     sf::RectangleShape roomBackground;
@@ -73,6 +74,7 @@ public:
     void startBattle();
     void handleBattleInput(const std::string &input);
     void changeCurrentWord();
+    void switchToDefense();
     void endRound();
     void endBattle();
 

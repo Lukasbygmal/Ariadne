@@ -1,4 +1,5 @@
 #include "room.h"
+#include <iostream>
 
 std::random_device Room::rd;
 std::mt19937 Room::rng(Room::rd());
@@ -51,6 +52,12 @@ Room::Room(int difficulty)
 std::optional<Monster *> Room::getMonster() const
 {
     return monster;
+}
+
+void Room::killMonster()
+{
+    // should return xp eventually
+    monster.reset();
 }
 
 std::optional<int> Room::getTrap() const

@@ -1,6 +1,7 @@
 #include "game.h"
 #include "handle_action.h"
 #include <iostream>
+#include <string>
 #include "parse_input.h"
 
 Game::Game()
@@ -147,7 +148,14 @@ void Game::update()
         sf::Time end_time = sf::seconds(10.0f);
         if (time > end_time)
         {
-            endRound();
+            if (!battle_mode)
+            {
+                endRound();
+            }
+            else
+            {
+                switchToDefense();
+            }
         }
     }
 }
@@ -164,7 +172,15 @@ void Game::updateUI()
     }
     else if (mode == GameMode::BATTLE)
     {
-        roomText.setString("You are in a battle!");
+        if (battle_mode)
+        {
+            roomText.setString("Attack!");
+        }
+
+        if (!battle_mode)
+        {
+            roomText.setString("Defense!");
+        }
     }
 
     levelText.setString("Lvl " + std::to_string(player.getLevel()));
@@ -266,20 +282,33 @@ void Game::startBattle()
     std::cout << "startBattle()\n";
     // start timer
     battleClock.restart();
+    battle_mode = true;
     changeMode(GameMode::BATTLE);
     // change current_word
     changeCurrentWord();
     // correct_words = 0
     correct_attacks = 0;
-    correct_parry = 0;
+    correct_parrys = 0;
 }
 
 void Game::handleBattleInput(const std::string &input)
 {
-    if (input == current_word) // should eventually have based on a flag if it is backwards (parry)
+    if (battle_mode) // for attack
     {
-        correct_attacks++; // or correct_parry
-        changeCurrentWord();
+        if (input == current_word)
+        {
+            correct_attacks++;
+            changeCurrentWord();
+        }
+    }
+    else // for parry
+    {
+        std::string reverse_word(current_word.rbegin(), current_word.rend());
+        if (input == reverse_word)
+        {
+            correct_parrys++;
+            changeCurrentWord();
+        }
     }
 }
 
@@ -290,15 +319,21 @@ void Game::changeCurrentWord()
     // for now just make it into "test"
 }
 
+void Game::switchToDefense()
+{
+    battle_mode = false;
+    changeCurrentWord();
+    battleClock.restart();
+}
+
 void Game::endRound()
 {
     std::cout << "EndRound() \n";
-    // need to think how i do with attack and defense phase
     for (int i = 0; i < correct_attacks; i++)
     {
         // deal damage to monster
     }
-    int missed_parry = 5 - correct_parry; // need to think if i want 2 for loops, one for parry and one for succesful monster attack?
+    int missed_parry = 5 - correct_parrys; // need to think if i want 2 for loops, one for parry and one for succesful monster attack?
     for (int i = 0; i < missed_parry; i++)
     {
         // deal damage to player
@@ -316,16 +351,16 @@ void Game::endRound()
     battleClock.restart();
     // restart timer
     correct_attacks = 0;
-    correct_parry = 0;
+    correct_parrys = 0;
 }
 
 void Game::endBattle()
 {
     std::cout << "EndBattle() correct_attack:" << correct_attacks << "\n";
+    std::cout << "EndBattle() correct_parry:" << correct_parrys << "\n";
     changeMode(GameMode::DUNGEON);
-    // change mode to dungeon
-    // award xp
-    // remove monster from room
+    // award xp (and maybe gold?)
+    dungeon.getCurrentRoom().killMonster();
 }
 
 void Game::run()
