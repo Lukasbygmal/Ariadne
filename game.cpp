@@ -174,12 +174,12 @@ void Game::updateUI()
     {
         if (battle_mode)
         {
-            roomText.setString("Attack!");
+            roomText.setString("To attack type: \n\n   "+ current_word);
         }
 
         if (!battle_mode)
         {
-            roomText.setString("Defense!");
+            roomText.setString("To defend reverse-type: \n\n   "+ current_word);
         }
     }
 
@@ -261,12 +261,14 @@ void Game::leaveDungeon()
 void Game::checkRoomHazards()
 {
     Room *current = dungeon.returnCurrentRoom();
-    std::optional<int> trap = current->getTrap();
+    std::optional<Trap *> trap = current->getTrap();
     if (trap)
     {
-        int damage = *trap;
-        player.receiveDamage(damage);
-        addMessage("You triggered a trap! You take " + std::to_string(damage) + " damage (before armor).\n");
+        int damage = trap.value()->getDamage();
+        damage = player.receiveDamage(damage);
+        std::string trap_name = trap.value()->to_string(); 
+        addMessage("You triggered a " + trap_name + " trap! You take " + std::to_string(damage) + " damage.\n");
+        current->removeTrap();
     }
     std::optional<Monster *> monster = current->getMonster();
     if (monster)

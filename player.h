@@ -37,7 +37,7 @@ public:
     std::string getName() const;
 
     void receiveXP(int amount);
-    void receiveDamage(int damage);
+    int receiveDamage(int damage);
     void heal(int amount);
     bool isAlive() const;
     void increaseHP(int amount);
