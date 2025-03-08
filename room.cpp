@@ -13,6 +13,7 @@ Room::Room(int difficulty)
     std::uniform_int_distribution<int> chestDist(0, 1);
     std::uniform_int_distribution<int> optionalDist(0, 5);
     std::uniform_int_distribution<int> monsterDist(0, 3);
+    std::uniform_int_distribution<int> trapDist(0, 1);
 
     type = typeDist(rng);
     path_n = pathDist(rng);
@@ -27,7 +28,18 @@ Room::Room(int difficulty)
     if (optionalDist(rng) == 1)
         engraving = pathDist(rng);
     if (optionalDist(rng) == 1)
-        trap = pathDist(rng);
+    {
+        int trap_type = trapDist(rng);
+        switch (trap_type)
+        {
+        case 0:
+            trap = new WallArrows(difficulty);
+            break;
+        case 1:
+            trap = new SwingingAxe(difficulty);
+            break;
+        }
+    }
     if (optionalDist(rng) == 1)
     {
         int monster_type = monsterDist(rng);
@@ -60,7 +72,12 @@ void Room::killMonster()
     monster.reset();
 }
 
-std::optional<int> Room::getTrap() const
+void Room::removeTrap()
+{
+    trap.reset();
+}
+
+std::optional<Trap *> Room::getTrap() const
 {
     return trap;
 }
@@ -79,9 +96,7 @@ std::string Room::to_string() const
         roomInfo += "Corpse: " + std::to_string(*corpse) + "\n\n";
     if (engraving)
         roomInfo += "Engraving: " + std::to_string(*engraving) + "\n\n";
-    if (trap)
-        roomInfo += "Trap: " + std::to_string(*trap) + "\n\n";
-    if (monster)
+    if (monster) //eventually won't need this as it looks now
         roomInfo += "Monster: " + monster.value()->to_string() + "\n\n";
 
     return roomInfo;

@@ -5,6 +5,7 @@
 #include <optional>
 #include <string>
 #include "monster.h"
+#include "trap.h"
 
 class Room
 {
@@ -20,14 +21,15 @@ private:
     std::optional<int> chest;
     std::optional<int> corpse;
     std::optional<int> engraving;
-    std::optional<int> trap;
+    std::optional<Trap *> trap;
     std::optional<Monster *> monster;
 
 public:
     Room(int difficulty);
     std::optional<Monster *> getMonster() const;
     void killMonster();
-    std::optional<int> getTrap() const;
+    void removeTrap();
+    std::optional<Trap *> getTrap() const;
 
     std::string to_string() const;
 };

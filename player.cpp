@@ -31,10 +31,11 @@ void Player::receiveXP(int amount)
     checkLevelUp();
 }
 
-void Player::receiveDamage(int damage)
+int Player::receiveDamage(int damage)
 {
     int actual_damage = calculateActualDamage(damage);
     current_hp = std::max(0, current_hp - actual_damage);
+    return actual_damage;
 }
 
 void Player::heal(int amount)
