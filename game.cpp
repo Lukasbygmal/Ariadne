@@ -145,7 +145,7 @@ void Game::update()
     if (mode == GameMode::BATTLE)
     {
         sf::Time time = battleClock.getElapsedTime();
-        sf::Time end_time = sf::seconds(10.0f);
+        sf::Time end_time = sf::seconds(4.0f);
         if (time > end_time)
         {
             if (!battle_mode)

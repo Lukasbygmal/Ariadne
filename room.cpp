@@ -1,63 +1,43 @@
 #include "room.h"
 #include <iostream>
 
-std::random_device Room::rd;
-std::mt19937 Room::rng(Room::rd());
-
-Room::Room(int difficulty)
+Room::Room(int difficulty, int _path_n, int _path_e, int _path_s, int _path_w, int _chest, int _corpse, int _engraving, int trap_type, int monster_type)
 {
-    rng.seed(rd());
+    path_n = _path_n;
+    path_e = _path_e;
+    path_s = _path_s;
+    path_w = _path_w;
+    chest = _chest;
+    corpse = _corpse;
+    engraving = _engraving;
 
-    std::uniform_int_distribution<int> typeDist(0, 4);
-    std::uniform_int_distribution<int> pathDist(0, 3);
-    std::uniform_int_distribution<int> chestDist(0, 1);
-    std::uniform_int_distribution<int> optionalDist(0, 5);
-    std::uniform_int_distribution<int> monsterDist(0, 3);
-    std::uniform_int_distribution<int> trapDist(0, 1);
-
-    type = typeDist(rng);
-    path_n = pathDist(rng);
-    path_e = pathDist(rng);
-    path_s = pathDist(rng);
-    path_w = pathDist(rng);
-
-    if (chestDist(rng))
-        chest = 1;
-    if (optionalDist(rng) == 1)
-        corpse = pathDist(rng);
-    if (optionalDist(rng) == 1)
-        engraving = pathDist(rng);
-    if (optionalDist(rng) == 1)
+    switch (trap_type)
     {
-        int trap_type = trapDist(rng);
-        switch (trap_type)
-        {
-        case 0:
-            trap = new WallArrows(difficulty);
-            break;
-        case 1:
-            trap = new SwingingAxe(difficulty);
-            break;
-        }
+    case 0:
+        break;
+    case 1:
+        trap = new WallArrows(difficulty);
+        break;
+    case 2:
+        trap = new SwingingAxe(difficulty);
+        break;
     }
-    if (optionalDist(rng) == 1)
+    switch (monster_type)
     {
-        int monster_type = monsterDist(rng);
-        switch (monster_type)
-        {
-        case 0:
-            monster = new Skeleton(difficulty);
-            break;
-        case 1:
-            monster = new Goblin(difficulty);
-            break;
-        case 2:
-            monster = new Minotaur(difficulty);
-            break;
-        case 3:
-            monster = new Wolf(difficulty);
-            break;
-        }
+    case 0:
+        break;
+    case 1:
+        monster = new Skeleton(difficulty);
+        break;
+    case 2:
+        monster = new Goblin(difficulty);
+        break;
+    case 3:
+        monster = new Minotaur(difficulty);
+        break;
+    case 4:
+        monster = new Wolf(difficulty);
+        break;
     }
 }
 
@@ -85,7 +65,6 @@ std::optional<Trap *> Room::getTrap() const
 std::string Room::to_string() const
 {
     std::string roomInfo = "Room:\n\n";
-    roomInfo += "Type: " + std::to_string(type) + "\n\n";
     roomInfo += "Paths: " + std::to_string(path_s) + ", " +
                 std::to_string(path_n) + ", " +
                 std::to_string(path_e) + ", " +
@@ -96,8 +75,5 @@ std::string Room::to_string() const
         roomInfo += "Corpse: " + std::to_string(*corpse) + "\n\n";
     if (engraving)
         roomInfo += "Engraving: " + std::to_string(*engraving) + "\n\n";
-    if (monster) //eventually won't need this as it looks now
-        roomInfo += "Monster: " + monster.value()->to_string() + "\n\n";
-
     return roomInfo;
 }
