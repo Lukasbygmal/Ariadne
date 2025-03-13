@@ -24,7 +24,7 @@ bool parse_input(const std::string &input, Action &action, GameMode mode)
     {
     case GameMode::DUNGEON:
     {
-        std::vector<std::string> valid_verbs = {"go", "rest", "investigate", "search", "open", "pray"};
+        std::vector<std::string> valid_verbs = {"go", "rest", "investigate", "search", "open", "pray", "exit"};
         std::vector<std::string> valid_directions = {"north", "west", "east", "south"};
         std::vector<std::string> valid_objects = {"chest", "engraving", "corpse"};
 
@@ -48,8 +48,9 @@ bool parse_input(const std::string &input, Action &action, GameMode mode)
             action = Action(words[0], std::nullopt, words[1]);
             return true;
         }
-        else if ((words[0] == "search" || words[0] == "rest" || words[0] == "pray") && words.size() == 1)
+        else if ((words[0] == "search" || words[0] == "rest" || words[0] == "pray" || words[0] == "exit") && words.size() == 1)
         {
+            std::cout << "____khjgjbhfjh" << std::endl;
             action = Action(words[0]);
             return true;
         }
@@ -73,7 +74,7 @@ bool parse_input(const std::string &input, Action &action, GameMode mode)
 
     case GameMode::BATTLE:
     {
-        action = Action(words[0],std::nullopt, std::nullopt);
+        action = Action(words[0], std::nullopt, std::nullopt);
         return true;
     }
 

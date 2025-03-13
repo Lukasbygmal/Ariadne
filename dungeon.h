@@ -16,8 +16,8 @@ private:
     int current_x;
     int current_y;
     Room *current_room;
-    int boss_room_x;
-    int boss_room_y;
+    int boss_room_x; // not sure i need this
+    int boss_room_y; // not sure i need this
 
 public:
     Dungeon(int size, int difficulty);
@@ -31,7 +31,7 @@ public:
     Room *returnCurrentRoom() const;
     int getCurrentX() const;
     int getCurrentY() const;
-    bool isBossRoom() const;
+    bool isBossRoom() const; // not sure i need this
 };
 
 #endif

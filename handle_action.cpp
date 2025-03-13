@@ -66,6 +66,11 @@ void handle_action(const Action &action, Game &game)
         {
             std::cout << "Pray()" << std::endl;
         }
+        else if (action.verb == "exit")
+        {
+            game.leaveDungeon();
+            std::cout << "ExitDungeon()" << std::endl;
+        }
         else
         {
             std::cout << "Invalid action." << std::endl;
