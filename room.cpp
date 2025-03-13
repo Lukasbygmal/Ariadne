@@ -46,10 +46,11 @@ std::optional<Monster *> Room::getMonster() const
     return monster;
 }
 
-void Room::killMonster()
+int Room::killMonster()
 {
-    // should return xp eventually
+    int xp = monster.value()->getBaseXP();
     monster.reset();
+    return xp;
 }
 
 void Room::removeTrap()

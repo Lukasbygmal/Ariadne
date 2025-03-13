@@ -174,12 +174,12 @@ void Game::updateUI()
     {
         if (battle_mode)
         {
-            roomText.setString("To attack type: \n\n   "+ current_word);
+            roomText.setString("To attack type: \n\n   " + current_word);
         }
 
         if (!battle_mode)
         {
-            roomText.setString("To defend reverse-type: \n\n   "+ current_word);
+            roomText.setString("To defend reverse-type: \n\n   " + current_word);
         }
     }
 
@@ -266,7 +266,7 @@ void Game::checkRoomHazards()
     {
         int damage = trap.value()->getDamage();
         damage = player.receiveDamage(damage);
-        std::string trap_name = trap.value()->to_string(); 
+        std::string trap_name = trap.value()->to_string();
         addMessage("You triggered a " + trap_name + " trap! You take " + std::to_string(damage) + " damage.\n");
         current->removeTrap();
     }
@@ -361,8 +361,8 @@ void Game::endBattle()
     std::cout << "EndBattle() correct_attack:" << correct_attacks << "\n";
     std::cout << "EndBattle() correct_parry:" << correct_parrys << "\n";
     changeMode(GameMode::DUNGEON);
-    // award xp (and maybe gold?)
-    dungeon.getCurrentRoom().killMonster();
+    int xp_reward = dungeon.getCurrentRoom().killMonster();
+    player.receiveXP(xp_reward);
 }
 
 void Game::run()
