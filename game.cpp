@@ -46,32 +46,37 @@ void Game::initializeText()
     levelText.setFont(font);
     levelText.setCharacterSize(24);
     levelText.setFillColor(sf::Color::White);
-    levelText.setPosition(800.f, 590.f);
+    levelText.setPosition(790.f, 590.f);
+
+    goldText.setFont(font);
+    goldText.setCharacterSize(24);
+    goldText.setFillColor(sf::Color::White);
+    goldText.setPosition(790.f, 640.f);
 
     hpText.setFont(font);
     hpText.setCharacterSize(20);
     hpText.setFillColor(sf::Color::White);
-    hpText.setPosition(800.f, 620.f);
+    hpText.setPosition(760.f, 620.f);
 
     strengthText.setFont(font);
     strengthText.setCharacterSize(20);
     strengthText.setFillColor(sf::Color::White);
-    strengthText.setPosition(640.f, 660.f);
+    strengthText.setPosition(640.f, 680.f);
 
     intelligenceText.setFont(font);
     intelligenceText.setCharacterSize(20);
     intelligenceText.setFillColor(sf::Color::White);
-    intelligenceText.setPosition(840.f, 660.f);
+    intelligenceText.setPosition(840.f, 680.f);
 
     agilityText.setFont(font);
     agilityText.setCharacterSize(20);
     agilityText.setFillColor(sf::Color::White);
-    agilityText.setPosition(640.f, 700.f);
+    agilityText.setPosition(640.f, 720.f);
 
     armorText.setFont(font);
     armorText.setCharacterSize(20);
     armorText.setFillColor(sf::Color::White);
-    armorText.setPosition(840.f, 700.f);
+    armorText.setPosition(840.f, 720.f);
 
     terminalText.setFont(font);
     terminalText.setCharacterSize(18);
@@ -184,10 +189,8 @@ void Game::updateUI()
     }
 
     levelText.setString("Lvl " + std::to_string(player.getLevel()));
-    levelText.setPosition(800.f - levelText.getGlobalBounds().width / 2, 590.f);
-
+    goldText.setString(std::to_string(player.getGold()) + " G");
     hpText.setString(std::to_string(player.getCurrentHP()) + " / " + std::to_string(player.getMaxHP()) + "HP");
-    hpText.setPosition(800.f - hpText.getGlobalBounds().width / 2, 620.f);
 
     strengthText.setString("Strength: " + std::to_string(player.getStrength()));
     intelligenceText.setString("Intelligence: " + std::to_string(player.getIntelligence()));
@@ -228,6 +231,7 @@ void Game::render()
     window.draw(roomText);
     window.draw(statsBackground);
     window.draw(levelText);
+    window.draw(goldText);
     window.draw(hpText);
     window.draw(strengthText);
     window.draw(intelligenceText);
