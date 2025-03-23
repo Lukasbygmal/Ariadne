@@ -36,6 +36,7 @@ private:
     sf::RectangleShape inputBox;
     sf::Text roomText;
     sf::Text levelText;
+    sf::Text goldText;
     sf::Text hpText;
     sf::Text strengthText;
     sf::Text intelligenceText;

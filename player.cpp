@@ -3,9 +3,10 @@
 
 Player::Player(const std::string &player_name) : name(player_name),
                                                  lvl(0),
+                                                 gold(0),
                                                  xp(250),
                                                  max_hp(100),
-                                                 current_hp(60),
+                                                 current_hp(100),
                                                  strength(15),
                                                  intelligence(12),
                                                  agility(14),
@@ -15,6 +16,7 @@ Player::Player(const std::string &player_name) : name(player_name),
 }
 
 int Player::getLevel() const { return lvl; }
+int Player::getGold() const { return gold; }
 int Player::getXP() const { return xp; }
 int Player::getXPToMax() const { return xp_to_max; }
 int Player::getMaxHP() const { return max_hp; }
@@ -29,6 +31,11 @@ void Player::receiveXP(int amount)
 {
     xp += amount;
     checkLevelUp();
+}
+
+void Player::receiveGold(int amount)
+{
+    gold += gold;
 }
 
 int Player::receiveDamage(int damage)
