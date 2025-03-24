@@ -70,6 +70,14 @@ int Room::killMonster()
     return xp;
 }
 
+int Room::openChest()
+{  
+    std::cout << "I get into open chest\n";
+    int gold = chest.value()->getGold();
+    chest.reset();
+    return gold;
+}
+
 void Room::removeTrap()
 {
     trap.reset();
@@ -92,7 +100,9 @@ std::string Room::to_string() const
                 std::to_string(path_n) + ", " +
                 std::to_string(path_e) + ", " +
                 std::to_string(path_w) + "\n\n";
-    // add chest representation
+    if (chest){
+        roomInfo += "Chest: " + (*chest)->to_string() + "\n\n";
+    }
     if (corpse)
         roomInfo += "Corpse: " + std::to_string(*corpse) + "\n\n";
     if (engraving)

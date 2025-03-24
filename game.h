@@ -81,6 +81,7 @@ public:
 
     GameMode getMode() const;
     const Player &getPlayer() const;
+    Player &getPlayer();
     Dungeon &getDungeon();
     const std::vector<std::string> &getMessages() const;
 };

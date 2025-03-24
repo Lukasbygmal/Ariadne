@@ -35,7 +35,7 @@ void Player::receiveXP(int amount)
 
 void Player::receiveGold(int amount)
 {
-    gold += gold;
+    gold += amount;
 }
 
 int Player::receiveDamage(int damage)

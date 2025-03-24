@@ -5,6 +5,6 @@
 #include "dungeon.h"
 #include "game.h"
 
-void handle_action(const Action &action, Game &game);
+bool handle_action(const Action &action, Game &game);
 
 #endif
