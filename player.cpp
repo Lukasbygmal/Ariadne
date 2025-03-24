@@ -7,7 +7,7 @@ Player::Player(const std::string &player_name) : name(player_name),
                                                  xp(250),
                                                  max_hp(100),
                                                  current_hp(100),
-                                                 strength(15),
+                                                 strength(40),
                                                  intelligence(12),
                                                  agility(14),
                                                  armor(69)
@@ -26,6 +26,13 @@ int Player::getIntelligence() const { return intelligence; }
 int Player::getAgility() const { return agility; }
 int Player::getArmor() const { return armor; }
 std::string Player::getName() const { return name; }
+
+void Player::dead()
+{
+    xp = 0;
+    gold = gold / 2;
+    current_hp = 100;
+}
 
 void Player::receiveXP(int amount)
 {

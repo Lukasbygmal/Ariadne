@@ -156,8 +156,8 @@ void Game::update()
     if (mode == GameMode::BATTLE)
     {
         sf::Time time = battleClock.getElapsedTime();
-        sf::Time end_time = sf::seconds(4.0f);
-        if (time > end_time)
+        sf::Time end_time = sf::seconds(12.0f);
+        if (time > end_time || (correct_attacks >= 8 && battle_mode) || (correct_parrys >= 6 && !battle_mode)) // change 6 and 8 to not magic numbers eventually
         {
             if (!battle_mode)
             {
@@ -341,27 +341,44 @@ void Game::switchToDefense()
 void Game::endRound()
 {
     std::cout << "EndRound() \n";
+    int player_damage = player.getStrength();
+    int total_player_damage = 0;
     for (int i = 0; i < correct_attacks; i++)
     {
         // deal damage to monster
+        total_player_damage += player_damage;
+        dungeon.getCurrentRoom().getMonster().value()->receiveDamage(player_damage); // should maybe make the damage done random later
     }
-    int missed_parry = 5 - correct_parrys; // need to think if i want 2 for loops, one for parry and one for succesful monster attack?
+    addMessage("You did " + std::to_string(correct_attacks) + " attacks for " + std::to_string(total_player_damage) + " damage! \n");
+
+    int missed_parry = 6 - correct_parrys; // need to think if i want 2 for loops, one for parry and one for succesful monster attack?
+    int monster_damage = dungeon.getCurrentRoom().getMonster().value()->getStrength();
+    int total_monster_damage = 0;
     for (int i = 0; i < missed_parry; i++)
     {
         // deal damage to player
+        total_monster_damage += monster_damage;
+        player.receiveDamage(monster_damage); // again should make it random eventually
     }
+    addMessage("You got hit " + std::to_string(missed_parry) + " times for " + std::to_string(total_monster_damage) + " damage! \n");
 
     // if player is dead (do something)
+    if (!player.isAlive())
+    {
+        addMessage("You died, lost gold and XP \n");
+        player.dead();
+        changeMode(GameMode::MENU);
+    }
 
     // if monster hp ==0: endBattle()
-    if (true) // true for now so that i can end battle
+    if (dungeon.getCurrentRoom().getMonster().value()->getHP() <= 0)
     {
         endBattle();
         return;
     }
 
     battleClock.restart();
-    // restart timer
+    battle_mode = true;
     correct_attacks = 0;
     correct_parrys = 0;
 }
