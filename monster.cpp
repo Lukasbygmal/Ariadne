@@ -19,6 +19,11 @@ int Monster::getXP() const
     return base_xp; // should eventually change this
 }
 
+void Monster::receiveDamage(int amount)
+{
+    hp = hp - amount;
+}
+
 std::string Monster::to_string() const
 {
     return name;
@@ -28,7 +33,7 @@ Skeleton::Skeleton(int difficulty) : Monster(difficulty)
 {
     name = "Skeleton";
     hp = 50;
-    strength = 10;
+    strength = 3;
     base_xp = 100;
     adjustForDifficulty(difficulty);
 }
@@ -44,7 +49,7 @@ Goblin::Goblin(int difficulty) : Monster(difficulty)
 {
     name = "Goblin";
     hp = 30;
-    strength = 8;
+    strength = 2;
     base_xp = 75;
     adjustForDifficulty(difficulty);
 }
@@ -59,8 +64,8 @@ void Goblin::adjustForDifficulty(int difficulty)
 Minotaur::Minotaur(int difficulty) : Monster(difficulty)
 {
     name = "Minotaur";
-    hp = 200;
-    strength = 25;
+    hp = 100;
+    strength = 3;
     base_xp = 500;
     adjustForDifficulty(difficulty);
 }
@@ -75,15 +80,15 @@ void Minotaur::adjustForDifficulty(int difficulty)
 Wolf::Wolf(int difficulty) : Monster(difficulty)
 {
     name = "Wolf";
-    hp = 40;
-    strength = 12;
+    hp = 20;
+    strength = 5;
     base_xp = 90;
     adjustForDifficulty(difficulty);
 }
 
 void Wolf::adjustForDifficulty(int difficulty)
 {
-    hp *= (difficulty * 0.7);
-    strength *= (difficulty * 0.8);
+    hp *= (difficulty * 0.5);
+    strength *= (difficulty * 0.5);
     base_xp *= difficulty;
 }

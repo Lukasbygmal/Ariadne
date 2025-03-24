@@ -48,6 +48,7 @@ public:
     void increaseIntelligence(int amount);
     void increaseAgility(int amount);
     void increaseArmor(int amount);
+    void dead();
 };
 
 #endif
