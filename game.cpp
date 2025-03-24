@@ -125,9 +125,15 @@ void Game::handleCommand(const std::string &command)
     Action result("null");
     if (parse_input(command, result, mode))
     {
-        addMessage("You " + command + "\n");
-        std::cout << "Success!\n";
-        handle_action(result, *this);
+        std::cout << "Passed parse_input\n";
+        if (handle_action(result, *this))
+        {
+            std::cout << "Passed handle_action\n";
+        }
+        else
+        {
+            addMessage("Can't " + command + " now\n");
+        }
     }
     else
     {
@@ -385,6 +391,11 @@ GameMode Game::getMode() const
 }
 
 const Player &Game::getPlayer() const
+{
+    return player;
+}
+
+Player &Game::getPlayer()
 {
     return player;
 }

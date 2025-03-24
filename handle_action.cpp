@@ -1,7 +1,7 @@
 #include <iostream>
 #include "handle_action.h"
 
-void handle_action(const Action &action, Game &game)
+bool handle_action(const Action &action, Game &game)
 {
     switch (game.getMode())
     {
@@ -11,74 +11,117 @@ void handle_action(const Action &action, Game &game)
             if (*action.object == "easy")
             {
                 game.enterDungeon(4, 1);
+                game.addMessage("You enter easy\n");
+                return true;
             }
             else if (*action.object == "medium")
             {
                 game.enterDungeon(6, 3);
+                game.addMessage("You enter medium\n");
+                return true;
             }
             else if (*action.object == "hard")
             {
                 game.enterDungeon(8, 5);
+                game.addMessage("You enter hard\n");
+                return true;
             }
         }
-        break;
+        return false;
 
     case GameMode::DUNGEON:
         if (action.verb == "go" && action.direction)
         {
-            std::cout << "Go(" << *action.direction << ")" << std::endl;
             Dungeon &dungeon = game.getDungeon();
             if (*action.direction == "east")
             {
-                dungeon.goEast();
+                if (dungeon.goEast())
+                {
+                    game.addMessage("You go east\n");
+                    game.checkRoomHazards();
+                    return true;
+                }
+                return false;
             }
             else if (*action.direction == "west")
             {
-                dungeon.goWest();
+                if (dungeon.goWest())
+                {
+                    game.addMessage("You go west\n");
+                    game.checkRoomHazards();
+                    return true;
+                }
+                return false;
             }
             else if (*action.direction == "north")
             {
-                dungeon.goNorth();
+                if (dungeon.goNorth())
+                {
+                    game.addMessage("You go north\n");
+                    game.checkRoomHazards();
+                    return true;
+                }
+                return false;
             }
             else if (*action.direction == "south")
             {
-                dungeon.goSouth();
+                if (dungeon.goSouth())
+                {
+                    game.addMessage("You go south\n");
+                    game.checkRoomHazards();
+                    return true;
+                }
+                return false;
             }
-            game.checkRoomHazards();
         }
         else if (action.verb == "investigate" && action.object)
         {
             std::cout << "Investigate(" << *action.object << ")" << std::endl;
+            return true;
         }
         else if (action.verb == "open" && action.object)
         {
             std::cout << "Open(" << *action.object << ")" << std::endl;
+            if (game.getDungeon().getCurrentRoom().getChest())
+            {
+                int gold = game.getDungeon().getCurrentRoom().openChest();
+                game.getPlayer().receiveGold(gold);
+                game.addMessage("You open the chest and recieve " + std::to_string(gold) + " gold\n");
+                return true;
+            }
+            return false;
         }
         else if (action.verb == "search")
         {
             std::cout << "Search()" << std::endl;
+            return true;
         }
         else if (action.verb == "rest")
         {
             std::cout << "Rest()" << std::endl;
+            return true;
         }
         else if (action.verb == "pray")
         {
             std::cout << "Pray()" << std::endl;
+            return true;
         }
         else if (action.verb == "exit")
         {
             game.leaveDungeon();
             std::cout << "ExitDungeon()" << std::endl;
+            return true;
         }
         else
         {
-            std::cout << "Invalid action." << std::endl;
+            std::cout << "This should never happen!" << std::endl;
+            return false;
         }
-        break;
 
     case GameMode::BATTLE:
         game.handleBattleInput(action.verb);
-        break;
+        return true;
     }
+    std::cout << "This should never happen!" << std::endl;
+    return false; // this should never happen, if it does handle or parse is wrong
 }
