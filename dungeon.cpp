@@ -21,7 +21,7 @@ Dungeon::Dungeon(int s, int d) : size(s),
     std::uniform_int_distribution<int> monsterDist(1, 4);
     std::uniform_int_distribution<int> trapDist(0, 1);
 
-    int path_n, path_e, path_s, path_w, chest, corpse, engraving, trap_type, monster_type;
+    int path_n, path_e, path_s, path_w, chest_type, corpse, engraving, trap_type, monster_type;
 
     int start_x = roomDist(rng);
     int start_y = 0;
@@ -44,12 +44,12 @@ Dungeon::Dungeon(int s, int d) : size(s),
                 path_e = pathDist(rng);
                 path_s = pathDist(rng);
                 path_w = pathDist(rng);
-                chest = 0;
+                chest_type = 0;
                 corpse = 0;
                 engraving = 0;
                 trap_type = 0;
                 monster_type = 0;
-                rooms[i].emplace_back(difficulty, path_n, path_e, path_s, path_w, chest, corpse, engraving, trap_type, monster_type);
+                rooms[i].emplace_back(difficulty, path_n, path_e, path_s, path_w, chest_type, corpse, engraving, trap_type, monster_type);
             }
             else if (i == boss_y && j == boss_x) // boss room, will be end room too
             {
@@ -57,12 +57,12 @@ Dungeon::Dungeon(int s, int d) : size(s),
                 path_e = pathDist(rng);
                 path_s = pathDist(rng);
                 path_w = pathDist(rng);
-                chest = 0;
+                chest_type = 0;
                 corpse = 0;
                 engraving = 0;
                 trap_type = 0;
                 monster_type = 4;
-                rooms[i].emplace_back(difficulty, path_n, path_e, path_s, path_w, chest, corpse, engraving, trap_type, monster_type);
+                rooms[i].emplace_back(difficulty, path_n, path_e, path_s, path_w, chest_type, corpse, engraving, trap_type, monster_type);
             }
             else if (i == treasure_y && j == treasure_x) // Treasure room
             {
@@ -70,12 +70,12 @@ Dungeon::Dungeon(int s, int d) : size(s),
                 path_e = pathDist(rng);
                 path_s = pathDist(rng);
                 path_w = pathDist(rng);
-                chest = 2;
+                chest_type = 4;
                 corpse = 0;
                 engraving = 0;
                 trap_type = trapDist(rng);
                 monster_type = (optionalDist(rng) == 1) ? monsterDist(rng) : 0;
-                rooms[i].emplace_back(difficulty, path_n, path_e, path_s, path_w, chest, corpse, engraving, trap_type, monster_type);
+                rooms[i].emplace_back(difficulty, path_n, path_e, path_s, path_w, chest_type, corpse, engraving, trap_type, monster_type);
             }
             else // normal room
             {
@@ -83,12 +83,12 @@ Dungeon::Dungeon(int s, int d) : size(s),
                 path_e = pathDist(rng);
                 path_s = pathDist(rng);
                 path_w = pathDist(rng);
-                chest = 0;     // have to change this
+                chest_type = 1;     // have to change this
                 corpse = 0;    // and this
                 engraving = 0; // and this since they are 0 forever now
                 trap_type = (optionalDist(rng) == 1) ? trapDist(rng) : 0;
                 monster_type = (optionalDist(rng) == 1) ? monsterDist(rng) : 0;
-                rooms[i].emplace_back(difficulty, path_n, path_e, path_s, path_w, chest, corpse, engraving, trap_type, monster_type);
+                rooms[i].emplace_back(difficulty, path_n, path_e, path_s, path_w, chest_type, corpse, engraving, trap_type, monster_type);
             }
         }
     }

@@ -16,7 +16,7 @@ public:
     
     int getHP() const;
     int getStrength() const;
-    int getBaseXP() const;
+    int getXP() const;
     virtual std::string to_string() const;
     
     virtual void adjustForDifficulty(int difficulty) = 0;
