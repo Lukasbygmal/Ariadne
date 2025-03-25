@@ -38,8 +38,10 @@ public:
     int getArmor() const;
     std::string getName() const;
 
+    void healToMax();
     void receiveXP(int amount);
     void receiveGold(int amount);
+    void decreaseGold(int amount);
     int receiveDamage(int damage);
     void heal(int amount);
     bool isAlive() const;

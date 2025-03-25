@@ -51,7 +51,7 @@ Dungeon::Dungeon(int s, int d) : size(s),
                 monster_type = 0;
                 rooms[i].emplace_back(difficulty, path_n, path_e, path_s, path_w, chest_type, corpse, engraving, trap_type, monster_type);
             }
-            else if (i == boss_y && j == boss_x) // boss room, will be end room too
+            else if (i == boss_y && j == boss_x) // boss room
             {
                 path_n = pathDist(rng);
                 path_e = pathDist(rng);
@@ -83,9 +83,9 @@ Dungeon::Dungeon(int s, int d) : size(s),
                 path_e = pathDist(rng);
                 path_s = pathDist(rng);
                 path_w = pathDist(rng);
-                chest_type = 1;     // have to change this
-                corpse = 0;    // and this
-                engraving = 0; // and this since they are 0 forever now
+                chest_type = 1; // have to change this
+                corpse = 0;     // and this
+                engraving = 0;  // and this since they are 0 forever now
                 trap_type = (optionalDist(rng) == 1) ? trapDist(rng) : 0;
                 monster_type = (optionalDist(rng) == 1) ? monsterDist(rng) : 0;
                 rooms[i].emplace_back(difficulty, path_n, path_e, path_s, path_w, chest_type, corpse, engraving, trap_type, monster_type);

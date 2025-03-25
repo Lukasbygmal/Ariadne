@@ -256,15 +256,65 @@ void Game::changeMode(GameMode newMode)
     mode = newMode;
 }
 
+bool Game::buyHP()
+{ // magic number that needs to be revisited for balancing
+    int cost = 10;
+    if (player.getGold() > cost)
+    {
+        player.decreaseGold(cost);
+        player.increaseHP(5);
+        return true;
+    }
+    return false;
+}
+
+bool Game::buyStrength()
+{ // magic number that needs to be revisited for balancing
+    int cost = 10;
+    if (player.getGold() > cost)
+    {
+        player.decreaseGold(cost);
+        player.increaseStrength(5);
+        return true;
+    }
+    return false;
+}
+
+bool Game::buyArmor()
+{ // magic number that needs to be revisited for balancing
+    int cost = 10;
+    if (player.getGold() > cost)
+    {
+        player.decreaseGold(cost);
+        player.increaseArmor(1);
+        return true;
+    }
+    return false;
+}
+
+bool Game::buyAgility()
+{ // magic number that needs to be revisited for balancing
+    int cost = 10;
+    if (player.getGold() > cost)
+    {
+        player.decreaseGold(cost);
+        player.increaseAgility(1);
+        return true;
+    }
+    return false;
+}
+
 void Game::enterDungeon(int size, int difficulty)
 {
     dungeon = Dungeon(size, difficulty);
+    healMaxPlayer();
     changeMode(GameMode::DUNGEON);
 }
 
 void Game::leaveDungeon()
 {
     changeMode(GameMode::MENU);
+    healMaxPlayer();
     addMessage("You escaped the dungeon\n");
 }
 
@@ -338,6 +388,11 @@ void Game::switchToDefense()
     battleClock.restart();
 }
 
+void Game::damageMonster(int damage)
+{ // should maybe make the damage done random later
+    dungeon.getCurrentRoom().getMonster().value()->receiveDamage(damage);
+}
+
 void Game::endRound()
 {
     std::cout << "EndRound() \n";
@@ -347,7 +402,7 @@ void Game::endRound()
     {
         // deal damage to monster
         total_player_damage += player_damage;
-        dungeon.getCurrentRoom().getMonster().value()->receiveDamage(player_damage); // should maybe make the damage done random later
+        damageMonster(player_damage);
     }
     addMessage("You did " + std::to_string(correct_attacks) + " attacks for " + std::to_string(total_player_damage) + " damage! \n");
 
@@ -400,6 +455,11 @@ void Game::run()
         update();
         render();
     }
+}
+
+void Game::healMaxPlayer()
+{
+    player.healToMax();
 }
 
 GameMode Game::getMode() const
