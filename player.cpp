@@ -45,6 +45,11 @@ void Player::receiveGold(int amount)
     gold += amount;
 }
 
+void Player::decreaseGold(int amount)
+{
+    gold -= amount;
+}
+
 int Player::receiveDamage(int damage)
 {
     int actual_damage = calculateActualDamage(damage);
@@ -55,6 +60,11 @@ int Player::receiveDamage(int damage)
 void Player::heal(int amount)
 {
     current_hp = std::min(max_hp, current_hp + amount);
+}
+
+void Player::healToMax()
+{
+    current_hp = max_hp;
 }
 
 bool Player::isAlive() const

@@ -24,11 +24,11 @@ bool parse_input(const std::string &input, Action &action, GameMode mode)
     {
     case GameMode::DUNGEON:
     {
-        std::vector<std::string> valid_verbs = {"go", "rest", "investigate", "search", "open", "pray", "exit"};
+        std::vector<std::string> valid_verbs = {"go", "rest", "investigate", "search", "open", "pray", "exit"}; //lowkey don't need this?
         std::vector<std::string> valid_directions = {"north", "west", "east", "south"};
         std::vector<std::string> valid_objects = {"chest", "engraving", "corpse"};
 
-        if (std::find(valid_verbs.begin(), valid_verbs.end(), words[0]) == valid_verbs.end())
+        if (std::find(valid_verbs.begin(), valid_verbs.end(), words[0]) == valid_verbs.end()) //like is it really worth doing this check?
             return false;
 
         if (words[0] == "go" && words.size() == 2 &&
@@ -50,7 +50,6 @@ bool parse_input(const std::string &input, Action &action, GameMode mode)
         }
         else if ((words[0] == "search" || words[0] == "rest" || words[0] == "pray" || words[0] == "exit") && words.size() == 1)
         {
-            std::cout << "____khjgjbhfjh" << std::endl;
             action = Action(words[0]);
             return true;
         }
@@ -59,12 +58,18 @@ bool parse_input(const std::string &input, Action &action, GameMode mode)
 
     case GameMode::MENU:
     {
-        std::vector<std::string> valid_commands = {"enter"};
+        std::vector<std::string> valid_commands = {"enter", "buy"}; //lowkey  don't need this?!
         std::vector<std::string> valid_dungeons = {"easy", "medium", "hard"};
+        std::vector<std::string> valid_items = {"strength", "hp", "armor", "agility"};
 
         if (words.size() == 2 &&
             words[0] == "enter" &&
             std::find(valid_dungeons.begin(), valid_dungeons.end(), words[1]) != valid_dungeons.end())
+        {
+            action = Action(words[0], std::nullopt, words[1]);
+            return true;
+        }
+        else if (words.size() == 2 && words[0] == "buy" && std::find(valid_items.begin(), valid_items.end(), words[1]) != valid_items.end())
         {
             action = Action(words[0], std::nullopt, words[1]);
             return true;

@@ -27,6 +27,43 @@ bool handle_action(const Action &action, Game &game)
                 return true;
             }
         }
+        else if (action.verb == "buy" && action.object)
+        {
+            if (*action.object == "strength")
+            {
+                if (game.buyStrength())
+                {
+                    return true;
+                }
+                return false;
+            }
+            else if (*action.object == "hp")
+            {
+
+                if (game.buyHP())
+                {
+                    return true;
+                }
+                return false;
+            }
+            else if (*action.object == "armor")
+            {
+                if (game.buyArmor())
+                {
+                    return true;
+                }
+                return false;
+            }
+            else if (*action.object == "agility")
+            {
+                if (game.buyAgility())
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
         return false;
 
     case GameMode::DUNGEON:

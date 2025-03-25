@@ -55,6 +55,8 @@ private:
     void initializeText();
     void updateUI();
     void renderXPBar();
+    void damageMonster(int damage);
+    void healMaxPlayer();
 
 public:
     Game();
@@ -68,6 +70,10 @@ public:
     void run();
 
     void changeMode(GameMode newMode);
+    bool buyHP();
+    bool buyStrength();
+    bool buyArmor();
+    bool buyAgility();
     void enterDungeon(int size, int difficulty);
     void leaveDungeon();
     void checkRoomHazards();
