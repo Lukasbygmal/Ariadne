@@ -18,10 +18,15 @@ enum class GameMode
 class Game
 {
 private:
+    static std::mt19937 rng;
+    static std::random_device rd;
     Player player;
     Dungeon dungeon;
     GameMode mode;
     std::string current_word;
+    int word_length;
+    int attacks;
+    int parrys;
     int correct_attacks;
     int correct_parrys;
     bool battle_mode; // true for attack, false for parry
@@ -80,7 +85,7 @@ public:
 
     void startBattle();
     void handleBattleInput(const std::string &input);
-    void changeCurrentWord();
+    void changeCurrentWord(int length);
     void switchToDefense();
     void endRound();
     void endBattle();

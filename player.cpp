@@ -57,6 +57,12 @@ int Player::receiveDamage(int damage)
     return actual_damage;
 }
 
+int Player::receiveDamageParry(int damage)
+{
+    int damage_after_parry = receiveDamage(damage) * 0.9; // want to change how this works eventually, need to ponder how to use stats (maybe agility used here?)
+    return damage_after_parry;
+}
+
 void Player::heal(int amount)
 {
     current_hp = std::min(max_hp, current_hp + amount);
