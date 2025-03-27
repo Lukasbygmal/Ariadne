@@ -43,6 +43,7 @@ public:
     void receiveGold(int amount);
     void decreaseGold(int amount);
     int receiveDamage(int damage);
+    int receiveDamageParry(int damage);
     void heal(int amount);
     bool isAlive() const;
     void increaseHP(int amount);

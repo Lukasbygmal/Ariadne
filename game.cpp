@@ -4,6 +4,9 @@
 #include <string>
 #include "parse_input.h"
 
+std::random_device Game::rd;
+std::mt19937 Game::rng(Game::rd());
+
 Game::Game()
     : player("legend27"), dungeon(6, 2), mode(GameMode::MENU), window(sf::VideoMode(1000, 800), "Ariadne")
 {
@@ -39,7 +42,7 @@ void Game::initializeUI()
 void Game::initializeText()
 {
     roomText.setFont(font);
-    roomText.setCharacterSize(20);
+    roomText.setCharacterSize(28);
     roomText.setFillColor(sf::Color::White);
     roomText.setPosition(20.f, 180.f);
 
@@ -157,7 +160,7 @@ void Game::update()
     {
         sf::Time time = battleClock.getElapsedTime();
         sf::Time end_time = sf::seconds(12.0f);
-        if (time > end_time || (correct_attacks >= 8 && battle_mode) || (correct_parrys >= 6 && !battle_mode)) // change 6 and 8 to not magic numbers eventually
+        if (time > end_time || (correct_attacks >= attacks && battle_mode) || (correct_parrys >= parrys && !battle_mode))
         {
             if (!battle_mode)
             {
@@ -179,18 +182,20 @@ void Game::updateUI()
     }
     else if (mode == GameMode::MENU)
     {
-        roomText.setString("The Ink & Anvil Tavern");
+        roomText.setString("The Ink & Anvil Tavern \n \n You can buy stats!");
     }
     else if (mode == GameMode::BATTLE)
     {
         if (battle_mode)
         {
-            roomText.setString("To attack type: \n\n   " + current_word);
+            roomText.setString(current_word);
+            roomText.setFillColor(sf::Color::Green);
         }
 
         if (!battle_mode)
         {
-            roomText.setString("To defend reverse-type: \n\n   " + current_word);
+            roomText.setString(current_word);
+            roomText.setFillColor(sf::Color::Red);
         }
     }
 
@@ -259,10 +264,11 @@ void Game::changeMode(GameMode newMode)
 bool Game::buyHP()
 { // magic number that needs to be revisited for balancing
     int cost = 10;
-    if (player.getGold() > cost)
+    if (player.getGold() >= cost)
     {
         player.decreaseGold(cost);
-        player.increaseHP(5);
+        player.increaseHP(word_length);
+        addMessage("Bought HP");
         return true;
     }
     return false;
@@ -271,10 +277,11 @@ bool Game::buyHP()
 bool Game::buyStrength()
 { // magic number that needs to be revisited for balancing
     int cost = 10;
-    if (player.getGold() > cost)
+    if (player.getGold() >= cost)
     {
         player.decreaseGold(cost);
-        player.increaseStrength(5);
+        player.increaseStrength(word_length);
+        addMessage("Bought Strength");
         return true;
     }
     return false;
@@ -283,10 +290,11 @@ bool Game::buyStrength()
 bool Game::buyArmor()
 { // magic number that needs to be revisited for balancing
     int cost = 10;
-    if (player.getGold() > cost)
+    if (player.getGold() >= cost)
     {
         player.decreaseGold(cost);
         player.increaseArmor(1);
+        addMessage("Bought Armor");
         return true;
     }
     return false;
@@ -295,10 +303,11 @@ bool Game::buyArmor()
 bool Game::buyAgility()
 { // magic number that needs to be revisited for balancing
     int cost = 10;
-    if (player.getGold() > cost)
+    if (player.getGold() >= cost)
     {
         player.decreaseGold(cost);
         player.increaseAgility(1);
+        addMessage("Bought Agility");
         return true;
     }
     return false;
@@ -347,10 +356,12 @@ void Game::startBattle()
     battle_mode = true;
     changeMode(GameMode::BATTLE);
     // change current_word
-    changeCurrentWord();
-    // correct_words = 0
+    word_length = 3; // this,
+    attacks = 8;     // this and
+    parrys = 6;      // this should probably depend on monster/difficulty
     correct_attacks = 0;
     correct_parrys = 0;
+    changeCurrentWord(word_length);
 }
 
 void Game::handleBattleInput(const std::string &input)
@@ -360,7 +371,7 @@ void Game::handleBattleInput(const std::string &input)
         if (input == current_word)
         {
             correct_attacks++;
-            changeCurrentWord();
+            changeCurrentWord(word_length);
         }
     }
     else // for parry
@@ -369,22 +380,32 @@ void Game::handleBattleInput(const std::string &input)
         if (input == reverse_word)
         {
             correct_parrys++;
-            changeCurrentWord();
+            changeCurrentWord(word_length);
         }
     }
 }
 
-void Game::changeCurrentWord()
+void Game::changeCurrentWord(int length)
 {
-    current_word = "test";
-    std::cout << "Current_word ==" << current_word << "\n";
+
+    const std::string characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+    std::uniform_int_distribution<> dist(0, characters.length() - 1);
+
+    current_word.clear();
+    current_word.reserve(length);
+
+    for (int i = 0; i < length; ++i)
+    {
+        current_word += characters[dist(rng)];
+    }
+    std::cout << "Current_word == " << current_word << "\n";
     // for now just make it into "test"
 }
 
 void Game::switchToDefense()
 {
     battle_mode = false;
-    changeCurrentWord();
+    changeCurrentWord(word_length);
     battleClock.restart();
 }
 
@@ -406,16 +427,25 @@ void Game::endRound()
     }
     addMessage("You did " + std::to_string(correct_attacks) + " attacks for " + std::to_string(total_player_damage) + " damage! \n");
 
-    int missed_parry = 6 - correct_parrys; // need to think if i want 2 for loops, one for parry and one for succesful monster attack?
+    int missed_parry = parrys - correct_parrys; // need to think if i want 2 for loops, one for parry and one for succesful monster attack?
     int monster_damage = dungeon.getCurrentRoom().getMonster().value()->getStrength();
     int total_monster_damage = 0;
-    for (int i = 0; i < missed_parry; i++)
+    for (int i = 0; i < parrys; i++)
     {
+        if (i < correct_parrys)
+        {
+            total_monster_damage += monster_damage;
+            player.receiveDamageParry(monster_damage); // again should make it random eventually
+        }
+        else
+        {
+            total_monster_damage += monster_damage;
+            player.receiveDamage(monster_damage); // again should make it random eventually
+        }
+
         // deal damage to player
-        total_monster_damage += monster_damage;
-        player.receiveDamage(monster_damage); // again should make it random eventually
     }
-    addMessage("You got hit " + std::to_string(missed_parry) + " times for " + std::to_string(total_monster_damage) + " damage! \n");
+    addMessage("You parried " + std::to_string(correct_parrys) + "/" + std::to_string(parrys) + "attacks, took " + std::to_string(total_monster_damage) + " damage! \n");
 
     // if player is dead (do something)
     if (!player.isAlive())
@@ -434,6 +464,7 @@ void Game::endRound()
 
     battleClock.restart();
     battle_mode = true;
+    changeCurrentWord(word_length);
     correct_attacks = 0;
     correct_parrys = 0;
 }
@@ -445,6 +476,7 @@ void Game::endBattle()
     changeMode(GameMode::DUNGEON);
     int xp_reward = dungeon.getCurrentRoom().killMonster();
     player.receiveXP(xp_reward);
+    roomText.setFillColor(sf::Color::White);
 }
 
 void Game::run()
