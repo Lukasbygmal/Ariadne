@@ -7,6 +7,7 @@
 #include <optional>
 #include "player.h"
 #include "dungeon.h"
+#include "db_manager.h"
 
 enum class GameMode
 {
@@ -18,9 +19,11 @@ enum class GameMode
 class Game
 {
 private:
+    DatabaseManager dbManager;
     static std::mt19937 rng;
     static std::random_device rd;
     Player player;
+    int user_id;
     Dungeon dungeon;
     GameMode mode;
     std::string current_word;
