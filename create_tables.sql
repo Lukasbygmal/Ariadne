@@ -1,4 +1,6 @@
---\connect root@localhost:3306
+-- to start server: sudo service mysql start
+--mysql -u root -p
+--\connect root@localhost:3306 ??
 --USE ariadne;
 --SELECT * FROM Users;
 

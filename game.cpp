@@ -8,9 +8,9 @@ std::random_device Game::rd;
 std::mt19937 Game::rng(Game::rd());
 
 Game::Game()
-    : player("Gimli"), user_id(3), dungeon(6, 2), mode(GameMode::MENU), window(sf::VideoMode(1000, 800), "Ariadne"), dbManager("localhost", "root", "", "ariadne")
+    : player("", 1, 1, 1, 1, 1, 1, 1), user_id(4), dungeon(6, 2), mode(GameMode::MENU), window(sf::VideoMode(1000, 800), "Ariadne"), dbManager("localhost", "root", "", "ariadne")
 {
-    if (!dbManager.loadPlayer(player, 3))
+    if (!dbManager.loadPlayer(player, user_id))
     {
         std::cout << "Failed to load player data!" << std::endl;
     }

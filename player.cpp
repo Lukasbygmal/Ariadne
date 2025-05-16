@@ -1,16 +1,16 @@
 #include "player.h"
 #include <algorithm>
 
-Player::Player(const std::string &player_name) : name(player_name),
-                                                 lvl(0),
-                                                 gold(0),
-                                                 xp(250),
-                                                 max_hp(100),
-                                                 current_hp(100),
-                                                 strength(40),
-                                                 intelligence(12),
-                                                 agility(14),
-                                                 armor(69)
+Player::Player(const std::string &player_name, int init_lvl, int init_xp, int init_gold, int init_max_hp, int init_strength, int init_agility, int init_armor) : name(player_name),
+                                                                                                                                                                 lvl(init_lvl),
+                                                                                                                                                                 gold(init_gold),
+                                                                                                                                                                 xp(init_xp),
+                                                                                                                                                                 max_hp(init_max_hp),
+                                                                                                                                                                 current_hp(init_max_hp),
+                                                                                                                                                                 strength(init_strength),
+                                                                                                                                                                 intelligence(12), // most likely want to remove, but not sure yet
+                                                                                                                                                                 agility(init_agility),
+                                                                                                                                                                 armor(init_armor)
 {
     updateXpToMax();
 }

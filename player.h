@@ -24,7 +24,7 @@ private:
     int calculateActualDamage(int incoming_damage) const;
 
 public:
-    Player(const std::string &player_name);
+    Player(const std::string &player_name, int init_lvl, int init_xp, int init_gold, int init_max_hp, int init_strength, int init_agility, int init_armor);
 
     int getLevel() const;
     int getGold() const;
