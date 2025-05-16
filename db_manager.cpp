@@ -74,24 +74,8 @@ bool DatabaseManager::loadPlayer(Player &player, int user_id)
         if (res->next())
         {
             // Create a new player instance with retrieved data
-            Player loadedPlayer(res->getString("name"));
-            // TODO: Need to modify the Player constructor to accept all parameters
-            int lvl = res->getInt("lvl");
+            Player loadedPlayer(res->getString("name"), res->getInt("lvl"), res->getInt("xp"), res->getInt("gold"), res->getInt("max_hp"), res->getInt("strength_stat"), res->getInt("agility_stat"), res->getInt("armor_stat"));
             int currentLvl = loadedPlayer.getLevel();
-
-            // Should look into this, not required right?
-            for (int i = currentLvl; i < lvl; i++)
-            {
-                loadedPlayer.receiveXP(loadedPlayer.getXPToMax());
-            }
-
-            loadedPlayer.receiveXP(res->getInt("xp"));
-            loadedPlayer.receiveGold(res->getInt("gold"));
-
-            loadedPlayer.increaseHP(res->getInt("max_hp") - loadedPlayer.getMaxHP());
-            loadedPlayer.increaseStrength(res->getInt("strength_stat") - loadedPlayer.getStrength());
-            loadedPlayer.increaseAgility(res->getInt("agility_stat") - loadedPlayer.getAgility());
-            loadedPlayer.increaseArmor(res->getInt("armor_stat") - loadedPlayer.getArmor());
 
             loadedPlayer.healToMax();
 
