@@ -1,8 +1,11 @@
 -- to start server: sudo service mysql start
 --mysql -u root -p
---\connect root@localhost:3306 ??
 --USE ariadne;
 --SELECT * FROM Users;
+-- If problem with root not being accessed
+-- sudo mysql
+--ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '';
+--FLUSH PRIVILEGES;
 
 CREATE TABLE Users (user_id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255) NOT NULL, lvl INT NOT NULL, xp INT NOT NULL, gold INT NOT NULL, max_hp INT NOT NULL, strength_stat INT NOT NULL, agility_stat INT NOT NULL, armor_stat INT NOT NULL);
 INSERT INTO Users (name, lvl, xp, gold, max_hp, strength_stat, agility_stat, armor_stat) VALUES
