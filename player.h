@@ -19,9 +19,8 @@ private:
     int armor;
 
     void updateXpToMax();
-    void checkLevelUp();
+    bool checkLevelUp();
     void levelUpBenefits();
-    int calculateActualDamage(int incoming_damage) const;
 
 public:
     Player(const std::string &player_name, int init_lvl, int init_xp, int init_gold, int init_max_hp, int init_strength, int init_agility, int init_armor);
@@ -39,9 +38,10 @@ public:
     std::string getName() const;
 
     void healToMax();
-    void receiveXP(int amount);
+    bool receiveXP(int amount);
     void receiveGold(int amount);
     void decreaseGold(int amount);
+    int damage();
     int receiveDamage(int damage);
     int receiveDamageParry(int damage);
     void heal(int amount);

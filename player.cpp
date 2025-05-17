@@ -1,5 +1,6 @@
 #include "player.h"
 #include <algorithm>
+#include <cmath>
 
 Player::Player(const std::string &player_name, int init_lvl, int init_xp, int init_gold, int init_max_hp, int init_strength, int init_agility, int init_armor) : name(player_name),
                                                                                                                                                                  lvl(init_lvl),
@@ -34,10 +35,11 @@ void Player::dead()
     current_hp = 100;
 }
 
-void Player::receiveXP(int amount)
+bool Player::receiveXP(int amount)
 {
     xp += amount;
-    checkLevelUp();
+    bool did_level = checkLevelUp();
+    return did_level;
 }
 
 void Player::receiveGold(int amount)
@@ -50,16 +52,29 @@ void Player::decreaseGold(int amount)
     gold -= amount;
 }
 
+int Player::damage()
+{
+    int damage = (strength + agility * 0.2); // balancing, and should agility be used here at all?
+    return damage;
+}
+
 int Player::receiveDamage(int damage)
 {
-    int actual_damage = calculateActualDamage(damage);
-    current_hp = std::max(0, current_hp - actual_damage);
+    float scaling_constant = 75.0f; // balancing?
+    float percent_multiplier = scaling_constant / (scaling_constant + armor);
+    float flat_factor = 0.2f; // balancing?
+    int flat_reduction = static_cast<int>(armor * flat_factor);
+
+    int reduced_damage = static_cast<int>(damage * percent_multiplier) - flat_reduction;
+    int actual_damage = std::max(1, reduced_damage);
+    current_hp = std::max(0, current_hp - actual_damage); // to not have negative hp
     return actual_damage;
 }
 
 int Player::receiveDamageParry(int damage)
 {
-    int damage_after_parry = receiveDamage(damage) * 0.9; // want to change how this works eventually, need to ponder how to use stats (maybe agility used here?)
+    int damage_after_parry = static_cast<int>(damage * 0.9); // balancing?
+    receiveDamage(damage_after_parry);
     return damage_after_parry;
 }
 
@@ -105,27 +120,31 @@ void Player::increaseArmor(int amount)
 
 void Player::updateXpToMax()
 {
-    xp_to_max = (lvl + 1) * (lvl + 100) * 5;
+    xp_to_max = (lvl + 1) * (lvl + 100); // temporarily decreased, was xp_to_max = (lvl + 1) * (lvl + 100) * 5; before
 }
 
-void Player::checkLevelUp()
+bool Player::checkLevelUp()
 {
-    while (xp >= xp_to_max)
+    if (xp >= xp_to_max)
     {
-        xp -= xp_to_max;
-        lvl++;
-        updateXpToMax();
-        levelUpBenefits();
+        while (xp >= xp_to_max) // have to make it this ugly to cover corner case of leveling more than 1 level
+        {
+            xp -= xp_to_max;
+            lvl++;
+            updateXpToMax();
+            levelUpBenefits();
+        }
+        return true;
     }
+
+    return false;
 }
 
 void Player::levelUpBenefits()
 {
-    // don't know how/what, need to know combat first
-}
-
-int Player::calculateActualDamage(int incoming_damage) const
-{
-    float damage_reduction = armor / (armor + 100.0f);
-    return static_cast<int>(incoming_damage * (1.0f - damage_reduction));
+    int scaling = std::ceil(lvl / 5.0);
+    increaseHP(25 * scaling);
+    increaseStrength(scaling);
+    increaseAgility(scaling);
+    increaseArmor(scaling);
 }

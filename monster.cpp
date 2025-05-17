@@ -32,7 +32,7 @@ std::string Monster::to_string() const
 Skeleton::Skeleton(int difficulty) : Monster(difficulty)
 {
     name = "Skeleton";
-    hp = 50;
+    hp = 5; // temporarily made really easy for testing
     strength = 3;
     base_xp = 100;
     adjustForDifficulty(difficulty);
@@ -48,7 +48,7 @@ void Skeleton::adjustForDifficulty(int difficulty)
 Goblin::Goblin(int difficulty) : Monster(difficulty)
 {
     name = "Goblin";
-    hp = 30;
+    hp = 3; // temporarily made really easy for testing
     strength = 2;
     base_xp = 75;
     adjustForDifficulty(difficulty);
@@ -64,7 +64,7 @@ void Goblin::adjustForDifficulty(int difficulty)
 Minotaur::Minotaur(int difficulty) : Monster(difficulty)
 {
     name = "Minotaur";
-    hp = 100;
+    hp = 1; // temporarily made really easy for testing
     strength = 3;
     base_xp = 500;
     adjustForDifficulty(difficulty);
@@ -80,7 +80,7 @@ void Minotaur::adjustForDifficulty(int difficulty)
 Wolf::Wolf(int difficulty) : Monster(difficulty)
 {
     name = "Wolf";
-    hp = 20;
+    hp = 2; // temporarily made really easy for testing
     strength = 5;
     base_xp = 90;
     adjustForDifficulty(difficulty);

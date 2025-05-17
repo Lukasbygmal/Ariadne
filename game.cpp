@@ -8,7 +8,7 @@ std::random_device Game::rd;
 std::mt19937 Game::rng(Game::rd());
 
 Game::Game()
-    : player("", 1, 1, 1, 1, 1, 1, 1), user_id(4), dungeon(6, 2), mode(GameMode::MENU), window(sf::VideoMode(1000, 800), "Ariadne"), dbManager("localhost", "root", "", "ariadne")
+    : player("", 1, 1, 1, 1, 1, 1, 1), user_id(7), dungeon(6, 2), mode(GameMode::MENU), window(sf::VideoMode(1000, 800), "Ariadne"), dbManager("localhost", "root", "", "ariadne")
 {
     if (!dbManager.loadPlayer(player, user_id))
     {
@@ -276,8 +276,8 @@ bool Game::buyHP()
     if (player.getGold() >= cost)
     {
         player.decreaseGold(cost);
-        player.increaseHP(word_length);
-        addMessage("Bought HP");
+        player.increaseHP(5);
+        addMessage("Bought HP\n");
         return true;
     }
     return false;
@@ -289,8 +289,8 @@ bool Game::buyStrength()
     if (player.getGold() >= cost)
     {
         player.decreaseGold(cost);
-        player.increaseStrength(word_length);
-        addMessage("Bought Strength");
+        player.increaseStrength(1);
+        addMessage("Bought Strength\n");
         return true;
     }
     return false;
@@ -303,7 +303,7 @@ bool Game::buyArmor()
     {
         player.decreaseGold(cost);
         player.increaseArmor(1);
-        addMessage("Bought Armor");
+        addMessage("Bought Armor\n");
         return true;
     }
     return false;
@@ -316,7 +316,7 @@ bool Game::buyAgility()
     {
         player.decreaseGold(cost);
         player.increaseAgility(1);
-        addMessage("Bought Agility");
+        addMessage("Bought Agility\n");
         return true;
     }
     return false;
@@ -426,7 +426,7 @@ void Game::damageMonster(int damage)
 void Game::endRound()
 {
     std::cout << "EndRound() \n";
-    int player_damage = player.getStrength();
+    int player_damage = player.damage(); // should make it random eventually
     int total_player_damage = 0;
     for (int i = 0; i < correct_attacks; i++)
     {
@@ -484,7 +484,11 @@ void Game::endBattle()
     std::cout << "EndBattle() correct_parry:" << correct_parrys << "\n";
     changeMode(GameMode::DUNGEON);
     int xp_reward = dungeon.getCurrentRoom().killMonster();
-    player.receiveXP(xp_reward);
+    bool did_level = player.receiveXP(xp_reward);
+    if (did_level)
+    {
+        addMessage("You leveled up and gained some stats!\n");
+    }
     roomText.setFillColor(sf::Color::White);
 }
 
