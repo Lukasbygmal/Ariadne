@@ -8,7 +8,7 @@ std::random_device Game::rd;
 std::mt19937 Game::rng(Game::rd());
 
 Game::Game()
-    : player("", 1, 1, 1, 1, 1, 1, 1), user_id(7), dungeon(6, 2), mode(GameMode::MENU), window(sf::VideoMode(1000, 800), "Ariadne"), dbManager("localhost", "root", "", "ariadne")
+    : player("", 1, 1, 1, 1, 1, 1, 1), user_id(7), dungeon(6, 2), mode(GameMode::MENU), window(sf::VideoMode(800, 660), "Ariadne"), dbManager("localhost", "root", "", "ariadne")
 {
     if (!dbManager.loadPlayer(player, user_id))
     {
@@ -29,21 +29,29 @@ void Game::initializeUI()
         throw std::runtime_error("Failed to load font");
     }
 
-    roomBackground.setSize(sf::Vector2f(600.f, 400.f));
+    roomBackground.setSize(sf::Vector2f(460.f, 400.f));
     roomBackground.setFillColor(sf::Color(100, 100, 100, 200));
-    roomBackground.setPosition(10.f, 170.f);
+    roomBackground.setPosition(10.f, 30.f);
 
-    statsBackground.setSize(sf::Vector2f(370.f, 210.f));
+    statsBackground.setSize(sf::Vector2f(310.f, 210.f));
     statsBackground.setFillColor(sf::Color(100, 100, 100, 200));
-    statsBackground.setPosition(620.f, 580.f);
+    statsBackground.setPosition(480.f, 440.f);
 
-    terminalBackground.setSize(sf::Vector2f(600.f, 160.f));
+    perksBackground.setSize(sf::Vector2f(150.f, 80.f));
+    perksBackground.setFillColor(sf::Color(114, 188, 212, 200));
+    perksBackground.setPosition(640.f, 350.f);
+
+    yetToDecideBackground.setSize(sf::Vector2f(150.f, 80.f));
+    yetToDecideBackground.setFillColor(sf::Color(120, 150, 100, 200));
+    yetToDecideBackground.setPosition(480.f, 350.f);
+
+    terminalBackground.setSize(sf::Vector2f(460.f, 160.f));
     terminalBackground.setFillColor(sf::Color(50, 50, 50, 220));
-    terminalBackground.setPosition(10.f, 580.f);
+    terminalBackground.setPosition(10.f, 440.f);
 
-    inputBox.setSize(sf::Vector2f(600.f, 40.f));
+    inputBox.setSize(sf::Vector2f(460.f, 40.f));
     inputBox.setFillColor(sf::Color(220, 220, 220));
-    inputBox.setPosition(10.f, 750.f);
+    inputBox.setPosition(10.f, 610.f);
 
     initializeText();
 }
@@ -53,52 +61,47 @@ void Game::initializeText()
     roomText.setFont(font);
     roomText.setCharacterSize(28);
     roomText.setFillColor(sf::Color::White);
-    roomText.setPosition(20.f, 180.f);
+    roomText.setPosition(20.f, 40.f);
 
     levelText.setFont(font);
     levelText.setCharacterSize(24);
     levelText.setFillColor(sf::Color::White);
-    levelText.setPosition(790.f, 590.f);
+    levelText.setPosition(610.f, 450.f);
 
     goldText.setFont(font);
     goldText.setCharacterSize(24);
     goldText.setFillColor(sf::Color::White);
-    goldText.setPosition(790.f, 640.f);
+    goldText.setPosition(610.f, 500.f);
 
     hpText.setFont(font);
     hpText.setCharacterSize(20);
     hpText.setFillColor(sf::Color::White);
-    hpText.setPosition(760.f, 620.f);
+    hpText.setPosition(590.f, 480.f);
 
     strengthText.setFont(font);
     strengthText.setCharacterSize(20);
     strengthText.setFillColor(sf::Color::White);
-    strengthText.setPosition(640.f, 680.f);
-
-    intelligenceText.setFont(font);
-    intelligenceText.setCharacterSize(20);
-    intelligenceText.setFillColor(sf::Color::White);
-    intelligenceText.setPosition(840.f, 680.f);
+    strengthText.setPosition(490.f, 540.f);
 
     agilityText.setFont(font);
     agilityText.setCharacterSize(20);
     agilityText.setFillColor(sf::Color::White);
-    agilityText.setPosition(640.f, 720.f);
+    agilityText.setPosition(610.f, 540.f);
 
     armorText.setFont(font);
     armorText.setCharacterSize(20);
     armorText.setFillColor(sf::Color::White);
-    armorText.setPosition(840.f, 720.f);
+    armorText.setPosition(700.f, 540.f);
 
     terminalText.setFont(font);
     terminalText.setCharacterSize(18);
     terminalText.setFillColor(sf::Color::White);
-    terminalText.setPosition(20.f, 590.f);
+    terminalText.setPosition(20.f, 450.f);
 
     inputText.setFont(font);
     inputText.setCharacterSize(18);
     inputText.setFillColor(sf::Color::Black);
-    inputText.setPosition(20.f, 760.f);
+    inputText.setPosition(20.f, 620.f);
 }
 
 void Game::processEvents()
@@ -210,12 +213,11 @@ void Game::updateUI()
 
     levelText.setString("Lvl " + std::to_string(player.getLevel()));
     goldText.setString(std::to_string(player.getGold()) + " G");
-    hpText.setString(std::to_string(player.getCurrentHP()) + " / " + std::to_string(player.getMaxHP()) + "HP");
+    hpText.setString(std::to_string(player.getCurrentHP()) + " / " + std::to_string(player.getMaxHP()) + " HP");
 
-    strengthText.setString("Strength: " + std::to_string(player.getStrength()));
-    intelligenceText.setString("Intelligence: " + std::to_string(player.getIntelligence()));
-    agilityText.setString("Agility: " + std::to_string(player.getAgility()));
-    armorText.setString("Armor: " + std::to_string(player.getArmor()));
+    strengthText.setString("Strength\n\n      " + std::to_string(player.getStrength()));
+    agilityText.setString("Agility\n\n    " + std::to_string(player.getAgility()));
+    armorText.setString("Armor\n\n    " + std::to_string(player.getArmor()));
 
     std::string terminalDisplay;
     for (const auto &msg : terminalMessages)
@@ -250,11 +252,12 @@ void Game::render()
     window.draw(roomBackground);
     window.draw(roomText);
     window.draw(statsBackground);
+    window.draw(perksBackground);
+    window.draw(yetToDecideBackground);
     window.draw(levelText);
     window.draw(goldText);
     window.draw(hpText);
     window.draw(strengthText);
-    window.draw(intelligenceText);
     window.draw(agilityText);
     window.draw(armorText);
     window.draw(terminalBackground);

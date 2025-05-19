@@ -14,7 +14,6 @@ private:
     int max_hp;
     int current_hp;
     int strength;
-    int intelligence;
     int agility;
     int armor;
 
@@ -32,7 +31,6 @@ public:
     int getMaxHP() const;
     int getCurrentHP() const;
     int getStrength() const;
-    int getIntelligence() const;
     int getAgility() const;
     int getArmor() const;
     std::string getName() const;
@@ -48,7 +46,6 @@ public:
     bool isAlive() const;
     void increaseHP(int amount);
     void increaseStrength(int amount);
-    void increaseIntelligence(int amount);
     void increaseAgility(int amount);
     void increaseArmor(int amount);
     void dead();

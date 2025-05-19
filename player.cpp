@@ -9,7 +9,6 @@ Player::Player(const std::string &player_name, int init_lvl, int init_xp, int in
                                                                                                                                                                  max_hp(init_max_hp),
                                                                                                                                                                  current_hp(init_max_hp),
                                                                                                                                                                  strength(init_strength),
-                                                                                                                                                                 intelligence(12), // most likely want to remove, but not sure yet
                                                                                                                                                                  agility(init_agility),
                                                                                                                                                                  armor(init_armor)
 {
@@ -23,7 +22,6 @@ int Player::getXPToMax() const { return xp_to_max; }
 int Player::getMaxHP() const { return max_hp; }
 int Player::getCurrentHP() const { return current_hp; }
 int Player::getStrength() const { return strength; }
-int Player::getIntelligence() const { return intelligence; }
 int Player::getAgility() const { return agility; }
 int Player::getArmor() const { return armor; }
 std::string Player::getName() const { return name; }
@@ -103,10 +101,6 @@ void Player::increaseStrength(int amount)
     strength += amount;
 }
 
-void Player::increaseIntelligence(int amount)
-{
-    intelligence += amount;
-}
 
 void Player::increaseAgility(int amount)
 {

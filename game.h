@@ -36,10 +36,12 @@ private:
     sf::RenderWindow window;
     std::vector<std::string> terminalMessages;
     sf::Clock battleClock;
-
+    
     sf::Font font;
     sf::RectangleShape roomBackground;
     sf::RectangleShape statsBackground;
+    sf::RectangleShape perksBackground;
+    sf::RectangleShape yetToDecideBackground;
     sf::RectangleShape terminalBackground;
     sf::RectangleShape inputBox;
     sf::Text roomText;
@@ -47,7 +49,6 @@ private:
     sf::Text goldText;
     sf::Text hpText;
     sf::Text strengthText;
-    sf::Text intelligenceText;
     sf::Text agilityText;
     sf::Text armorText;
     sf::Text terminalText;
@@ -56,7 +57,7 @@ private:
     std::string userInput;
 
     const int totalSegments = 20;
-    const float segmentWidth = 49;
+    const float segmentWidth = 39.2;
     const float segmentHeight = 10;
 
     void initializeUI();
