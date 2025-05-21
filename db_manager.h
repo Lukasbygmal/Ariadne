@@ -33,6 +33,7 @@ public:
     ~DatabaseManager();
 
     bool loadPlayer(Player &player, int userId);
+    bool savePlayer(Player &player, int userId);
 };
 
 #endif

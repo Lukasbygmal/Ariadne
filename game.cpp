@@ -110,7 +110,11 @@ void Game::processEvents()
     while (window.pollEvent(event))
     {
         if (event.type == sf::Event::Closed)
+        {
+            dbManager.savePlayer(player, user_id);
             window.close();
+        }
+
         handleInput(event);
     }
 }
@@ -334,6 +338,14 @@ void Game::enterDungeon(int size, int difficulty)
 
 void Game::leaveDungeon()
 {
+    if (!dbManager.savePlayer(player, user_id))
+    {
+        std::cout << "Failed to save player data!" << std::endl;
+    }
+    else
+    {
+        std::cout << "Player data saved successfully!" << std::endl;
+    }
     changeMode(GameMode::MENU);
     healMaxPlayer();
     addMessage("You escaped the dungeon\n");

@@ -98,6 +98,38 @@ bool DatabaseManager::loadPlayer(Player &player, int user_id)
     }
 }
 
+bool DatabaseManager::savePlayer(Player &player, int user_id)
+{
+    if (!connect())
+        return false;
+
+    try
+    {
+        std::unique_ptr<sql::PreparedStatement> pstmt(conn->prepareStatement(
+            "UPDATE Users SET name = ?, lvl = ?, xp = ?, gold = ?, max_hp = ?, strength_stat = ?, agility_stat = ?, armor_stat = ? WHERE user_id = ?"));
+
+        pstmt->setString(1, player.getName());
+        pstmt->setInt(2, player.getLevel());
+        pstmt->setInt(3, player.getXP());
+        pstmt->setInt(4, player.getGold());
+        pstmt->setInt(5, player.getMaxHP());
+        pstmt->setInt(6, player.getStrength());
+        pstmt->setInt(7, player.getAgility());
+        pstmt->setInt(8, player.getArmor());
+        pstmt->setInt(9, user_id);
+
+        pstmt->executeUpdate();
+        return true;
+    }
+    catch (sql::SQLException &e)
+    {
+        std::cerr << "SQLException in savePlayer(): " << e.what() << std::endl;
+        std::cerr << "SQLState: " << e.getSQLState() << std::endl;
+        std::cerr << "ErrorCode: " << e.getErrorCode() << std::endl;
+        return false;
+    }
+}
+
 bool DatabaseManager::doesPlayerExist(const std::string &playerName)
 { // need to rethink as it should use user_id as key, so can have repeat names?
     if (!connect())
