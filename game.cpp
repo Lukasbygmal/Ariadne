@@ -423,7 +423,6 @@ void Game::changeCurrentWord(int length)
         current_word += characters[dist(rng)];
     }
     std::cout << "Current_word == " << current_word << "\n";
-    // for now just make it into "test"
 }
 
 void Game::switchToDefense()
@@ -434,44 +433,54 @@ void Game::switchToDefense()
 }
 
 void Game::damageMonster(int damage)
-{ // should maybe make the damage done random later
+{
     dungeon.getCurrentRoom().getMonster().value()->receiveDamage(damage);
 }
 
 void Game::endRound()
 {
     std::cout << "EndRound() \n";
+    std::uniform_real_distribution<float> dist(0.5f, 1.5f); // might want to make 1 for attack and one for def, if perks affect this
+    float amplifier = 1;
+    int hit;
     int player_damage = player.damage(); // should make it random eventually
     int total_player_damage = 0;
     for (int i = 0; i < correct_attacks; i++)
     {
         // deal damage to monster
-        total_player_damage += player_damage;
-        damageMonster(player_damage);
+        amplifier = dist(rng);
+        hit = player_damage * amplifier;
+        total_player_damage += hit;
+        std::cout << "amplifier " << amplifier << "\n";
+        std::cout << "hit(monster) " << hit << "\n";
+        
+        damageMonster(hit);
     }
     addMessage("You did " + std::to_string(correct_attacks) + " attacks for " + std::to_string(total_player_damage) + " damage! \n");
 
-    int missed_parry = parrys - correct_parrys; // need to think if i want 2 for loops, one for parry and one for succesful monster attack?
+    int missed_parry = parrys - correct_parrys;
     int monster_damage = dungeon.getCurrentRoom().getMonster().value()->getStrength();
     int total_monster_damage = 0;
+    int actual_damage;
     for (int i = 0; i < parrys; i++)
     {
+        amplifier = dist(rng);
+        hit = monster_damage * amplifier;
+        std::cout << "amplifier " << amplifier << "\n";
+        std::cout << "hit(monster) " << hit << "\n";
         if (i < correct_parrys)
         {
-            total_monster_damage += monster_damage;
-            player.receiveDamageParry(monster_damage); // again should make it random eventually
+            actual_damage = player.receiveDamageParry(hit);
+            total_monster_damage += actual_damage;
         }
         else
         {
-            total_monster_damage += monster_damage;
-            player.receiveDamage(monster_damage); // again should make it random eventually
+            actual_damage = player.receiveDamage(hit);
+            total_monster_damage += actual_damage;
         }
-
-        // deal damage to player
     }
     addMessage("You parried " + std::to_string(correct_parrys) + "/" + std::to_string(parrys) + "attacks, took " + std::to_string(total_monster_damage) + " damage! \n");
 
-    // if player is dead (do something)
     if (!player.isAlive())
     {
         addMessage("You died, lost gold and XP \n");
