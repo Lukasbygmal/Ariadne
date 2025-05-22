@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <optional>
+#include <deque>
 #include "player.h"
 #include "dungeon.h"
 #include "db_manager.h"
@@ -26,8 +27,9 @@ private:
     int user_id;
     Dungeon dungeon;
     GameMode mode;
-    std::string current_word;
-    int word_length;
+    std::deque<std::string> word_queue;
+    int word_length_attack;
+    int word_length_parry;
     int attacks;
     int parrys;
     int correct_attacks;
@@ -89,7 +91,8 @@ public:
 
     void startBattle();
     void handleBattleInput(const std::string &input);
-    void changeCurrentWord(int length);
+    std::string createWord(int length);
+    void resetWordQueue(int words, int length);
     void switchToDefense();
     void endRound();
     void endBattle();

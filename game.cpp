@@ -175,7 +175,7 @@ void Game::update()
     if (mode == GameMode::BATTLE)
     {
         sf::Time time = battleClock.getElapsedTime();
-        sf::Time end_time = sf::seconds(12.0f);
+        sf::Time end_time = sf::seconds(0.1f);
         if (time > end_time || (correct_attacks >= attacks && battle_mode) || (correct_parrys >= parrys && !battle_mode))
         {
             if (!battle_mode)
@@ -202,15 +202,20 @@ void Game::updateUI()
     }
     else if (mode == GameMode::BATTLE)
     {
+        std::string display_words;
+        for (const auto& word : word_queue)
+        {
+            display_words += word + "\n\n";
+        }
+
+        roomText.setString(display_words);
         if (battle_mode)
         {
-            roomText.setString(current_word);
             roomText.setFillColor(sf::Color::Green);
         }
 
         if (!battle_mode)
         {
-            roomText.setString(current_word);
             roomText.setFillColor(sf::Color::Red);
         }
     }
@@ -379,23 +384,27 @@ void Game::startBattle()
     battleClock.restart();
     battle_mode = true;
     changeMode(GameMode::BATTLE);
-    // change current_word
-    word_length = 3; // this,
+    word_length_attack = 3;
+    word_length_parry = 2; // this,
     attacks = 8;     // this and
     parrys = 6;      // this should probably depend on monster/difficulty
     correct_attacks = 0;
     correct_parrys = 0;
-    changeCurrentWord(word_length);
+    resetWordQueue(attacks, word_length_attack);
 }
 
 void Game::handleBattleInput(const std::string &input)
 {
+    if (word_queue.empty()) return;
+
+    const std::string& current_word = word_queue.front();
+
     if (battle_mode) // for attack
     {
         if (input == current_word)
         {
             correct_attacks++;
-            changeCurrentWord(word_length);
+            word_queue.pop_front();
         }
     }
     else // for parry
@@ -404,31 +413,39 @@ void Game::handleBattleInput(const std::string &input)
         if (input == reverse_word)
         {
             correct_parrys++;
-            changeCurrentWord(word_length);
+            word_queue.pop_front();
         }
     }
 }
 
-void Game::changeCurrentWord(int length)
+std::string Game::createWord(int length)
 {
-
+    std::string new_word;   
     const std::string characters = "abcdefghijklmnopqrstuvwxyz0123456789";
     std::uniform_int_distribution<> dist(0, characters.length() - 1);
 
-    current_word.clear();
-    current_word.reserve(length);
+    new_word.reserve(length);
 
     for (int i = 0; i < length; ++i)
     {
-        current_word += characters[dist(rng)];
+        new_word += characters[dist(rng)];
     }
-    std::cout << "Current_word == " << current_word << "\n";
+    std::cout << "new_word == " << new_word << "\n";
+    return new_word;
+}
+
+void Game::resetWordQueue(int words, int length)
+{
+    word_queue.clear();
+    for (int i = 0; i<words ;i++){
+        word_queue.push_back(createWord(length));
+    }
 }
 
 void Game::switchToDefense()
 {
     battle_mode = false;
-    changeCurrentWord(word_length);
+    resetWordQueue(parrys,word_length_parry);
     battleClock.restart();
 }
 
@@ -452,7 +469,7 @@ void Game::endRound()
         hit = player_damage * amplifier;
         total_player_damage += hit;
         std::cout << "amplifier " << amplifier << "\n";
-        std::cout << "hit(monster) " << hit << "\n";
+        std::cout << "hit(player) " << hit << "\n";
         
         damageMonster(hit);
     }
@@ -471,11 +488,13 @@ void Game::endRound()
         if (i < correct_parrys)
         {
             actual_damage = player.receiveDamageParry(hit);
+            std::cout << "Parried -" << actual_damage << "\n";
             total_monster_damage += actual_damage;
         }
         else
         {
             actual_damage = player.receiveDamage(hit);
+            std::cout << "Not parried -" << actual_damage << "\n";
             total_monster_damage += actual_damage;
         }
     }
@@ -485,10 +504,11 @@ void Game::endRound()
     {
         addMessage("You died, lost gold and XP \n");
         player.dead();
+        roomText.setFillColor(sf::Color::White);
         changeMode(GameMode::MENU);
     }
 
-    // if monster hp ==0: endBattle()
+    // this long if statement is if monster is dead
     if (dungeon.getCurrentRoom().getMonster().value()->getHP() <= 0)
     {
         endBattle();
@@ -497,7 +517,7 @@ void Game::endRound()
 
     battleClock.restart();
     battle_mode = true;
-    changeCurrentWord(word_length);
+    resetWordQueue(attacks,word_length_attack);
     correct_attacks = 0;
     correct_parrys = 0;
 }
