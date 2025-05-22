@@ -30,7 +30,6 @@ void Player::dead()
 {
     xp = 0;
     gold = gold / 2;
-    current_hp = 100;
 }
 
 bool Player::receiveXP(int amount)
