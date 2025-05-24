@@ -8,7 +8,7 @@ std::random_device Game::rd;
 std::mt19937 Game::rng(Game::rd());
 
 Game::Game()
-    : player("", 1, 1, 1, 1, 1, 1, 1), user_id(7), dungeon(6, 2), mode(GameMode::MENU), window(sf::VideoMode(800, 660), "Ariadne"), dbManager("localhost", "root", "", "ariadne")
+    : player("", 1, 1, 1, 1, 1, 1, 1), user_id(7), dungeon("Thalgrin", "easy"), mode(GameMode::MENU), window(sf::VideoMode(800, 660), "Ariadne"), dbManager("localhost", "root", "", "ariadne")
 {
     if (!dbManager.loadPlayer(player, user_id))
     {
@@ -203,7 +203,7 @@ void Game::updateUI()
     else if (mode == GameMode::BATTLE)
     {
         std::string display_words;
-        for (const auto& word : word_queue)
+        for (const auto &word : word_queue)
         {
             display_words += word + "\n\n";
         }
@@ -334,9 +334,9 @@ bool Game::buyAgility()
     return false;
 }
 
-void Game::enterDungeon(int size, int difficulty)
+void Game::enterDungeon(std::string dungeon_name, std::string string_difficulty)
 {
-    dungeon = Dungeon(size, difficulty);
+    dungeon = Dungeon(dungeon_name, string_difficulty);
     healMaxPlayer();
     changeMode(GameMode::DUNGEON);
 }
@@ -358,17 +358,17 @@ void Game::leaveDungeon()
 
 void Game::checkRoomHazards()
 {
-    Room *current = dungeon.returnCurrentRoom();
-    std::optional<Trap *> trap = current->getTrap();
+    Room current = dungeon.getCurrentRoom();
+    std::optional<Trap *> trap = current.getTrap();
     if (trap)
     {
         int damage = trap.value()->getDamage();
         damage = player.receiveDamage(damage);
         std::string trap_name = trap.value()->to_string();
         addMessage("You triggered a " + trap_name + " trap! You take " + std::to_string(damage) + " damage.\n");
-        current->removeTrap();
+        current.removeTrap();
     }
-    std::optional<Monster *> monster = current->getMonster();
+    std::optional<Monster *> monster = current.getMonster();
     if (monster)
     {
         std::string monster_name = monster.value()->to_string();
@@ -386,8 +386,8 @@ void Game::startBattle()
     changeMode(GameMode::BATTLE);
     word_length_attack = 3;
     word_length_parry = 2; // this,
-    attacks = 8;     // this and
-    parrys = 6;      // this should probably depend on monster/difficulty
+    attacks = 8;           // this and
+    parrys = 6;            // this should probably depend on monster/difficulty
     correct_attacks = 0;
     correct_parrys = 0;
     resetWordQueue(attacks, word_length_attack);
@@ -395,9 +395,10 @@ void Game::startBattle()
 
 void Game::handleBattleInput(const std::string &input)
 {
-    if (word_queue.empty()) return;
+    if (word_queue.empty())
+        return;
 
-    const std::string& current_word = word_queue.front();
+    const std::string &current_word = word_queue.front();
 
     if (battle_mode) // for attack
     {
@@ -420,7 +421,7 @@ void Game::handleBattleInput(const std::string &input)
 
 std::string Game::createWord(int length)
 {
-    std::string new_word;   
+    std::string new_word;
     const std::string characters = "abcdefghijklmnopqrstuvwxyz0123456789";
     std::uniform_int_distribution<> dist(0, characters.length() - 1);
 
@@ -437,7 +438,8 @@ std::string Game::createWord(int length)
 void Game::resetWordQueue(int words, int length)
 {
     word_queue.clear();
-    for (int i = 0; i<words ;i++){
+    for (int i = 0; i < words; i++)
+    {
         word_queue.push_back(createWord(length));
     }
 }
@@ -445,7 +447,7 @@ void Game::resetWordQueue(int words, int length)
 void Game::switchToDefense()
 {
     battle_mode = false;
-    resetWordQueue(parrys,word_length_parry);
+    resetWordQueue(parrys, word_length_parry);
     battleClock.restart();
 }
 
@@ -470,7 +472,7 @@ void Game::endRound()
         total_player_damage += hit;
         std::cout << "amplifier " << amplifier << "\n";
         std::cout << "hit(player) " << hit << "\n";
-        
+
         damageMonster(hit);
     }
     addMessage("You did " + std::to_string(correct_attacks) + " attacks for " + std::to_string(total_player_damage) + " damage! \n");
@@ -517,7 +519,7 @@ void Game::endRound()
 
     battleClock.restart();
     battle_mode = true;
-    resetWordQueue(attacks,word_length_attack);
+    resetWordQueue(attacks, word_length_attack);
     correct_attacks = 0;
     correct_parrys = 0;
 }

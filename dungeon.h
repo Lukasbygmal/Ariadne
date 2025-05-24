@@ -5,6 +5,14 @@
 #include <vector>
 #include "room.h"
 
+struct DungeonConfig
+{
+    int size;
+    std::vector<int> monster_pool;
+    int boss_monster_type;
+    int base_difficulty;
+};
+
 class Dungeon
 {
 private:
@@ -20,7 +28,7 @@ private:
     int boss_room_y; // not sure i need this
 
 public:
-    Dungeon(int size, int difficulty);
+    Dungeon(std::string dungeon_name, std::string string_difficulty);
 
     bool goNorth();
     bool goSouth();
@@ -28,7 +36,6 @@ public:
     bool goWest();
 
     Room &getCurrentRoom() const;
-    Room *returnCurrentRoom() const;
     int getCurrentX() const;
     int getCurrentY() const;
     bool isBossRoom() const; // not sure i need this

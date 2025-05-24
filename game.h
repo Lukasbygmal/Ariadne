@@ -38,7 +38,7 @@ private:
     sf::RenderWindow window;
     std::vector<std::string> terminalMessages;
     sf::Clock battleClock;
-    
+
     sf::Font font;
     sf::RectangleShape roomBackground;
     sf::RectangleShape statsBackground;
@@ -85,7 +85,7 @@ public:
     bool buyStrength();
     bool buyArmor();
     bool buyAgility();
-    void enterDungeon(int size, int difficulty);
+    void enterDungeon(std::string dungeon_name, std::string string_difficulty);
     void leaveDungeon();
     void checkRoomHazards();
 
