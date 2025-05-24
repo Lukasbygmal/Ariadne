@@ -10,19 +10,19 @@ bool handle_action(const Action &action, Game &game)
         {
             if (*action.object == "easy")
             {
-                game.enterDungeon(4, 1);
+                game.enterDungeon("Thalgrin", *action.object);
                 game.addMessage("You enter easy\n");
                 return true;
             }
             else if (*action.object == "medium")
             {
-                game.enterDungeon(6, 3);
+                game.enterDungeon("Thalgrin", *action.object);
                 game.addMessage("You enter medium\n");
                 return true;
             }
             else if (*action.object == "hard")
             {
-                game.enterDungeon(8, 5);
+                game.enterDungeon("Thalgrin", *action.object);
                 game.addMessage("You enter hard\n");
                 return true;
             }
