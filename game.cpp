@@ -8,7 +8,7 @@ std::random_device Game::rd;
 std::mt19937 Game::rng(Game::rd());
 
 Game::Game()
-    : player("", 1, 1, 1, 1, 1, 1, 1), user_id(7), dungeon("Thalgrin", "easy"), mode(GameMode::MENU), window(sf::VideoMode(800, 660), "Ariadne"), dbManager("localhost", "root", "", "ariadne")
+    : player("", 1, 1, 1, 1, 1, 1, 1), user_id(7), dungeon("thalgrin", "easy"), mode(GameMode::MENU), window(sf::VideoMode(800, 660), "Ariadne"), dbManager("localhost", "root", "", "ariadne")
 {
     if (!dbManager.loadPlayer(player, user_id))
     {

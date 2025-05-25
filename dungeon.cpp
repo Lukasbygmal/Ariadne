@@ -1,21 +1,22 @@
 #include "dungeon.h"
 #include <random>
 #include <map>
+#include <stdexcept>
 
 std::random_device Dungeon::rd;
 std::mt19937 Dungeon::rng(Dungeon::rd());
 
 std::map<std::string, DungeonConfig> dungeon_configs = {
-    {"Thalgrin", {4, {1, 2}, 1, 1}},
-    {"Vornak", {5, {1, 2, 3}, 2, 4}},
-    {"Ezrath", {5, {2, 3}, 2, 7}},
-    {"Kundrel", {6, {2, 3, 4}, 3, 10}},
-    {"Zamorran", {6, {3, 4}, 3, 13}},
-    {"Druvok", {7, {2, 3, 4}, 4, 16}},
-    {"Malquor", {7, {1, 3, 4}, 4, 19}},
-    {"Xelveth", {8, {2, 4}, 4, 22}},
-    {"Ormathal", {8, {1, 2, 4}, 4, 25}},
-    {"Grivnox", {10, {1, 3, 4}, 4, 28}}};
+    {"thalgrin", {4, {1, 2}, 1, 1}},
+    {"vornak", {5, {1, 2, 3}, 2, 4}},
+    {"ezrath", {5, {2, 3}, 2, 7}},
+    {"kundrel", {6, {2, 3, 4}, 3, 10}},
+    {"zamorran", {6, {3, 4}, 3, 13}},
+    {"druvok", {7, {2, 3, 4}, 4, 16}},
+    {"malquor", {7, {1, 3, 4}, 4, 19}},
+    {"xelveth", {8, {2, 4}, 4, 22}},
+    {"ormathal", {8, {1, 2, 4}, 4, 25}},
+    {"grivnox", {10, {1, 3, 4}, 4, 28}}};
 Dungeon::Dungeon(std::string dungeon_name, std::string string_difficulty) : size(4),
                                                                             difficulty(1),
                                                                             current_x(0),
@@ -30,6 +31,10 @@ Dungeon::Dungeon(std::string dungeon_name, std::string string_difficulty) : size
         difficulty_level = 3;
 
     auto it = dungeon_configs.find(dungeon_name);
+    if (it == dungeon_configs.end())
+    {
+        throw std::invalid_argument("Invalid dungeon name: " + dungeon_name);
+    }
 
     DungeonConfig config = it->second;
     size = config.size;
