@@ -6,26 +6,11 @@ bool handle_action(const Action &action, Game &game)
     switch (game.getMode())
     {
     case GameMode::MENU:
-        if (action.verb == "enter" && action.object)
+        if (action.verb == "enter" && action.direction && action.object)
         {
-            if (*action.object == "easy")
-            {
-                game.enterDungeon("Thalgrin", *action.object);
-                game.addMessage("You enter easy\n");
-                return true;
-            }
-            else if (*action.object == "medium")
-            {
-                game.enterDungeon("Thalgrin", *action.object);
-                game.addMessage("You enter medium\n");
-                return true;
-            }
-            else if (*action.object == "hard")
-            {
-                game.enterDungeon("Thalgrin", *action.object);
-                game.addMessage("You enter hard\n");
-                return true;
-            }
+            game.enterDungeon(*action.direction, *action.object);
+            game.addMessage("You enter \n");
+            return true;
         }
         else if (action.verb == "buy" && action.object)
         {
