@@ -175,7 +175,7 @@ void Game::update()
     if (mode == GameMode::BATTLE)
     {
         sf::Time time = battleClock.getElapsedTime();
-        sf::Time end_time = sf::seconds(0.1f);
+        sf::Time end_time = sf::seconds(round_time);
         if (time > end_time || (correct_attacks >= attacks && battle_mode) || (correct_parrys >= parrys && !battle_mode))
         {
             if (!battle_mode)
@@ -390,6 +390,7 @@ void Game::startBattle()
     parrys = 6;            // this should probably depend on monster/difficulty
     correct_attacks = 0;
     correct_parrys = 0;
+    round_time = 5.0 + player.getAgility() * 0.05; // should depend on monster, and needs balancing
     resetWordQueue(attacks, word_length_attack);
 }
 

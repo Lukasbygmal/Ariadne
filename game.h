@@ -34,6 +34,7 @@ private:
     int parrys;
     int correct_attacks;
     int correct_parrys;
+    float round_time;
     bool battle_mode; // true for attack, false for parry
     sf::RenderWindow window;
     std::vector<std::string> terminalMessages;

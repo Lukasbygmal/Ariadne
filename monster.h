@@ -3,53 +3,30 @@
 
 #include <string>
 
+struct MonsterConfig
+{
+    std::string name;
+    int base_hp;
+    int base_strength;
+    int base_xp;
+};
+
 class Monster
 {
-protected:
+private:
     int hp;
     int strength;
-    int base_xp;
+    int xp;
     std::string name;
 
 public:
-    Monster(int difficulty);
-    virtual ~Monster() = default;
+    Monster(const int type, int difficulty);
 
     int getHP() const;
     int getStrength() const;
     int getXP() const;
     void receiveDamage(int amount);
-    virtual std::string to_string() const;
-
-    virtual void adjustForDifficulty(int difficulty) = 0;
-};
-
-class Skeleton : public Monster
-{
-public:
-    Skeleton(int difficulty);
-    void adjustForDifficulty(int difficulty) override;
-};
-
-class Goblin : public Monster
-{
-public:
-    Goblin(int difficulty);
-    void adjustForDifficulty(int difficulty) override;
-};
-
-class Minotaur : public Monster
-{
-public:
-    Minotaur(int difficulty);
-    void adjustForDifficulty(int difficulty) override;
-};
-
-class Wolf : public Monster
-{
-public:
-    Wolf(int difficulty);
-    void adjustForDifficulty(int difficulty) override;
+    std::string to_string() const;
 };
 
 #endif
