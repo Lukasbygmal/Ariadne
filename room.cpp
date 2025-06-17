@@ -39,22 +39,9 @@ Room::Room(int difficulty, int _path_n, int _path_e, int _path_s, int _path_w, i
         trap = new SwingingAxe(difficulty);
         break;
     }
-    switch (monster_type)
+    if (monster_type != 0)
     {
-    case 0:
-        break;
-    case 1:
-        monster = new Skeleton(difficulty);
-        break;
-    case 2:
-        monster = new Goblin(difficulty);
-        break;
-    case 3:
-        monster = new Minotaur(difficulty);
-        break;
-    case 4:
-        monster = new Wolf(difficulty);
-        break;
+        monster = new Monster(monster_type, difficulty);
     }
 }
 
@@ -71,7 +58,7 @@ int Room::killMonster()
 }
 
 int Room::openChest()
-{  
+{
     std::cout << "I get into open chest\n";
     int gold = chest.value()->getGold();
     chest.reset();
@@ -100,7 +87,8 @@ std::string Room::to_string() const
                 std::to_string(path_n) + ", " +
                 std::to_string(path_e) + ", " +
                 std::to_string(path_w) + "\n\n";
-    if (chest){
+    if (chest)
+    {
         roomInfo += "Chest: " + (*chest)->to_string() + "\n\n";
     }
     if (corpse)

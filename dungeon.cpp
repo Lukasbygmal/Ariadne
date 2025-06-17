@@ -5,8 +5,8 @@
 
 std::random_device Dungeon::rd;
 std::mt19937 Dungeon::rng(Dungeon::rd());
-
-std::map<std::string, DungeonConfig> dungeon_configs = {
+// DungeonConfig order: size, monster_pool, boss_monster_type, base_difficulty
+const std::map<std::string, DungeonConfig> dungeon_configs = {
     {"thalgrin", {4, {1, 2}, 1, 1}},
     {"vornak", {5, {1, 2, 3}, 2, 4}},
     {"ezrath", {5, {2, 3}, 2, 7}},
@@ -17,12 +17,7 @@ std::map<std::string, DungeonConfig> dungeon_configs = {
     {"xelveth", {8, {2, 4}, 4, 22}},
     {"ormathal", {8, {1, 2, 4}, 4, 25}},
     {"grivnox", {10, {1, 3, 4}, 4, 28}}};
-Dungeon::Dungeon(std::string dungeon_name, std::string string_difficulty) : size(4),
-                                                                            difficulty(1),
-                                                                            current_x(0),
-                                                                            current_y(0),
-                                                                            boss_room_x(0),
-                                                                            boss_room_y(0)
+Dungeon::Dungeon(std::string dungeon_name, std::string string_difficulty)
 {
     int difficulty_level = 1;
     if (string_difficulty == "medium")

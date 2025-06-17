@@ -1,7 +1,28 @@
 #include "monster.h"
+#include <map>
+#include <stdexcept>
 
-Monster::Monster(int difficulty) : hp(0), strength(0), base_xp(0), name("")
+// MonsterConfig order: name, base_hp, base_strength, base_xp
+const std::map<int, MonsterConfig> monster_configs = {
+    {1, {"Skeleton", 5, 3, 100}},
+    {2, {"Goblin", 3, 2, 75}},
+    {3, {"Minotaur", 1, 3, 500}},
+    {4, {"Wolf", 2, 5, 90}}};
+
+Monster::Monster(const int type, int difficulty)
 {
+    auto it = monster_configs.find(type);
+    if (it == monster_configs.end())
+    {
+        throw std::invalid_argument("Invalid monster type: " + type);
+    }
+
+    const MonsterConfig &config = it->second;
+
+    name = config.name;
+    hp = static_cast<int>(config.base_hp * difficulty); // This needs balancing
+    strength = static_cast<int>(config.base_strength * difficulty);
+    xp = static_cast<int>(config.base_xp * difficulty);
 }
 
 int Monster::getHP() const
@@ -16,7 +37,7 @@ int Monster::getStrength() const
 
 int Monster::getXP() const
 {
-    return base_xp; // should eventually change this
+    return xp;
 }
 
 void Monster::receiveDamage(int amount)
@@ -27,68 +48,4 @@ void Monster::receiveDamage(int amount)
 std::string Monster::to_string() const
 {
     return name;
-}
-
-Skeleton::Skeleton(int difficulty) : Monster(difficulty)
-{
-    name = "Skeleton";
-    hp = 5; // temporarily made really easy for testing
-    strength = 3;
-    base_xp = 100;
-    adjustForDifficulty(difficulty);
-}
-
-void Skeleton::adjustForDifficulty(int difficulty)
-{
-    hp *= difficulty;
-    strength *= (difficulty * 0.5);
-    base_xp *= difficulty;
-}
-
-Goblin::Goblin(int difficulty) : Monster(difficulty)
-{
-    name = "Goblin";
-    hp = 3; // temporarily made really easy for testing
-    strength = 2;
-    base_xp = 75;
-    adjustForDifficulty(difficulty);
-}
-
-void Goblin::adjustForDifficulty(int difficulty)
-{
-    hp *= (difficulty * 0.8);
-    strength *= (difficulty * 0.6);
-    base_xp *= difficulty;
-}
-
-Minotaur::Minotaur(int difficulty) : Monster(difficulty)
-{
-    name = "Minotaur";
-    hp = 1; // temporarily made really easy for testing
-    strength = 3;
-    base_xp = 500;
-    adjustForDifficulty(difficulty);
-}
-
-void Minotaur::adjustForDifficulty(int difficulty)
-{
-    hp *= (difficulty * 1.2);
-    strength *= difficulty;
-    base_xp *= (difficulty * 1.5);
-}
-
-Wolf::Wolf(int difficulty) : Monster(difficulty)
-{
-    name = "Wolf";
-    hp = 2; // temporarily made really easy for testing
-    strength = 5;
-    base_xp = 90;
-    adjustForDifficulty(difficulty);
-}
-
-void Wolf::adjustForDifficulty(int difficulty)
-{
-    hp *= (difficulty * 0.5);
-    strength *= (difficulty * 0.5);
-    base_xp *= difficulty;
 }
