@@ -59,16 +59,24 @@ bool parse_input(const std::string &input, Action &action, GameMode mode)
     case GameMode::MENU:
     {
         std::vector<std::string> valid_commands = {"enter", "buy"}; // lowkey  don't need this?!
-        std::vector<std::string> valid_dungeons = {"thalgrin",
-                                                   "vornak",
-                                                   "ezrath",
-                                                   "kundrel",
-                                                   "zamorran",
-                                                   "druvok",
-                                                   "malquor",
-                                                   "xelveth",
-                                                   "ormathal",
-                                                   "grivnox"};
+        std::vector<std::string> valid_dungeons = {
+            "thal",
+            "vorn",
+            "ezra",
+            "kurn",
+            "zamo",
+            "druv",
+            "malq",
+            "xelv",
+            "ormh",
+            "griv",
+            "fend",
+            "quar",
+            "blen",
+            "xoth",
+            "merk",
+            "zenk"};
+
         std::vector<std::string> valid_difficulties = {"easy", "medium", "hard"};
         std::vector<std::string> valid_items = {"strength", "hp", "armor", "agility"};
 

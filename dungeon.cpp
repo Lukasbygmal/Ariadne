@@ -7,18 +7,29 @@ std::random_device Dungeon::rd;
 std::mt19937 Dungeon::rng(Dungeon::rd());
 // DungeonConfig order: size, monster_pool, boss_monster_type, base_difficulty
 const std::map<std::string, DungeonConfig> dungeon_configs = {
-    {"thalgrin", {4, {1, 2}, 1, 1}},
-    {"vornak", {5, {1, 2, 3}, 2, 4}},
-    {"ezrath", {5, {2, 3}, 2, 7}},
-    {"kundrel", {6, {2, 3, 4}, 3, 10}},
-    {"zamorran", {6, {3, 4}, 3, 13}},
-    {"druvok", {7, {2, 3, 4}, 4, 16}},
-    {"malquor", {7, {1, 3, 4}, 4, 19}},
-    {"xelveth", {8, {2, 4}, 4, 22}},
-    {"ormathal", {8, {1, 2, 4}, 4, 25}},
-    {"grivnox", {10, {1, 3, 4}, 4, 28}}};
+    // Bosses:
+    {"thal", {4, {1, 2, 3}, 1, 1}},                                 // Goblin
+    {"vorn", {5, {1, 2, 3}, 2, 4}},                                 // Slime
+    {"ezra", {5, {1, 2, 3}, 3, 7}},                                 // Skeleton
+    {"kurn", {6, {1, 2, 3}, 4, 10}},                                // Zombie
+    {"zamo", {6, {2, 3, 4, 5}, 5, 13}},                             // Wolf
+    {"druv", {7, {2, 3, 4, 5, 6}, 6, 16}},                          // Imp
+    {"malq", {7, {3, 4, 5, 6, 7, 8}, 7, 19}},                       // Wraith
+    {"xelv", {8, {4, 5, 6, 7, 8, 9, 10}, 8, 22}},                   // Minotaur
+    {"ormh", {8, {5, 6, 7, 8, 9, 10}, 9, 25}},                      // Orc
+    {"griv", {10, {6, 7, 8, 9, 10, 11}, 10, 28}},                   // Troll
+    {"fend", {11, {7, 8, 9, 10, 11}, 11, 31}},                      // Vampire
+    {"quar", {12, {8, 9, 10, 11, 12}, 12, 34}},                     // Dragonling
+    {"blen", {13, {6, 7, 8, 9, 10, 11}, 6, 37}},                    // Imp reused
+    {"xoth", {20, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}, 7, 40}}, // Wraith reused
+    {"merk", {15, {4, 5, 6, 7, 8, 9, 10, 11}, 12, 43}},             // Dragonling reused
+    {"zenk", {16, {1, 2, 3, 4, 5, 6, 7, 8}, 3, 46}}                 // Skeleton reused
+};
+
 Dungeon::Dungeon(std::string dungeon_name, std::string string_difficulty)
 {
+    name = dungeon_name;
+    difficulty_string = string_difficulty;
     int difficulty_level = 1;
     if (string_difficulty == "medium")
         difficulty_level = 2;
@@ -38,7 +49,6 @@ Dungeon::Dungeon(std::string dungeon_name, std::string string_difficulty)
 
     std::uniform_int_distribution<int> roomDist(0, size - 1);
     std::uniform_int_distribution<int> treasureRoomDist(1, size - 2);
-    std::uniform_int_distribution<int> pathDist(0, 3);
     std::uniform_int_distribution<int> chestDist(0, 1);
     std::uniform_int_distribution<int> optionalDist(0, 2);
     std::uniform_int_distribution<int> monsterDist(0, config.monster_pool.size() - 1);
@@ -59,12 +69,7 @@ Dungeon::Dungeon(std::string dungeon_name, std::string string_difficulty)
         rooms[i].reserve(size);
         for (int j = 0; j < size; ++j)
         {
-            int path_n = pathDist(rng);
-            int path_e = pathDist(rng);
-            int path_s = pathDist(rng);
-            int path_w = pathDist(rng);
             int chest_type = 0;
-            int corpse = 0;
             int engraving = 0;
             int trap_type = 0;
             int monster_type = 0;
@@ -87,7 +92,7 @@ Dungeon::Dungeon(std::string dungeon_name, std::string string_difficulty)
                 trap_type = (optionalDist(rng) == 1) ? trapDist(rng) : 0;
                 monster_type = (optionalDist(rng) == 1) ? config.monster_pool[monsterDist(rng)] : 0;
             }
-            rooms[i].emplace_back(int_difficulty, path_n, path_e, path_s, path_w, chest_type, corpse, engraving, trap_type, monster_type);
+            rooms[i].emplace_back(int_difficulty, chest_type, engraving, trap_type, monster_type);
         }
     }
 
@@ -165,4 +170,11 @@ bool Dungeon::isBossRoom() const
         return true;
     }
     return false;
+}
+
+std::string Dungeon::to_string() const
+{
+    std::string dungeonInfo;
+    dungeonInfo = name + " - " + difficulty_string + "\n\n";
+    return dungeonInfo;
 }
