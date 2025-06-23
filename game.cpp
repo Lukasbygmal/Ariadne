@@ -8,7 +8,7 @@ std::random_device Game::rd;
 std::mt19937 Game::rng(Game::rd());
 
 Game::Game()
-    : player("", 1, 1, 1, 1, 1, 1, 1), user_id(7), dungeon("thalgrin", "easy"), mode(GameMode::MENU), window(sf::VideoMode(800, 660), "Ariadne"), dbManager("localhost", "root", "", "ariadne")
+    : player("", 1, 1, 1, 1, 1, 1, 1), user_id(7), dungeon("thal", "easy"), mode(GameMode::MENU), window(sf::VideoMode(800, 660), "Ariadne"), dbManager("localhost", "root", "", "ariadne")
 {
     if (!dbManager.loadPlayer(player, user_id))
     {
@@ -58,10 +58,15 @@ void Game::initializeUI()
 
 void Game::initializeText()
 {
-    roomText.setFont(font);
-    roomText.setCharacterSize(28);
-    roomText.setFillColor(sf::Color::White);
-    roomText.setPosition(20.f, 40.f);
+    titleText.setFont(font);
+    titleText.setCharacterSize(28);
+    titleText.setFillColor(sf::Color::White);
+    titleText.setPosition(20.f, 40.f);
+
+    subTitleText.setFont(font);
+    subTitleText.setCharacterSize(18);
+    subTitleText.setFillColor(sf::Color::White);
+    subTitleText.setPosition(24.f, 105.f);
 
     levelText.setFont(font);
     levelText.setCharacterSize(24);
@@ -194,29 +199,33 @@ void Game::updateUI()
 {
     if (mode == GameMode::DUNGEON)
     {
-        roomText.setString(dungeon.getCurrentRoom().to_string());
+        subTitleText.setString("");
+        titleText.setString(dungeon.to_string() + dungeon.getCurrentRoom().to_string());
     }
     else if (mode == GameMode::MENU)
     {
-        roomText.setString("The Ink & Anvil Tavern \n \n You can buy stats!");
+        titleText.setString("The Ink & Anvil Tavern \n \nBuy stats or enter a dungeon! \n \n");
+        std::string list_dungeons = "thal \n\nvorn \n\nezra \n\nkurn \n\nzamo \n\ndruv \n\nmalq \n\nxelv \n\normh \n\ngriv \n\nfend \n\nquar \n\nblen \n\nxoth \n\nmerk \n\nzenk";
+        subTitleText.setString(list_dungeons);
     }
     else if (mode == GameMode::BATTLE)
     {
+        subTitleText.setString("");
         std::string display_words;
         for (const auto &word : word_queue)
         {
             display_words += word + "\n\n";
         }
 
-        roomText.setString(display_words);
+        titleText.setString(display_words);
         if (battle_mode)
         {
-            roomText.setFillColor(sf::Color::Green);
+            titleText.setFillColor(sf::Color::Green);
         }
 
         if (!battle_mode)
         {
-            roomText.setFillColor(sf::Color::Red);
+            titleText.setFillColor(sf::Color::Red);
         }
     }
 
@@ -259,7 +268,8 @@ void Game::render()
     renderXPBar();
 
     window.draw(roomBackground);
-    window.draw(roomText);
+    window.draw(titleText);
+    window.draw(subTitleText);
     window.draw(statsBackground);
     window.draw(perksBackground);
     window.draw(yetToDecideBackground);
@@ -507,7 +517,7 @@ void Game::endRound()
     {
         addMessage("You died, lost gold and XP \n");
         player.dead();
-        roomText.setFillColor(sf::Color::White);
+        titleText.setFillColor(sf::Color::White);
         changeMode(GameMode::MENU);
     }
 
@@ -536,7 +546,7 @@ void Game::endBattle()
     {
         addMessage("You leveled up and gained some stats!\n");
     }
-    roomText.setFillColor(sf::Color::White);
+    titleText.setFillColor(sf::Color::White);
 }
 
 void Game::run()

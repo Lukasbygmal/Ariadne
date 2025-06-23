@@ -47,7 +47,8 @@ private:
     sf::RectangleShape yetToDecideBackground;
     sf::RectangleShape terminalBackground;
     sf::RectangleShape inputBox;
-    sf::Text roomText;
+    sf::Text titleText;
+    sf::Text subTitleText;
     sf::Text levelText;
     sf::Text goldText;
     sf::Text hpText;

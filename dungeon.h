@@ -19,6 +19,8 @@ private:
     static std::mt19937 rng;
     static std::random_device rd;
     std::vector<std::vector<Room>> rooms;
+    std::string name;
+    std::string difficulty_string;
     int size;
     int difficulty;
     int current_x;
@@ -39,6 +41,7 @@ public:
     int getCurrentX() const;
     int getCurrentY() const;
     bool isBossRoom() const; // not sure i need this
+    std::string to_string() const;
 };
 
 #endif
