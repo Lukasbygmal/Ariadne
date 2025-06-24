@@ -2,6 +2,7 @@
 #include "handle_action.h"
 #include <iostream>
 #include <string>
+#include <cctype>
 #include "parse_input.h"
 
 std::random_device Game::rd;
@@ -65,7 +66,7 @@ void Game::initializeText()
 
     subTitleText.setFont(font);
     subTitleText.setCharacterSize(18);
-    subTitleText.setFillColor(sf::Color::White);
+    subTitleText.setFillColor(sf::Color::Red);
     subTitleText.setPosition(24.f, 105.f);
 
     levelText.setFont(font);
@@ -205,7 +206,7 @@ void Game::updateUI()
     else if (mode == GameMode::MENU)
     {
         titleText.setString("The Ink & Anvil Tavern \n \nBuy stats or enter a dungeon! \n \n");
-        std::string list_dungeons = "thal \n\nvorn \n\nezra \n\nkurn \n\nzamo \n\ndruv \n\nmalq \n\nxelv \n\normh \n\ngriv \n\nfend \n\nquar \n\nblen \n\nxoth \n\nmerk \n\nzenk";
+        std::string list_dungeons = "Thal \n\nVorn \n\nEzra \n\nKurn \n\nZamo \n\nDruv \n\nMalq \n\nXelv \n\nOrmh \n\nGriv \n\nFend \n\nQuar \n\nBlen \n\nXoth \n\nMerk \n\nZenk";
         subTitleText.setString(list_dungeons);
     }
     else if (mode == GameMode::BATTLE)
@@ -394,10 +395,10 @@ void Game::startBattle()
     battleClock.restart();
     battle_mode = true;
     changeMode(GameMode::BATTLE);
-    word_length_attack = 3;
-    word_length_parry = 2; // this,
-    attacks = 8;           // this and
-    parrys = 6;            // this should probably depend on monster/difficulty
+    word_length_attack = dungeon.getWordLength();
+    word_length_parry = word_length_attack - 1;
+    attacks = dungeon.getWords();
+    parrys = attacks - 2;
     correct_attacks = 0;
     correct_parrys = 0;
     round_time = 5.0 + player.getAgility() * 0.05; // should depend on monster, and needs balancing
