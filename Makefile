@@ -8,7 +8,7 @@ CXXFLAGS = -c -Wall -g -I/usr/include/mysql-cppconn
 LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -lmysqlcppconn
 
 # Source files
-SRCS = main.cpp parse_input.cpp room.cpp handle_action.cpp player.cpp monster.cpp trap.cpp chest.cpp dungeon.cpp game.cpp db_manager.cpp
+SRCS = main.cpp parse_input.cpp room.cpp handle_action.cpp player.cpp monster.cpp trap.cpp chest.cpp dungeon.cpp game.cpp db_manager.cpp login.cpp
 
 # Object files
 OBJS = $(SRCS:.cpp=.o)

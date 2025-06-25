@@ -36,7 +36,7 @@ private:
     int correct_parrys;
     float round_time;
     bool battle_mode; // true for attack, false for parry
-    sf::RenderWindow window;
+    sf::RenderWindow &window;
     std::vector<std::string> terminalMessages;
     sf::Clock battleClock;
 
@@ -72,7 +72,7 @@ private:
     void healMaxPlayer();
 
 public:
-    Game();
+    Game(int user_id, sf::RenderWindow &window);
 
     void processEvents();
     void handleInput(const sf::Event &event);
