@@ -32,3 +32,8 @@ sfml-app
 *.exe
 *.out
 *.app
+
+# Virtual Environment
+game_api/game_api_env/
+
+*.env
