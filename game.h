@@ -8,7 +8,7 @@
 #include <deque>
 #include "player.h"
 #include "dungeon.h"
-#include "db_manager.h"
+#include "api_client.h"
 
 enum class GameMode
 {
@@ -20,7 +20,7 @@ enum class GameMode
 class Game
 {
 private:
-    DatabaseManager dbManager;
+    APIClient apiClient;
     static std::mt19937 rng;
     static std::random_device rd;
     Player player;
