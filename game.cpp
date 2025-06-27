@@ -9,14 +9,14 @@ std::random_device Game::rd;
 std::mt19937 Game::rng(Game::rd());
 
 Game::Game(int user_id_, sf::RenderWindow &win)
-    : player("", 1, 1, 1, 1, 1, 1, 1),
+    : apiClient("http://localhost:5000", "local-test-key-123"),
+      player("", 1, 1, 1, 1, 1, 1, 1),
       user_id(user_id_),
       dungeon("thal", "easy"),
       mode(GameMode::MENU),
-      window(win),
-      dbManager("localhost", "root", "", "ariadne")
+      window(win)
 {
-    if (!dbManager.loadPlayer(player, user_id))
+    if (!apiClient.loadPlayer(player, user_id))
     {
         std::cout << "Failed to load player data!" << std::endl;
     }
@@ -122,7 +122,7 @@ void Game::processEvents()
     {
         if (event.type == sf::Event::Closed)
         {
-            dbManager.savePlayer(player, user_id);
+            apiClient.savePlayer(player, user_id);
             window.close();
         }
 
@@ -359,7 +359,7 @@ void Game::enterDungeon(std::string dungeon_name, std::string string_difficulty)
 
 void Game::leaveDungeon()
 {
-    if (!dbManager.savePlayer(player, user_id))
+    if (!apiClient.savePlayer(player, user_id))
     {
         std::cout << "Failed to save player data!" << std::endl;
     }
