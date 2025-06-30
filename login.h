@@ -16,5 +16,4 @@ private:
     sf::RectangleShape buttonBox;
     void draw();
     void handleEvent(const sf::Event &event, bool &tryLogin);
-    bool dummyApiCall(int &user_id);
 };
