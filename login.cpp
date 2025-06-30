@@ -1,5 +1,6 @@
 #include "login.h"
 #include <iostream>
+#include "auth.h"
 
 Login::Login(sf::RenderWindow &win) : window(win)
 {
@@ -10,20 +11,20 @@ Login::Login(sf::RenderWindow &win) : window(win)
     titleText.setFillColor(sf::Color::Red);
     titleText.setPosition(115, 60);
 
-    buttonBox.setSize(sf::Vector2f(180, 60));
-    buttonBox.setPosition(310, 340);
+    buttonBox.setSize(sf::Vector2f(320, 60));
+    buttonBox.setPosition(250, 340);
     buttonBox.setFillColor(sf::Color(100, 100, 100, 200));
 
     loginButton.setFont(font);
-    loginButton.setString("Login");
+    loginButton.setString("Login with GitHub");
     loginButton.setCharacterSize(42);
     loginButton.setFillColor(sf::Color::White);
-    loginButton.setPosition(345, 340);
+    loginButton.setPosition(265, 340);
 
     errorText.setFont(font);
     errorText.setCharacterSize(18);
     errorText.setFillColor(sf::Color::Red);
-    errorText.setPosition(200, 360);
+    errorText.setPosition(200, 420);
 }
 
 void Login::draw()
@@ -32,10 +33,8 @@ void Login::draw()
     window.draw(titleText);
     window.draw(buttonBox);
     window.draw(loginButton);
-
     if (!errorText.getString().isEmpty())
         window.draw(errorText);
-
     window.display();
 }
 
@@ -47,7 +46,6 @@ void Login::handleEvent(const sf::Event &event, bool &tryLogin)
         if (buttonBox.getGlobalBounds().contains(mouse))
             tryLogin = true;
     }
-
     if (event.type == sf::Event::KeyPressed)
     {
         if (event.key.code == sf::Keyboard::Return)
@@ -55,12 +53,6 @@ void Login::handleEvent(const sf::Event &event, bool &tryLogin)
             tryLogin = true;
         }
     }
-}
-
-bool Login::dummyApiCall(int &user_id)
-{
-    user_id = 7;
-    return true;
 }
 
 bool Login::run(int &user_id)
@@ -82,13 +74,19 @@ bool Login::run(int &user_id)
         }
         if (tryLogin)
         {
-            if (dummyApiCall(user_id))
+            auth::startGithubLogin();
+            std::string code;
+            errorText.setString("Paste the code from the browser here:");
+            draw();
+            std::cout << "Paste the code/token from the browser here: ";
+            std::getline(std::cin, code);
+            if (auth::exchangeCodeForUserId(code, user_id))
             {
                 loggedIn = true;
             }
             else
             {
-                errorText.setString("Login failed!");
+                errorText.setString("Login failed! Invalid code/token.");
             }
         }
         draw();
