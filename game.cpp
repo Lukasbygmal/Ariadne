@@ -76,7 +76,12 @@ void Game::initializeText()
     subTitleText.setFont(textFont);
     subTitleText.setCharacterSize(18);
     subTitleText.setFillColor(sf::Color::White);
-    subTitleText.setPosition(24.f, 105.f);
+    subTitleText.setPosition(24.f, 95.f);
+
+    battleText.setFont(textFont);
+    battleText.setCharacterSize(28);
+    battleText.setFillColor(sf::Color::White);
+    battleText.setPosition(24.f, 135.f);
 
     levelText.setFont(textFont);
     levelText.setCharacterSize(24);
@@ -178,7 +183,7 @@ void Game::handleCommand(const std::string &command)
 
 void Game::addMessage(const std::string &message)
 {
-    const size_t maxMessageLength = 45;
+    const size_t maxMessageLength = 55;
     std::string truncatedMessage = message;
     if (truncatedMessage.length() > maxMessageLength)
     {
@@ -215,33 +220,41 @@ void Game::updateUI()
 {
     if (mode == GameMode::DUNGEON)
     {
+        battleText.setString("");
         subTitleText.setString("");
         titleText.setString(dungeon.to_string() + dungeon.getCurrentRoom().to_string());
     }
     else if (mode == GameMode::MENU)
     {
+        battleText.setString("");
         titleText.setString("The Ink & Anvil Tavern \nBuy stats or enter a dungeon! \n");
         std::string list_dungeons = "\nDungeons easy/medium/hard:\nThal   Vorn \nEzra   Kurn \nZamo   Druv \nMalq   Xelv \nOrmh   Griv \nFend   Quar \nBlen   Xoth \nMerk   Zenk";
         subTitleText.setString(list_dungeons);
     }
     else if (mode == GameMode::BATTLE)
     {
-        subTitleText.setString("");
+        std::optional<Monster *> monsterOpt = dungeon.getCurrentRoom().getMonster();
+        if (monsterOpt)
+        {
+            Monster *monster = monsterOpt.value();
+            titleText.setString("Battle with " + monster->to_string() + "\n");
+            subTitleText.setString("Strength: " + std::to_string(monster->getStrength()) + " HP: " + std::to_string(monster->getHP()));
+        }
         std::string display_words;
-        for (const auto &word : word_queue)
+        for (const std::string &word : word_queue)
         {
             display_words += word + "\n";
         }
 
-        titleText.setString(display_words);
+        battleText.setString(display_words);
         if (battle_mode)
         {
-            titleText.setFillColor(sf::Color::Green);
+            battleText.setFillColor(sf::Color::Green);
         }
 
         if (!battle_mode)
         {
-            titleText.setFillColor(sf::Color::Red);
+            battleText.setFillColor(sf::Color::Red);
         }
     }
 
@@ -286,6 +299,7 @@ void Game::render()
     window.draw(roomBackground);
     window.draw(titleText);
     window.draw(subTitleText);
+    window.draw(battleText);
     window.draw(statsBackground);
     window.draw(perksBackground);
     window.draw(yetToDecideBackground);
@@ -474,18 +488,24 @@ void Game::resetWordQueue(int words, int length)
 void Game::switchToDefense()
 {
     battle_mode = false;
+    userInput.clear(); // clear terminal input
     resetWordQueue(parrys, word_length_parry);
     battleClock.restart();
 }
 
 void Game::damageMonster(int damage)
 {
-    dungeon.getCurrentRoom().getMonster().value()->receiveDamage(damage);
+    std::optional<Monster *> monsterOpt = dungeon.getCurrentRoom().getMonster();
+    if (monsterOpt)
+    {
+        monsterOpt.value()->receiveDamage(damage);
+    }
 }
 
 void Game::endRound()
 {
     std::cout << "EndRound() \n";
+    userInput.clear();                                      // clear terminal input
     std::uniform_real_distribution<float> dist(0.5f, 1.5f); // might want to make 1 for attack and one for def, if perks affect this
     float amplifier = 1;
     int hit;
@@ -504,7 +524,12 @@ void Game::endRound()
     }
     addMessage("You did " + std::to_string(correct_attacks) + " attacks for " + std::to_string(total_player_damage) + " damage!");
 
-    int monster_damage = dungeon.getCurrentRoom().getMonster().value()->getStrength();
+    std::optional<Monster *> monsterOpt = dungeon.getCurrentRoom().getMonster();
+    int monster_damage = 0;
+    if (monsterOpt)
+    {
+        monster_damage = monsterOpt.value()->getStrength();
+    }
     int total_monster_damage = 0;
     int actual_damage;
     for (int i = 0; i < parrys; i++)
@@ -532,15 +557,20 @@ void Game::endRound()
     {
         addMessage("You died, lost gold and XP!");
         player.dead();
-        titleText.setFillColor(sf::Color::White);
+        titleText.setFillColor(sf::Color::White); // check if needed after change
         changeMode(GameMode::MENU);
     }
 
     // this long if statement is if monster is dead
-    if (dungeon.getCurrentRoom().getMonster().value()->getHP() <= 0)
+    monsterOpt = dungeon.getCurrentRoom().getMonster();
+    if (monsterOpt)
     {
-        endBattle();
-        return;
+        Monster *monster = monsterOpt.value();
+        if (monster->getHP() <= 0)
+        {
+            endBattle();
+            return;
+        }
     }
 
     battleClock.restart();
@@ -561,7 +591,7 @@ void Game::endBattle()
     {
         addMessage("You leveled up and gained some stats!");
     }
-    titleText.setFillColor(sf::Color::White);
+    titleText.setFillColor(sf::Color::White); // check if needed after change
 }
 
 void Game::run()
