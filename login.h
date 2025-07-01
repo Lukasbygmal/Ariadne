@@ -14,8 +14,9 @@ public:
 
 private:
     sf::RenderWindow &window;
-    sf::Font font;
-    
+    sf::Font titleFont;
+    sf::Font textFont;
+
     sf::Text titleText;
     sf::RectangleShape buttonBox;
     sf::Text loginButton;
@@ -25,7 +26,7 @@ private:
     sf::RectangleShape submitButton;
     sf::Text submitButtonText;
     sf::Text errorText;
-    
+
     std::string inputString;
     bool waitingForCode;
     bool inputActive;

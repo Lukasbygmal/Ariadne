@@ -7,23 +7,30 @@ static const size_t MAX_INPUT_LENGTH = 50;
 
 Login::Login(sf::RenderWindow &win) : window(win), waitingForCode(false), inputActive(false)
 {
-    font.loadFromFile("new_athena.ttf");
+    if (!textFont.loadFromFile("Fredoka-Regular.ttf"))
+    {
+        throw std::runtime_error("Failed to load textFont");
+    }
+    if (!titleFont.loadFromFile("Fredoka-Medium.ttf"))
+    {
+        throw std::runtime_error("Failed to load titleFont");
+    }
 
-    titleText.setFont(font);
+    titleText.setFont(titleFont);
     titleText.setString("Welcome to Ariadne!");
     titleText.setCharacterSize(72);
     titleText.setFillColor(sf::Color::Red);
-    titleText.setPosition(115, 60);
+    titleText.setPosition(60, 60);
 
     buttonBox.setSize(sf::Vector2f(320, 60));
-    buttonBox.setPosition(250, 340);
+    buttonBox.setPosition(245, 340);
     buttonBox.setFillColor(sf::Color(100, 100, 100, 200));
 
-    loginButton.setFont(font);
-    loginButton.setString("Login with GitHub");
+    loginButton.setFont(titleFont);
+    loginButton.setString("GitHub Login");
     loginButton.setCharacterSize(42);
     loginButton.setFillColor(sf::Color::White);
-    loginButton.setPosition(265, 340);
+    loginButton.setPosition(285, 343);
 
     inputBox.setSize(sf::Vector2f(400, 40));
     inputBox.setPosition(180, 430);
@@ -31,12 +38,12 @@ Login::Login(sf::RenderWindow &win) : window(win), waitingForCode(false), inputA
     inputBox.setOutlineThickness(2);
     inputBox.setOutlineColor(sf::Color(100, 100, 100));
 
-    inputText.setFont(font);
+    inputText.setFont(textFont);
     inputText.setCharacterSize(20);
     inputText.setFillColor(sf::Color::White);
     inputText.setPosition(190, 440);
 
-    promptText.setFont(font);
+    promptText.setFont(textFont);
     promptText.setCharacterSize(20);
     promptText.setFillColor(sf::Color::White);
     promptText.setPosition(180, 400);
@@ -45,13 +52,13 @@ Login::Login(sf::RenderWindow &win) : window(win), waitingForCode(false), inputA
     submitButton.setPosition(590, 430);
     submitButton.setFillColor(sf::Color(0, 150, 0, 200));
 
-    submitButtonText.setFont(font);
+    submitButtonText.setFont(titleFont);
     submitButtonText.setString(">");
     submitButtonText.setCharacterSize(20);
     submitButtonText.setFillColor(sf::Color::White);
-    submitButtonText.setPosition(600, 425);
+    submitButtonText.setPosition(600, 435);
 
-    errorText.setFont(font);
+    errorText.setFont(textFont);
     errorText.setCharacterSize(18);
     errorText.setFillColor(sf::Color::Red);
     errorText.setPosition(200, 500);

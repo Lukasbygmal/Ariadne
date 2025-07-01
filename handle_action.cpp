@@ -9,7 +9,7 @@ bool handle_action(const Action &action, Game &game)
         if (action.verb == "enter" && action.direction && action.object)
         {
             game.enterDungeon(*action.direction, *action.object);
-            game.addMessage("You enter \n");
+            game.addMessage("You enter " + *action.direction + " " + *action.object);
             return true;
         }
         else if (action.verb == "buy" && action.object)
@@ -59,7 +59,7 @@ bool handle_action(const Action &action, Game &game)
             {
                 if (dungeon.goEast())
                 {
-                    game.addMessage("You go east\n");
+                    game.addMessage("You go east");
                     game.checkRoomHazards();
                     return true;
                 }
@@ -69,7 +69,7 @@ bool handle_action(const Action &action, Game &game)
             {
                 if (dungeon.goWest())
                 {
-                    game.addMessage("You go west\n");
+                    game.addMessage("You go west");
                     game.checkRoomHazards();
                     return true;
                 }
@@ -79,7 +79,7 @@ bool handle_action(const Action &action, Game &game)
             {
                 if (dungeon.goNorth())
                 {
-                    game.addMessage("You go north\n");
+                    game.addMessage("You go north");
                     game.checkRoomHazards();
                     return true;
                 }
@@ -89,7 +89,7 @@ bool handle_action(const Action &action, Game &game)
             {
                 if (dungeon.goSouth())
                 {
-                    game.addMessage("You go south\n");
+                    game.addMessage("You go south");
                     game.checkRoomHazards();
                     return true;
                 }
@@ -108,7 +108,7 @@ bool handle_action(const Action &action, Game &game)
             {
                 int gold = game.getDungeon().getCurrentRoom().openChest();
                 game.getPlayer().receiveGold(gold);
-                game.addMessage("You open the chest and recieve " + std::to_string(gold) + " gold\n");
+                game.addMessage("You open the chest and recieve " + std::to_string(gold) + " gold");
                 return true;
             }
             return false;

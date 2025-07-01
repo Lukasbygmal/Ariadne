@@ -40,7 +40,8 @@ private:
     std::vector<std::string> terminalMessages;
     sf::Clock battleClock;
 
-    sf::Font font;
+    sf::Font titleFont;
+    sf::Font textFont;
     sf::RectangleShape roomBackground;
     sf::RectangleShape statsBackground;
     sf::RectangleShape perksBackground;
