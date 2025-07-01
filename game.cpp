@@ -30,9 +30,13 @@ Game::Game(int user_id_, sf::RenderWindow &win)
 
 void Game::initializeUI()
 {
-    if (!font.loadFromFile("new_athena.ttf"))
+    if (!textFont.loadFromFile("Fredoka-Regular.ttf"))
     {
-        throw std::runtime_error("Failed to load font");
+        throw std::runtime_error("Failed to load textFont");
+    }
+    if (!titleFont.loadFromFile("Fredoka-Medium.ttf"))
+    {
+        throw std::runtime_error("Failed to load titleFont");
     }
 
     roomBackground.setSize(sf::Vector2f(460.f, 400.f));
@@ -64,52 +68,52 @@ void Game::initializeUI()
 
 void Game::initializeText()
 {
-    titleText.setFont(font);
+    titleText.setFont(titleFont);
     titleText.setCharacterSize(28);
     titleText.setFillColor(sf::Color::White);
     titleText.setPosition(20.f, 40.f);
 
-    subTitleText.setFont(font);
+    subTitleText.setFont(textFont);
     subTitleText.setCharacterSize(18);
-    subTitleText.setFillColor(sf::Color::Red);
+    subTitleText.setFillColor(sf::Color::White);
     subTitleText.setPosition(24.f, 105.f);
 
-    levelText.setFont(font);
+    levelText.setFont(textFont);
     levelText.setCharacterSize(24);
     levelText.setFillColor(sf::Color::White);
-    levelText.setPosition(610.f, 450.f);
+    levelText.setPosition(610.f, 460.f);
 
-    goldText.setFont(font);
+    goldText.setFont(textFont);
     goldText.setCharacterSize(24);
     goldText.setFillColor(sf::Color::White);
-    goldText.setPosition(610.f, 500.f);
+    goldText.setPosition(610.f, 495.f);
 
-    hpText.setFont(font);
+    hpText.setFont(textFont);
     hpText.setCharacterSize(20);
     hpText.setFillColor(sf::Color::White);
-    hpText.setPosition(590.f, 480.f);
+    hpText.setPosition(590.f, 600.f);
 
-    strengthText.setFont(font);
+    strengthText.setFont(textFont);
     strengthText.setCharacterSize(20);
     strengthText.setFillColor(sf::Color::White);
     strengthText.setPosition(490.f, 540.f);
 
-    agilityText.setFont(font);
+    agilityText.setFont(textFont);
     agilityText.setCharacterSize(20);
     agilityText.setFillColor(sf::Color::White);
     agilityText.setPosition(610.f, 540.f);
 
-    armorText.setFont(font);
+    armorText.setFont(textFont);
     armorText.setCharacterSize(20);
     armorText.setFillColor(sf::Color::White);
     armorText.setPosition(700.f, 540.f);
 
-    terminalText.setFont(font);
+    terminalText.setFont(textFont);
     terminalText.setCharacterSize(18);
     terminalText.setFillColor(sf::Color::White);
-    terminalText.setPosition(20.f, 450.f);
+    terminalText.setPosition(20.f, 440.f);
 
-    inputText.setFont(font);
+    inputText.setFont(textFont);
     inputText.setCharacterSize(18);
     inputText.setFillColor(sf::Color::Black);
     inputText.setPosition(20.f, 620.f);
@@ -162,19 +166,25 @@ void Game::handleCommand(const std::string &command)
         }
         else
         {
-            addMessage("Can't " + command + " now\n");
+            addMessage("Can't " + command + " now");
         }
     }
     else
     {
-        addMessage("You realize you cannot " + command + " and start questioning your sanity!\n");
+        addMessage("Invalid: " + command);
         std::cout << "Invalid command. Try again.\n";
     }
 }
 
 void Game::addMessage(const std::string &message)
 {
-    terminalMessages.push_back(message);
+    const size_t maxMessageLength = 45;
+    std::string truncatedMessage = message;
+    if (truncatedMessage.length() > maxMessageLength)
+    {
+        truncatedMessage = truncatedMessage.substr(0, maxMessageLength) + "...";
+    }
+    terminalMessages.push_back(truncatedMessage);
     if (terminalMessages.size() > 7)
     {
         terminalMessages.erase(terminalMessages.begin());
@@ -210,8 +220,8 @@ void Game::updateUI()
     }
     else if (mode == GameMode::MENU)
     {
-        titleText.setString("The Ink & Anvil Tavern \n \nBuy stats or enter a dungeon! \n \n");
-        std::string list_dungeons = "Thal \n\nVorn \n\nEzra \n\nKurn \n\nZamo \n\nDruv \n\nMalq \n\nXelv \n\nOrmh \n\nGriv \n\nFend \n\nQuar \n\nBlen \n\nXoth \n\nMerk \n\nZenk";
+        titleText.setString("The Ink & Anvil Tavern \nBuy stats or enter a dungeon! \n");
+        std::string list_dungeons = "\nDungeons easy/medium/hard:\nThal   Vorn \nEzra   Kurn \nZamo   Druv \nMalq   Xelv \nOrmh   Griv \nFend   Quar \nBlen   Xoth \nMerk   Zenk";
         subTitleText.setString(list_dungeons);
     }
     else if (mode == GameMode::BATTLE)
@@ -220,7 +230,7 @@ void Game::updateUI()
         std::string display_words;
         for (const auto &word : word_queue)
         {
-            display_words += word + "\n\n";
+            display_words += word + "\n";
         }
 
         titleText.setString(display_words);
@@ -239,9 +249,9 @@ void Game::updateUI()
     goldText.setString(std::to_string(player.getGold()) + " G");
     hpText.setString(std::to_string(player.getCurrentHP()) + " / " + std::to_string(player.getMaxHP()) + " HP");
 
-    strengthText.setString("Strength\n\n      " + std::to_string(player.getStrength()));
-    agilityText.setString("Agility\n\n    " + std::to_string(player.getAgility()));
-    armorText.setString("Armor\n\n    " + std::to_string(player.getArmor()));
+    strengthText.setString("Strength\n      " + std::to_string(player.getStrength()));
+    agilityText.setString("Agility\n    " + std::to_string(player.getAgility()));
+    armorText.setString("Armor\n    " + std::to_string(player.getArmor()));
 
     std::string terminalDisplay;
     for (const auto &msg : terminalMessages)
@@ -305,7 +315,7 @@ bool Game::buyHP()
     {
         player.decreaseGold(cost);
         player.increaseHP(5);
-        addMessage("Bought HP\n");
+        addMessage("Bought HP");
         return true;
     }
     return false;
@@ -318,7 +328,7 @@ bool Game::buyStrength()
     {
         player.decreaseGold(cost);
         player.increaseStrength(1);
-        addMessage("Bought Strength\n");
+        addMessage("Bought Strength");
         return true;
     }
     return false;
@@ -331,7 +341,7 @@ bool Game::buyArmor()
     {
         player.decreaseGold(cost);
         player.increaseArmor(1);
-        addMessage("Bought Armor\n");
+        addMessage("Bought Armor");
         return true;
     }
     return false;
@@ -344,7 +354,7 @@ bool Game::buyAgility()
     {
         player.decreaseGold(cost);
         player.increaseAgility(1);
-        addMessage("Bought Agility\n");
+        addMessage("Bought Agility");
         return true;
     }
     return false;
@@ -369,7 +379,7 @@ void Game::leaveDungeon()
     }
     changeMode(GameMode::MENU);
     healMaxPlayer();
-    addMessage("You escaped the dungeon\n");
+    addMessage("You escaped the dungeon");
 }
 
 void Game::checkRoomHazards()
@@ -381,14 +391,14 @@ void Game::checkRoomHazards()
         int damage = trap.value()->getDamage();
         damage = player.receiveDamage(damage);
         std::string trap_name = trap.value()->to_string();
-        addMessage("You triggered a " + trap_name + " trap! You take " + std::to_string(damage) + " damage.\n");
+        addMessage("You triggered a " + trap_name + " trap! You take " + std::to_string(damage) + " damage.");
         current.removeTrap();
     }
     std::optional<Monster *> monster = current.getMonster();
     if (monster)
     {
         std::string monster_name = monster.value()->to_string();
-        addMessage("A " + monster_name + " appears before you! Prepare for battle!\n");
+        addMessage("A " + monster_name + " appears before you! Prepare for battle!");
         startBattle();
     }
 }
@@ -492,9 +502,8 @@ void Game::endRound()
 
         damageMonster(hit);
     }
-    addMessage("You did " + std::to_string(correct_attacks) + " attacks for " + std::to_string(total_player_damage) + " damage! \n");
+    addMessage("You did " + std::to_string(correct_attacks) + " attacks for " + std::to_string(total_player_damage) + " damage!");
 
-    int missed_parry = parrys - correct_parrys;
     int monster_damage = dungeon.getCurrentRoom().getMonster().value()->getStrength();
     int total_monster_damage = 0;
     int actual_damage;
@@ -517,11 +526,11 @@ void Game::endRound()
             total_monster_damage += actual_damage;
         }
     }
-    addMessage("You parried " + std::to_string(correct_parrys) + "/" + std::to_string(parrys) + "attacks, took " + std::to_string(total_monster_damage) + " damage! \n");
+    addMessage("You parried " + std::to_string(correct_parrys) + "/" + std::to_string(parrys) + "attacks, took " + std::to_string(total_monster_damage) + " damage!");
 
     if (!player.isAlive())
     {
-        addMessage("You died, lost gold and XP \n");
+        addMessage("You died, lost gold and XP!");
         player.dead();
         titleText.setFillColor(sf::Color::White);
         changeMode(GameMode::MENU);
@@ -550,7 +559,7 @@ void Game::endBattle()
     bool did_level = player.receiveXP(xp_reward);
     if (did_level)
     {
-        addMessage("You leveled up and gained some stats!\n");
+        addMessage("You leveled up and gained some stats!");
     }
     titleText.setFillColor(sf::Color::White);
 }

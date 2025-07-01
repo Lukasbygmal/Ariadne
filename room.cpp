@@ -77,12 +77,12 @@ std::optional<Chest *> Room::getChest() const
 
 std::string Room::to_string() const
 {
-    std::string roomInfo = "In the room:\n\n";
+    std::string roomInfo = "In the room:\n";
     if (chest)
     {
-        roomInfo += (*chest)->to_string() + "\n\n";
+        roomInfo += (*chest)->to_string() + "\n";
     }
     if (engraving)
-        roomInfo += "Engraving \n\n";
+        roomInfo += "Engraving \n";
     return roomInfo;
 }

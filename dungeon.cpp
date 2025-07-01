@@ -178,6 +178,6 @@ std::string Dungeon::capitalizeFirstLetter(const std::string &input) const
 std::string Dungeon::to_string() const
 {
     std::string dungeonInfo;
-    dungeonInfo = capitalizeFirstLetter(name) + " - " + capitalizeFirstLetter(difficulty_string) + "\n\n";
+    dungeonInfo = capitalizeFirstLetter(name) + " - " + capitalizeFirstLetter(difficulty_string) + "\n";
     return dungeonInfo;
 }
