@@ -50,6 +50,7 @@ private:
     sf::RectangleShape inputBox;
     sf::Text titleText;
     sf::Text subTitleText;
+    sf::Text battleText;
     sf::Text levelText;
     sf::Text goldText;
     sf::Text hpText;

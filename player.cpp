@@ -100,7 +100,6 @@ void Player::increaseStrength(int amount)
     strength += amount;
 }
 
-
 void Player::increaseAgility(int amount)
 {
     agility += amount;
@@ -118,16 +117,19 @@ void Player::updateXpToMax()
 
 bool Player::checkLevelUp()
 {
-    if (xp >= xp_to_max)
+    if (lvl < 100) // max level
     {
-        while (xp >= xp_to_max) // have to make it this ugly to cover corner case of leveling more than 1 level
+        if (xp >= xp_to_max)
         {
-            xp -= xp_to_max;
-            lvl++;
-            updateXpToMax();
-            levelUpBenefits();
+            while (xp >= xp_to_max) // have to make it this ugly to cover corner case of leveling more than 1 level
+            {
+                xp -= xp_to_max;
+                lvl++;
+                updateXpToMax();
+                levelUpBenefits();
+            }
+            return true;
         }
-        return true;
     }
 
     return false;
