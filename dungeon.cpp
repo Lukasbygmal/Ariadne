@@ -2,29 +2,71 @@
 #include <random>
 #include <map>
 #include <stdexcept>
+#include <queue>
+#include <set>
+#include <iostream> //TODO should remove later
 
 std::random_device Dungeon::rd;
 std::mt19937 Dungeon::rng(Dungeon::rd());
 // DungeonConfig order: size, words, word_length, monster_pool, boss_monster_type, base_difficulty
 const std::map<std::string, DungeonConfig> dungeon_configs = {
     // Bosses:
-    {"thal", {4, 4, 3, {1, 2, 3}, 1, 1}},                                 // Goblin
-    {"vorn", {5, 4, 3, {1, 2, 3}, 2, 4}},                                 // Slime
-    {"ezra", {5, 4, 3, {1, 2, 3}, 3, 7}},                                 // Skeleton
-    {"kurn", {6, 5, 3, {1, 2, 3}, 4, 10}},                                // Zombie
-    {"zamo", {6, 6, 4, {2, 3, 4, 5}, 5, 13}},                             // Wolf
-    {"druv", {7, 6, 4, {2, 3, 4, 5, 6}, 6, 16}},                          // Imp
-    {"malq", {7, 7, 4, {3, 4, 5, 6, 7, 8}, 7, 19}},                       // Wraith
-    {"xelv", {8, 8, 4, {4, 5, 6, 7, 8, 9, 10}, 8, 22}},                   // Minotaur
-    {"ormh", {8, 8, 5, {5, 6, 7, 8, 9, 10}, 9, 25}},                      // Orc
-    {"griv", {10, 9, 5, {6, 7, 8, 9, 10, 11}, 10, 28}},                   // Troll
-    {"fend", {11, 9, 6, {7, 8, 9, 10, 11}, 11, 31}},                      // Vampire
-    {"quar", {12, 9, 5, {8, 9, 10, 11, 12}, 12, 34}},                     // Dragonling
-    {"blen", {13, 9, 6, {6, 7, 8, 9, 10, 11}, 6, 37}},                    // Imp reused
-    {"xoth", {20, 5, 3, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}, 7, 40}}, // Wraith reused
-    {"merk", {15, 10, 6, {4, 5, 6, 7, 8, 9, 10, 11}, 12, 43}},            // Dragonling reused
-    {"zenk", {16, 10, 7, {1, 2, 3, 4, 5, 6, 7, 8}, 3, 46}}                // Skeleton reused
+    {"thal", {3, 4, 3, {1, 2, 3}, 1, 1}},                                // Goblin
+    {"vorn", {4, 4, 3, {1, 2, 3}, 2, 4}},                                // Slime
+    {"ezra", {5, 4, 3, {1, 2, 3}, 3, 7}},                                // Skeleton
+    {"kurn", {4, 5, 3, {1, 2, 3}, 4, 10}},                               // Zombie
+    {"zamo", {6, 6, 4, {2, 3, 4, 5}, 5, 13}},                            // Wolf
+    {"druv", {5, 6, 4, {2, 3, 4, 5, 6}, 6, 16}},                         // Imp
+    {"malq", {5, 7, 4, {3, 4, 5, 6, 7, 8}, 7, 19}},                      // Wraith
+    {"xelv", {6, 8, 4, {4, 5, 6, 7, 8, 9, 10}, 8, 22}},                  // Minotaur
+    {"ormh", {5, 8, 5, {5, 6, 7, 8, 9, 10}, 9, 25}},                     // Orc
+    {"griv", {4, 9, 5, {6, 7, 8, 9, 10, 11}, 10, 28}},                   // Troll
+    {"fend", {5, 9, 6, {7, 8, 9, 10, 11}, 11, 31}},                      // Vampire
+    {"quar", {7, 9, 5, {8, 9, 10, 11, 12}, 12, 34}},                     // Dragonling
+    {"blen", {7, 9, 6, {6, 7, 8, 9, 10, 11}, 6, 37}},                    // Imp reused
+    {"xoth", {8, 5, 3, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}, 7, 40}}, // Wraith reused
+    {"merk", {6, 10, 6, {4, 5, 6, 7, 8, 9, 10, 11}, 12, 43}},            // Dragonling reused
+    {"zenk", {7, 10, 7, {1, 2, 3, 4, 5, 6, 7, 8}, 3, 46}}                // Skeleton reused
 };
+
+// BFS function to check if a path exists between two points
+bool Dungeon::pathExists(int start_x, int start_y, int end_x, int end_y, const std::vector<std::vector<bool>> &blocked) const
+{
+    if (blocked[start_y][start_x] || blocked[end_y][end_x])
+        return false;
+
+    std::queue<std::pair<int, int>> queue;
+    std::set<std::pair<int, int>> visited;
+
+    queue.push({start_x, start_y});
+    visited.insert({start_x, start_y});
+
+    int dx[] = {0, 0, 1, -1};
+    int dy[] = {1, -1, 0, 0};
+
+    while (!queue.empty())
+    {
+        auto [x, y] = queue.front();
+        queue.pop();
+
+        if (x == end_x && y == end_y)
+            return true;
+
+        for (int i = 0; i < 4; i++)
+        {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+
+            if (nx >= 0 && nx < size && ny >= 0 && ny < size &&
+                !blocked[ny][nx] && visited.find({nx, ny}) == visited.end())
+            {
+                queue.push({nx, ny});
+                visited.insert({nx, ny});
+            }
+        }
+    }
+    return false;
+}
 
 Dungeon::Dungeon(std::string dungeon_name, std::string string_difficulty)
 {
@@ -65,44 +107,94 @@ Dungeon::Dungeon(std::string dungeon_name, std::string string_difficulty)
     int treasure_x = roomDist(rng);
     int treasure_y = treasureRoomDist(rng);
 
-    int room_number_counter = 0; // need both to account for boss and treasure room
-    int current_room_number;
+    // Create blocked rooms while ensuring connectivity
+    std::vector<std::vector<bool>> blocked(size, std::vector<bool>(size, false));
+
+    // Block some rooms randomly
+    int total_rooms = size * size;
+    int rooms_to_block = total_rooms * 0.25; // Magic number for blocking rooms, might want to clean up later. Put in dungeon Config??
+    std::uniform_int_distribution<int> blockDist(0, size - 1);
+
+    for (int i = 0; i < rooms_to_block; i++)
+    {
+        int block_x, block_y;
+        bool valid_block = false;
+        int attempts = 0;
+
+        while (!valid_block && attempts < 50) // This is also weird magic number that im not sure what to do about
+        {
+            block_x = blockDist(rng);
+            block_y = blockDist(rng);
+
+            // Don't block start, boss, or treasure rooms
+            if ((block_x == start_x && block_y == start_y) ||
+                (block_x == boss_x && block_y == boss_y) ||
+                (block_x == treasure_x && block_y == treasure_y) ||
+                blocked[block_y][block_x])
+            {
+                attempts++;
+                continue;
+            }
+
+            // Temporarily block this room and check if paths still exist
+            blocked[block_y][block_x] = true;
+
+            bool start_to_boss = pathExists(start_x, start_y, boss_x, boss_y, blocked);
+            bool start_to_treasure = pathExists(start_x, start_y, treasure_x, treasure_y, blocked);
+
+            if (start_to_boss && start_to_treasure)
+            {
+                valid_block = true;
+            }
+            else
+            {
+                blocked[block_y][block_x] = false;
+            }
+            attempts++;
+        }
+    }
 
     rooms.resize(size);
-    for (int i = 0; i < size; ++i)
+    for (int y = 0; y < size; ++y)
     {
-        rooms[i].reserve(size);
-        for (int j = 0; j < size; ++j)
+        rooms[y].reserve(size);
+        for (int x = 0; x < size; ++x)
         {
-            room_number_counter++;
-            current_room_number = room_number_counter;
-
             int chest_type = 0;
             int engraving = 0;
             int trap_type = 0;
             int monster_type = 0;
-            if (i == start_y && j == start_x) // start room
+            RoomType room_type = RoomType::NORMAL;
+
+            if (blocked[y][x])
             {
+                room_type = RoomType::BLOCKED;
             }
-            else if (i == boss_y && j == boss_x) // boss room
+            else if (y == start_y && x == start_x)
             {
-                current_room_number = -1;
+                room_type = RoomType::NORMAL;
+            }
+            else if (y == boss_y && x == boss_x)
+            {
+                room_type = RoomType::BOSS;
                 monster_type = config.boss_monster_type;
             }
-            else if (i == treasure_y && j == treasure_x) // treasure room
+            else if (y == treasure_y && x == treasure_x)
             {
-                current_room_number = -2;
+                room_type = RoomType::TREASURE;
                 chest_type = 4;
                 trap_type = trapDist(rng);
                 monster_type = (optionalDist(rng) == 1) ? config.monster_pool[monsterDist(rng)] : 0;
             }
-            else // normal room
+            else
             {
+                room_type = RoomType::NORMAL;
                 chest_type = chestDist(rng);
                 trap_type = (optionalDist(rng) == 1) ? trapDist(rng) : 0;
                 monster_type = (optionalDist(rng) == 1) ? config.monster_pool[monsterDist(rng)] : 0;
             }
-            rooms[i].emplace_back(int_difficulty, chest_type, engraving, trap_type, monster_type, current_room_number);
+
+            rooms[y].emplace_back(int_difficulty, chest_type, engraving, trap_type, monster_type, room_type);
         }
     }
 
@@ -112,6 +204,18 @@ Dungeon::Dungeon(std::string dungeon_name, std::string string_difficulty)
 
     boss_room_x = boss_x;
     boss_room_y = boss_y;
+
+    // For debuging todo remove
+    auto map = dungeonMap();
+        std::cout << "Map:" << std::endl;
+        for (int y = 0; y < map.size(); ++y)
+        {
+            for (int x = 0; x < map[y].size(); ++x)
+            {
+                std::cout << map[y][x] << " ";
+            }
+            std::cout << std::endl;
+        }
 }
 
 bool Dungeon::move(int dx, int dy)
@@ -121,6 +225,12 @@ bool Dungeon::move(int dx, int dy)
 
     if (new_x >= 0 && new_x < size && new_y >= 0 && new_y < size)
     {
+        // Check if room is blocked
+        if (rooms[new_y][new_x].getRoomType() == RoomType::BLOCKED)
+        {
+            return false;
+        }
+
         current_x = new_x;
         current_y = new_y;
         current_room = &rooms[current_y][current_x];
@@ -172,6 +282,33 @@ std::string Dungeon::capitalizeFirstLetter(const std::string &input) const
     std::string result = input;
     result[0] = std::toupper(static_cast<unsigned char>(result[0]));
     return result;
+}
+
+std::vector<std::vector<int>> Dungeon::dungeonMap() const
+{
+    std::vector<std::vector<int>> map(size, std::vector<int>(size));
+    for (int i = 0; i < size; ++i)
+    {
+        for (int j = 0; j < size; ++j)
+        {
+            switch (rooms[i][j].getRoomType()) {
+                case RoomType::NORMAL:
+                    map[i][j] = 0;
+                    break;
+                case RoomType::BOSS:
+                    map[i][j] = 1;
+                    break;
+                case RoomType::TREASURE:
+                    map[i][j] = 2;
+                    break;
+                case RoomType::BLOCKED:
+                    map[i][j] = 3;
+                    break;
+            }
+        }
+    }
+    map[getCurrentY()][getCurrentX()] = 4; //player position
+    return map;
 }
 
 std::string Dungeon::to_string() const

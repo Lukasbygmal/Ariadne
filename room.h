@@ -6,6 +6,15 @@
 #include "monster.h"
 #include "trap.h"
 #include "chest.h"
+
+enum class RoomType
+{
+    NORMAL,
+    BOSS,
+    TREASURE,
+    BLOCKED
+};
+
 class Room
 {
 private:
@@ -13,10 +22,10 @@ private:
     std::optional<int> engraving;
     std::unique_ptr<Trap> trap;
     std::unique_ptr<Monster> monster;
-    int room_number; // -1 = boss room, -2 = treasure room
+    RoomType room_type;
 
 public:
-    Room(int difficulty, int chest_type, int engraving, int trap_type, int monster_type, int room_number);
+    Room(int difficulty, int chest_type, int engraving, int trap_type, int monster_type, RoomType type);
     Monster *getMonster() const;
     int killMonster();
     int openChest();
@@ -24,5 +33,6 @@ public:
     Trap *getTrap() const;
     Chest *getChest() const;
     std::string to_string() const;
+    RoomType getRoomType() const;
 };
 #endif

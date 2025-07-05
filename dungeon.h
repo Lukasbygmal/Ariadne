@@ -34,6 +34,7 @@ private:
     int boss_room_y; // not sure i need this
     bool move(int dx, int dy);
     std::string capitalizeFirstLetter(const std::string &input) const;
+    bool pathExists(int start_x, int start_y, int end_x, int end_y, const std::vector<std::vector<bool>> &blocked) const;
 
 public:
     Dungeon(std::string dungeon_name, std::string string_difficulty);
@@ -44,6 +45,7 @@ public:
     bool goWest();
 
     Room &getCurrentRoom() const;
+    std::vector<std::vector<int>> dungeonMap() const;
     int getCurrentX() const;
     int getCurrentY() const;
     bool isBossRoom() const; // not sure i need this
