@@ -18,9 +18,10 @@ private:
     int strength;
     int xp;
     std::string name;
+    bool is_boss;
 
 public:
-    Monster(const int type, int difficulty);
+    Monster(const int type, int difficulty, bool is_boss);
 
     int getHP() const;
     int getStrength() const;

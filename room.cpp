@@ -1,7 +1,8 @@
 #include "room.h"
 #include <iostream>
-Room::Room(int difficulty, int chest_type, int engraving, int trap_type, int monster_type)
+Room::Room(int difficulty, int chest_type, int engraving, int trap_type, int monster_type, int room_number)
 {
+    this->room_number = room_number;
     this->engraving = engraving;
     switch (chest_type)
     {
@@ -34,7 +35,12 @@ Room::Room(int difficulty, int chest_type, int engraving, int trap_type, int mon
     }
     if (monster_type != 0)
     {
-        monster = std::make_unique<Monster>(monster_type, difficulty);
+        bool is_boss = false;
+        if (room_number == -1)
+        {
+            is_boss = true;
+        }
+        monster = std::make_unique<Monster>(monster_type, difficulty, is_boss);
     }
 }
 
@@ -74,7 +80,20 @@ Chest *Room::getChest() const
 
 std::string Room::to_string() const
 {
-    std::string roomInfo = "In the room:\n";
+    std::string roomInfo;
+    if (room_number == -1)
+    {
+        roomInfo = "Boss Room:\n";
+    }
+    else if (room_number == -2)
+    {
+        roomInfo = "Treasure Room:\n";
+    }
+    else
+    {
+        roomInfo = "Room " + std::to_string(room_number) + ":\n";
+    }
+
     if (chest)
     {
         roomInfo += chest->to_string() + "\n";
