@@ -64,6 +64,7 @@ void Game::initializeUI()
     inputBox.setPosition(10.f, 610.f);
 
     initializeText();
+    initializeMap();
 }
 
 void Game::initializeText()
@@ -122,6 +123,39 @@ void Game::initializeText()
     inputText.setCharacterSize(18);
     inputText.setFillColor(sf::Color::Black);
     inputText.setPosition(20.f, 620.f);
+}
+
+void Game::initializeMap()
+{
+    sf::Vector2f mapPosition = {480.0f, 30.0f};
+    mapBackground.setSize(sf::Vector2f(MAP_DISPLAY_SIZE, MAP_DISPLAY_SIZE));
+    mapBackground.setFillColor(sf::Color(50, 50, 50, 220));
+    mapBackground.setPosition(mapPosition);
+
+    auto dungeonMapData = dungeon.dungeonMap();
+    int mapSize = dungeonMapData.size();
+
+    float tileSize = MAP_DISPLAY_SIZE / mapSize;
+
+    float tilePadding = tileSize * 0.4;
+    float roomSize = tileSize - tilePadding;
+
+    mapTiles.resize(mapSize);
+    for (int i = 0; i < mapSize; ++i)
+    {
+        mapTiles[i].resize(mapSize);
+    }
+
+    for (int i = 0; i < mapSize; ++i)
+    {
+        for (int j = 0; j < mapSize; ++j)
+        {
+            mapTiles[i][j].setSize(sf::Vector2f(roomSize, roomSize));
+            mapTiles[i][j].setPosition(
+                mapPosition.x + j * tileSize + tilePadding / 2.0f,
+                mapPosition.y + i * tileSize + tilePadding / 2.0f);
+        }
+    }
 }
 
 void Game::processEvents()
@@ -287,6 +321,48 @@ void Game::renderXPBar()
     }
 }
 
+void Game::renderMap()
+{
+    window.draw(mapBackground);
+
+    // Only draw tiles when in dungeon mode
+    if (mode == GameMode::DUNGEON)
+    {
+        auto dungeonMapData = dungeon.dungeonMap();
+        int mapSize = dungeonMapData.size();
+
+        for (int i = 0; i < mapSize; ++i)
+        {
+            for (int j = 0; j < mapSize; ++j)
+            {
+                sf::Color tileColor;
+                switch (dungeonMapData[i][j])
+                {
+                case 0:
+                    tileColor = sf::Color(128, 128, 128);
+                    break; // NORMAL room
+                case 1:
+                    tileColor = sf::Color::Red;
+                    break; // BOSS room
+                case 2:
+                    tileColor = sf::Color::Yellow;
+                    break; // TREASURE room
+                case 3:
+                    tileColor = sf::Color::Black;
+                    break; // BLOCKED room
+                case 4:
+                    tileColor = sf::Color::Green;
+                    break; // Player position
+                default:
+                    tileColor = sf::Color::Magenta;
+                    break; // Debug
+                }
+                mapTiles[i][j].setFillColor(tileColor);
+                window.draw(mapTiles[i][j]);
+            }
+        }
+    }
+}
 void Game::render()
 {
     updateUI();
@@ -294,6 +370,7 @@ void Game::render()
     window.clear();
 
     renderXPBar();
+    renderMap();
 
     window.draw(roomBackground);
     window.draw(titleText);
@@ -376,6 +453,7 @@ bool Game::buyAgility()
 void Game::enterDungeon(std::string dungeon_name, std::string string_difficulty)
 {
     dungeon = Dungeon(dungeon_name, string_difficulty);
+    initializeMap();
     healMaxPlayer();
     changeMode(GameMode::DUNGEON);
 }

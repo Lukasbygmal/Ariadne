@@ -59,6 +59,10 @@ private:
     sf::Text armorText;
     sf::Text terminalText;
     sf::Text inputText;
+    sf::RectangleShape mapBackground;
+
+    std::vector<std::vector<sf::RectangleShape>> mapTiles;
+    const float MAP_DISPLAY_SIZE = 310.0f;
 
     std::string userInput;
 
@@ -68,10 +72,12 @@ private:
 
     void initializeUI();
     void initializeText();
+    void initializeMap();
     void updateUI();
     void renderXPBar();
     void damageMonster(int damage);
     void healMaxPlayer();
+    void renderMap();
 
 public:
     Game(int user_id, sf::RenderWindow &window);
