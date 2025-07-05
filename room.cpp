@@ -1,25 +1,23 @@
 #include "room.h"
 #include <iostream>
-
-Room::Room(int difficulty, int chest_type, int _engraving, int trap_type, int monster_type)
+Room::Room(int difficulty, int chest_type, int engraving, int trap_type, int monster_type)
 {
-    engraving = _engraving;
-
+    this->engraving = engraving;
     switch (chest_type)
     {
     case 0:
         break;
     case 1:
-        chest = new SmallChest(difficulty);
+        chest = std::make_unique<SmallChest>(difficulty);
         break;
     case 2:
-        chest = new MediumChest(difficulty);
+        chest = std::make_unique<MediumChest>(difficulty);
         break;
     case 3:
-        chest = new LargeChest(difficulty);
+        chest = std::make_unique<LargeChest>(difficulty);
         break;
     case 4:
-        chest = new Artifact(difficulty);
+        chest = std::make_unique<Artifact>(difficulty);
         break;
     }
 
@@ -28,26 +26,26 @@ Room::Room(int difficulty, int chest_type, int _engraving, int trap_type, int mo
     case 0:
         break;
     case 1:
-        trap = new WallArrows(difficulty);
+        trap = std::make_unique<WallArrows>(difficulty);
         break;
     case 2:
-        trap = new SwingingAxe(difficulty);
+        trap = std::make_unique<SwingingAxe>(difficulty);
         break;
     }
     if (monster_type != 0)
     {
-        monster = new Monster(monster_type, difficulty);
+        monster = std::make_unique<Monster>(monster_type, difficulty);
     }
 }
 
-std::optional<Monster *> Room::getMonster() const
+Monster *Room::getMonster() const
 {
-    return monster;
+    return monster.get();
 }
 
 int Room::killMonster()
 {
-    int xp = monster.value()->getXP();
+    int xp = monster->getXP();
     monster.reset();
     return xp;
 }
@@ -55,24 +53,23 @@ int Room::killMonster()
 int Room::openChest()
 {
     std::cout << "I get into open chest\n";
-    int gold = chest.value()->getGold();
+    int gold = chest->getGold();
     chest.reset();
     return gold;
 }
-
 void Room::removeTrap()
 {
     trap.reset();
 }
 
-std::optional<Trap *> Room::getTrap() const
+Trap *Room::getTrap() const
 {
-    return trap;
+    return trap.get();
 }
 
-std::optional<Chest *> Room::getChest() const
+Chest *Room::getChest() const
 {
-    return chest;
+    return chest.get();
 }
 
 std::string Room::to_string() const
@@ -80,7 +77,7 @@ std::string Room::to_string() const
     std::string roomInfo = "In the room:\n";
     if (chest)
     {
-        roomInfo += (*chest)->to_string() + "\n";
+        roomInfo += chest->to_string() + "\n";
     }
     if (engraving)
         roomInfo += "Engraving \n";

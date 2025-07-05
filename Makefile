@@ -31,6 +31,10 @@ $(TARGET): $(OBJS)
 run: $(TARGET)
 	./$(TARGET)
 
+# Test the program for memory errors with Valgrind
+mem: $(TARGET)
+	valgrind --leak-check=full --track-origins=yes ./$(TARGET)
+
 # Clean up the build files
 clean:
 	rm -f $(OBJS) $(TARGET)
@@ -39,4 +43,4 @@ clean:
 gdb: $(TARGET)
 	gdb ./$(TARGET)
 
-.PHONY: all clean run gdb
+.PHONY: all clean run gdb mem
