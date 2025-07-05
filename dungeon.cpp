@@ -11,7 +11,7 @@ std::mt19937 Dungeon::rng(Dungeon::rd());
 // DungeonConfig order: size, words, word_length, monster_pool, boss_monster_type, base_difficulty
 const std::map<std::string, DungeonConfig> dungeon_configs = {
     // Bosses:
-    {"thal", {3, 4, 3, {1, 2, 3}, 1, 1}},                                // Goblin
+    {"thal", {4, 4, 3, {1, 2, 3}, 1, 1}},                                // Goblin
     {"vorn", {4, 4, 3, {1, 2, 3}, 2, 4}},                                // Slime
     {"ezra", {5, 4, 3, {1, 2, 3}, 3, 7}},                                // Skeleton
     {"kurn", {4, 5, 3, {1, 2, 3}, 4, 10}},                               // Zombie
@@ -20,7 +20,7 @@ const std::map<std::string, DungeonConfig> dungeon_configs = {
     {"malq", {5, 7, 4, {3, 4, 5, 6, 7, 8}, 7, 19}},                      // Wraith
     {"xelv", {6, 8, 4, {4, 5, 6, 7, 8, 9, 10}, 8, 22}},                  // Minotaur
     {"ormh", {5, 8, 5, {5, 6, 7, 8, 9, 10}, 9, 25}},                     // Orc
-    {"griv", {4, 9, 5, {6, 7, 8, 9, 10, 11}, 10, 28}},                   // Troll
+    {"griv", {6, 9, 5, {6, 7, 8, 9, 10, 11}, 10, 28}},                   // Troll
     {"fend", {5, 9, 6, {7, 8, 9, 10, 11}, 11, 31}},                      // Vampire
     {"quar", {7, 9, 5, {8, 9, 10, 11, 12}, 12, 34}},                     // Dragonling
     {"blen", {7, 9, 6, {6, 7, 8, 9, 10, 11}, 6, 37}},                    // Imp reused
