@@ -233,10 +233,9 @@ void Game::updateUI()
     }
     else if (mode == GameMode::BATTLE)
     {
-        std::optional<Monster *> monsterOpt = dungeon.getCurrentRoom().getMonster();
-        if (monsterOpt)
+        Monster *monster = dungeon.getCurrentRoom().getMonster();
+        if (monster)
         {
-            Monster *monster = monsterOpt.value();
             titleText.setString("Battle with " + monster->to_string() + "\n");
             subTitleText.setString("Strength: " + std::to_string(monster->getStrength()) + " HP: " + std::to_string(monster->getHP()));
         }
@@ -398,20 +397,20 @@ void Game::leaveDungeon()
 
 void Game::checkRoomHazards()
 {
-    Room current = dungeon.getCurrentRoom();
-    std::optional<Trap *> trap = current.getTrap();
+    Room &current = dungeon.getCurrentRoom();
+    Trap *trap = current.getTrap();
     if (trap)
     {
-        int damage = trap.value()->getDamage();
+        int damage = trap->getDamage();
         damage = player.receiveDamage(damage);
-        std::string trap_name = trap.value()->to_string();
+        std::string trap_name = trap->to_string();
         addMessage("You triggered a " + trap_name + " trap! You take " + std::to_string(damage) + " damage.");
         current.removeTrap();
     }
-    std::optional<Monster *> monster = current.getMonster();
+    Monster *monster = dungeon.getCurrentRoom().getMonster();
     if (monster)
     {
-        std::string monster_name = monster.value()->to_string();
+        std::string monster_name = monster->to_string();
         addMessage("A " + monster_name + " appears before you! Prepare for battle!");
         startBattle();
     }
@@ -495,10 +494,10 @@ void Game::switchToDefense()
 
 void Game::damageMonster(int damage)
 {
-    std::optional<Monster *> monsterOpt = dungeon.getCurrentRoom().getMonster();
-    if (monsterOpt)
+    Monster *monster = dungeon.getCurrentRoom().getMonster();
+    if (monster)
     {
-        monsterOpt.value()->receiveDamage(damage);
+        monster->receiveDamage(damage);
     }
 }
 
@@ -524,11 +523,11 @@ void Game::endRound()
     }
     addMessage("You did " + std::to_string(correct_attacks) + " attacks for " + std::to_string(total_player_damage) + " damage!");
 
-    std::optional<Monster *> monsterOpt = dungeon.getCurrentRoom().getMonster();
+    Monster *monster = dungeon.getCurrentRoom().getMonster();
     int monster_damage = 0;
-    if (monsterOpt)
+    if (monster)
     {
-        monster_damage = monsterOpt.value()->getStrength();
+        monster_damage = monster->getStrength();
     }
     int total_monster_damage = 0;
     int actual_damage;
@@ -562,10 +561,8 @@ void Game::endRound()
     }
 
     // this long if statement is if monster is dead
-    monsterOpt = dungeon.getCurrentRoom().getMonster();
-    if (monsterOpt)
+    if (monster)
     {
-        Monster *monster = monsterOpt.value();
         if (monster->getHP() <= 0)
         {
             endBattle();
