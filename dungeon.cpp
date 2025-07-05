@@ -65,12 +65,18 @@ Dungeon::Dungeon(std::string dungeon_name, std::string string_difficulty)
     int treasure_x = roomDist(rng);
     int treasure_y = treasureRoomDist(rng);
 
+    int room_number_counter = 0; // need both to account for boss and treasure room
+    int current_room_number;
+
     rooms.resize(size);
     for (int i = 0; i < size; ++i)
     {
         rooms[i].reserve(size);
         for (int j = 0; j < size; ++j)
         {
+            room_number_counter++;
+            current_room_number = room_number_counter;
+
             int chest_type = 0;
             int engraving = 0;
             int trap_type = 0;
@@ -80,10 +86,12 @@ Dungeon::Dungeon(std::string dungeon_name, std::string string_difficulty)
             }
             else if (i == boss_y && j == boss_x) // boss room
             {
+                current_room_number = -1;
                 monster_type = config.boss_monster_type;
             }
             else if (i == treasure_y && j == treasure_x) // treasure room
             {
+                current_room_number = -2;
                 chest_type = 4;
                 trap_type = trapDist(rng);
                 monster_type = (optionalDist(rng) == 1) ? config.monster_pool[monsterDist(rng)] : 0;
@@ -94,7 +102,7 @@ Dungeon::Dungeon(std::string dungeon_name, std::string string_difficulty)
                 trap_type = (optionalDist(rng) == 1) ? trapDist(rng) : 0;
                 monster_type = (optionalDist(rng) == 1) ? config.monster_pool[monsterDist(rng)] : 0;
             }
-            rooms[i].emplace_back(int_difficulty, chest_type, engraving, trap_type, monster_type);
+            rooms[i].emplace_back(int_difficulty, chest_type, engraving, trap_type, monster_type, current_room_number);
         }
     }
 
@@ -154,15 +162,6 @@ int Dungeon::getCurrentX() const
 int Dungeon::getCurrentY() const
 {
     return current_y;
-}
-
-bool Dungeon::isBossRoom() const
-{
-    if (current_x == boss_room_x && current_y == boss_room_y)
-    {
-        return true;
-    }
-    return false;
 }
 
 std::string Dungeon::capitalizeFirstLetter(const std::string &input) const

@@ -17,8 +17,13 @@ const std::map<int, MonsterConfig> monster_configs = {
     {11, {"Vampire", 5, 18, 200}},
     {12, {"Dragonling", 5, 20, 195}}};
 
-Monster::Monster(const int type, int difficulty)
+Monster::Monster(const int type, int difficulty, bool is_boss)
 {
+    this->is_boss = is_boss;
+    if (is_boss)
+    {
+        difficulty = difficulty * 2;
+    }
     auto it = monster_configs.find(type);
     if (it == monster_configs.end())
     {
@@ -55,5 +60,9 @@ void Monster::receiveDamage(int amount)
 
 std::string Monster::to_string() const
 {
+    if (is_boss)
+    {
+        return (name + " Boss");
+    }
     return name;
 }

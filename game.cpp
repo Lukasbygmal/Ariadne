@@ -565,6 +565,7 @@ void Game::endRound()
     {
         if (monster->getHP() <= 0)
         {
+            addMessage(monster->to_string() + "slayed!");
             endBattle();
             return;
         }
