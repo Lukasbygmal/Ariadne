@@ -57,6 +57,9 @@ private:
     sf::Text strengthText;
     sf::Text agilityText;
     sf::Text armorText;
+    sf::Text perksText;
+    sf::Text yetToDecideText;
+    sf::Text listDungeonsText;
     sf::Text terminalText;
     sf::Text inputText;
     sf::RectangleShape mapBackground;

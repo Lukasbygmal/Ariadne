@@ -115,6 +115,21 @@ void Game::initializeText()
     armorText.setFillColor(Colors::Text);
     armorText.setPosition(700.f, 540.f);
 
+    listDungeonsText.setFont(textFont);
+    listDungeonsText.setCharacterSize(20);
+    listDungeonsText.setFillColor(Colors::Text);
+    listDungeonsText.setPosition(490.f, 30.f);
+
+    perksText.setFont(textFont);
+    perksText.setCharacterSize(20);
+    perksText.setFillColor(Colors::Text);
+    perksText.setPosition(650.f, 360.f);
+
+    yetToDecideText.setFont(textFont);
+    yetToDecideText.setCharacterSize(20);
+    yetToDecideText.setFillColor(Colors::Text);
+    yetToDecideText.setPosition(490.f, 360.f);
+
     terminalText.setFont(textFont);
     terminalText.setCharacterSize(18);
     terminalText.setFillColor(Colors::Text);
@@ -257,14 +272,17 @@ void Game::updateUI()
     {
         battleText.setString("");
         subTitleText.setString("");
+        listDungeonsText.setString("");
         titleText.setString(dungeon.to_string() + dungeon.getCurrentRoom().to_string());
     }
     else if (mode == GameMode::MENU)
     {
         battleText.setString("");
+        subTitleText.setString("\nHow to play:\nIn tavern:\nbuy [amount] [hp/strength/agility/armor]\nenter [dungeon name] [easy/medium/hard]\nIn dungeon:\ngo [west/north/south/east]\nopen chest\nexit\nIn battle:\nType the green text to attack\nType the red text backwards to parry\n");
         titleText.setString("The Ink & Anvil Tavern \nBuy stats or enter a dungeon! \n");
-        std::string list_dungeons = "\nDungeons easy/medium/hard:\nThal   Vorn \nEzra   Kurn \nZamo   Druv \nMalq   Xelv \nOrmh   Griv \nFend   Quar \nBlen   Xoth \nMerk   Zenk";
-        subTitleText.setString(list_dungeons);
+        // Kinda ugly way to display dungeons, but it works for now
+        std::string list_dungeons = "Dungeons:\nThal            Vorn\nEzra            Kurn \nZamo            Druv \nMalq            Xelv \nOrmh            Griv \nFend            Quar \nBlen            Xoth \nMerk            Zenk";
+        listDungeonsText.setString(list_dungeons);
     }
     else if (mode == GameMode::BATTLE)
     {
@@ -291,6 +309,9 @@ void Game::updateUI()
             battleText.setFillColor(Colors::Danger);
         }
     }
+
+    yetToDecideText.setString("Leaderboard \ncoming...");
+    perksText.setString("Perks \ncoming...");
 
     levelText.setString("Lvl " + std::to_string(player.getLevel()));
     goldText.setString(std::to_string(player.getGold()) + " G");
@@ -386,6 +407,9 @@ void Game::render()
     window.draw(strengthText);
     window.draw(agilityText);
     window.draw(armorText);
+    window.draw(perksText);
+    window.draw(yetToDecideText);
+    window.draw(listDungeonsText);
     window.draw(terminalBackground);
     window.draw(terminalText);
     window.draw(inputBox);
