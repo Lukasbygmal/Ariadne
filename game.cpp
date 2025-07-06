@@ -423,53 +423,54 @@ void Game::changeMode(GameMode newMode)
     mode = newMode;
 }
 
-bool Game::buyHP()
+bool Game::buyHP(int amount)
 { // magic number that needs to be revisited for balancing
-    int cost = 10;
+    int cost = 20 * amount;
     if (player.getGold() >= cost)
     {
         player.decreaseGold(cost);
-        player.increaseHP(5);
-        addMessage("Bought HP");
+        player.increaseHP(1 * amount);
+        addMessage("Bought " + std::to_string(amount) + " HP");
+        healMaxPlayer();
         return true;
     }
     return false;
 }
 
-bool Game::buyStrength()
+bool Game::buyStrength(int amount)
 { // magic number that needs to be revisited for balancing
-    int cost = 10;
+    int cost = 100 * amount;
     if (player.getGold() >= cost)
     {
         player.decreaseGold(cost);
-        player.increaseStrength(1);
-        addMessage("Bought Strength");
+        player.increaseStrength(1 * amount);
+        addMessage("Bought " + std::to_string(amount) + " Strength");
         return true;
     }
     return false;
 }
 
-bool Game::buyArmor()
+bool Game::buyArmor(int amount)
 { // magic number that needs to be revisited for balancing
-    int cost = 10;
+    int cost = 100 * amount;
     if (player.getGold() >= cost)
     {
         player.decreaseGold(cost);
-        player.increaseArmor(1);
-        addMessage("Bought Armor");
+        player.increaseArmor(1 * amount);
+        addMessage("Bought " + std::to_string(amount) + " Armor");
         return true;
     }
     return false;
 }
 
-bool Game::buyAgility()
+bool Game::buyAgility(int amount)
 { // magic number that needs to be revisited for balancing
-    int cost = 10;
+    int cost = 100 * amount;
     if (player.getGold() >= cost)
     {
         player.decreaseGold(cost);
-        player.increaseAgility(1);
-        addMessage("Bought Agility");
+        player.increaseAgility(1 * amount);
+        addMessage("Bought " + std::to_string(amount) + " Agility");
         return true;
     }
     return false;
@@ -661,6 +662,7 @@ void Game::endRound()
         player.dead();
         titleText.setFillColor(Colors::Text); // check if needed after change todo
         changeMode(GameMode::MENU);
+        healMaxPlayer();
     }
 
     // this long if statement is if monster is dead

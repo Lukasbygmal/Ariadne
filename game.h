@@ -94,10 +94,10 @@ public:
     void run();
 
     void changeMode(GameMode newMode);
-    bool buyHP();
-    bool buyStrength();
-    bool buyArmor();
-    bool buyAgility();
+    bool buyHP(int amount);
+    bool buyStrength(int amount);
+    bool buyArmor(int amount);
+    bool buyAgility(int amount);
     void enterDungeon(std::string dungeon_name, std::string string_difficulty);
     void leaveDungeon();
     void checkRoomHazards();

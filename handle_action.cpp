@@ -1,5 +1,6 @@
 #include <iostream>
 #include "handle_action.h"
+#include <stdexcept>
 
 bool handle_action(const Action &action, Game &game)
 {
@@ -12,43 +13,55 @@ bool handle_action(const Action &action, Game &game)
             game.addMessage("You enter " + *action.direction + " " + *action.object);
             return true;
         }
-        else if (action.verb == "buy" && action.object)
+        else if (action.verb == "buy" && action.direction && action.object)
         {
-            if (*action.object == "strength")
+            // This is to make sure it is a number
+            try
             {
-                if (game.buyStrength())
+                int amount = std::stoi(*action.direction);
+                if (amount <= 0 || amount >= 1000)
                 {
-                    return true;
+                    return false; // Invalid number range
                 }
-                return false;
-            }
-            else if (*action.object == "hp")
-            {
 
-                if (game.buyHP())
+                if (*action.object == "strength")
                 {
-                    return true;
+                    if (game.buyStrength(amount))
+                    {
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
+                else if (*action.object == "hp")
+                {
+                    if (game.buyHP(amount))
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                else if (*action.object == "armor")
+                {
+                    if (game.buyArmor(amount))
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                else if (*action.object == "agility")
+                {
+                    if (game.buyAgility(amount))
+                    {
+                        return true;
+                    }
+                    return false;
+                }
             }
-            else if (*action.object == "armor")
+            catch (const std::exception &)
             {
-                if (game.buyArmor())
-                {
-                    return true;
-                }
-                return false;
-            }
-            else if (*action.object == "agility")
-            {
-                if (game.buyAgility())
-                {
-                    return true;
-                }
-                return false;
+                return false; // Invalid number format
             }
         }
-
         return false;
 
     case GameMode::DUNGEON:
