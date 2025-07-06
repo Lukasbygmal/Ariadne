@@ -88,9 +88,9 @@ bool parse_input(const std::string &input, Action &action, GameMode mode)
             action = Action(words[0], words[1], words[2]);
             return true;
         }
-        else if (words.size() == 2 && words[0] == "buy" && std::find(valid_items.begin(), valid_items.end(), words[1]) != valid_items.end())
+        else if (words.size() == 3 && words[0] == "buy" && std::find(valid_items.begin(), valid_items.end(), words[2]) != valid_items.end())
         {
-            action = Action(words[0], std::nullopt, words[1]);
+            action = Action(words[0], words[1], words[2]);
             return true;
         }
         return false;
