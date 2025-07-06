@@ -4,6 +4,7 @@
 #include <string>
 #include <cctype>
 #include "parse_input.h"
+#include "Colors.hpp"
 
 std::random_device Game::rd;
 std::mt19937 Game::rng(Game::rd());
@@ -40,27 +41,27 @@ void Game::initializeUI()
     }
 
     roomBackground.setSize(sf::Vector2f(460.f, 400.f));
-    roomBackground.setFillColor(sf::Color(100, 100, 100, 200));
+    roomBackground.setFillColor(Colors::PrimaryBackground);
     roomBackground.setPosition(10.f, 30.f);
 
     statsBackground.setSize(sf::Vector2f(310.f, 210.f));
-    statsBackground.setFillColor(sf::Color(100, 100, 100, 200));
+    statsBackground.setFillColor(Colors::PrimaryBackground);
     statsBackground.setPosition(480.f, 440.f);
 
     perksBackground.setSize(sf::Vector2f(150.f, 80.f));
-    perksBackground.setFillColor(sf::Color(114, 188, 212, 200));
+    perksBackground.setFillColor(Colors::TerminalBackground);
     perksBackground.setPosition(640.f, 350.f);
 
     yetToDecideBackground.setSize(sf::Vector2f(150.f, 80.f));
-    yetToDecideBackground.setFillColor(sf::Color(120, 150, 100, 200));
+    yetToDecideBackground.setFillColor(Colors::Treasure); // TODO
     yetToDecideBackground.setPosition(480.f, 350.f);
 
     terminalBackground.setSize(sf::Vector2f(460.f, 160.f));
-    terminalBackground.setFillColor(sf::Color(50, 50, 50, 220));
+    terminalBackground.setFillColor(Colors::TerminalBackground);
     terminalBackground.setPosition(10.f, 440.f);
 
     inputBox.setSize(sf::Vector2f(460.f, 40.f));
-    inputBox.setFillColor(sf::Color(220, 220, 220));
+    inputBox.setFillColor(Colors::Text);
     inputBox.setPosition(10.f, 610.f);
 
     initializeText();
@@ -71,57 +72,57 @@ void Game::initializeText()
 {
     titleText.setFont(titleFont);
     titleText.setCharacterSize(28);
-    titleText.setFillColor(sf::Color::White);
+    titleText.setFillColor(Colors::Text);
     titleText.setPosition(20.f, 40.f);
 
     subTitleText.setFont(textFont);
     subTitleText.setCharacterSize(18);
-    subTitleText.setFillColor(sf::Color::White);
+    subTitleText.setFillColor(Colors::Text);
     subTitleText.setPosition(24.f, 95.f);
 
     battleText.setFont(textFont);
     battleText.setCharacterSize(28);
-    battleText.setFillColor(sf::Color::White);
+    battleText.setFillColor(Colors::Text);
     battleText.setPosition(24.f, 135.f);
 
     levelText.setFont(textFont);
     levelText.setCharacterSize(24);
-    levelText.setFillColor(sf::Color::White);
+    levelText.setFillColor(Colors::Text);
     levelText.setPosition(610.f, 460.f);
 
     goldText.setFont(textFont);
     goldText.setCharacterSize(24);
-    goldText.setFillColor(sf::Color::White);
+    goldText.setFillColor(Colors::Treasure);
     goldText.setPosition(610.f, 495.f);
 
     hpText.setFont(textFont);
     hpText.setCharacterSize(20);
-    hpText.setFillColor(sf::Color::White);
+    hpText.setFillColor(Colors::Danger);
     hpText.setPosition(590.f, 600.f);
 
     strengthText.setFont(textFont);
     strengthText.setCharacterSize(20);
-    strengthText.setFillColor(sf::Color::White);
+    strengthText.setFillColor(Colors::Text);
     strengthText.setPosition(490.f, 540.f);
 
     agilityText.setFont(textFont);
     agilityText.setCharacterSize(20);
-    agilityText.setFillColor(sf::Color::White);
+    agilityText.setFillColor(Colors::Text);
     agilityText.setPosition(610.f, 540.f);
 
     armorText.setFont(textFont);
     armorText.setCharacterSize(20);
-    armorText.setFillColor(sf::Color::White);
+    armorText.setFillColor(Colors::Text);
     armorText.setPosition(700.f, 540.f);
 
     terminalText.setFont(textFont);
     terminalText.setCharacterSize(18);
-    terminalText.setFillColor(sf::Color::White);
+    terminalText.setFillColor(Colors::Text);
     terminalText.setPosition(20.f, 440.f);
 
     inputText.setFont(textFont);
     inputText.setCharacterSize(18);
-    inputText.setFillColor(sf::Color::Black);
+    inputText.setFillColor(Colors::Background);
     inputText.setPosition(20.f, 620.f);
 }
 
@@ -129,7 +130,7 @@ void Game::initializeMap()
 {
     sf::Vector2f mapPosition = {480.0f, 30.0f};
     mapBackground.setSize(sf::Vector2f(MAP_DISPLAY_SIZE, MAP_DISPLAY_SIZE));
-    mapBackground.setFillColor(sf::Color(50, 50, 50, 220));
+    mapBackground.setFillColor(Colors::MapBackground);
     mapBackground.setPosition(mapPosition);
 
     auto dungeonMapData = dungeon.dungeonMap();
@@ -282,12 +283,12 @@ void Game::updateUI()
         battleText.setString(display_words);
         if (battle_mode)
         {
-            battleText.setFillColor(sf::Color::Green);
+            battleText.setFillColor(Colors::Player);
         }
 
         if (!battle_mode)
         {
-            battleText.setFillColor(sf::Color::Red);
+            battleText.setFillColor(Colors::Danger);
         }
     }
 
@@ -316,7 +317,7 @@ void Game::renderXPBar()
     {
         sf::RectangleShape segment(sf::Vector2f(segmentWidth - 6, segmentHeight));
         segment.setPosition(10.f + i * segmentWidth, 10.f);
-        segment.setFillColor(i < filledSegments ? sf::Color(0, 255, 0) : sf::Color(50, 50, 50));
+        segment.setFillColor(i < filledSegments ? Colors::Player : Colors::PrimaryBackground);
         window.draw(segment);
     }
 }
@@ -339,19 +340,19 @@ void Game::renderMap()
                 switch (dungeonMapData[i][j])
                 {
                 case 0:
-                    tileColor = sf::Color(128, 128, 128);
+                    tileColor = Colors::PrimaryBackground;
                     break; // NORMAL room
                 case 1:
-                    tileColor = sf::Color::Red;
+                    tileColor = Colors::Danger;
                     break; // BOSS room
                 case 2:
-                    tileColor = sf::Color::Yellow;
+                    tileColor = Colors::Treasure;
                     break; // TREASURE room
                 case 3:
-                    tileColor = sf::Color::Black;
+                    tileColor = Colors::Background;
                     break; // BLOCKED room
                 case 4:
-                    tileColor = sf::Color::Green;
+                    tileColor = Colors::Player;
                     break; // Player position
                 default:
                     tileColor = sf::Color::Magenta;
@@ -634,7 +635,7 @@ void Game::endRound()
     {
         addMessage("You died, lost gold and XP!");
         player.dead();
-        titleText.setFillColor(sf::Color::White); // check if needed after change
+        titleText.setFillColor(Colors::Text); // check if needed after change todo
         changeMode(GameMode::MENU);
     }
 
@@ -667,7 +668,7 @@ void Game::endBattle()
     {
         addMessage("You leveled up and gained some stats!");
     }
-    titleText.setFillColor(sf::Color::White); // check if needed after change
+    titleText.setFillColor(Colors::Text); // check if needed after change todo
 }
 
 void Game::run()
