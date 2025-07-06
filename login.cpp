@@ -2,6 +2,7 @@
 #include <iostream>
 #include "auth.h"
 #include <SFML/Window/Clipboard.hpp>
+#include "Colors.hpp"
 
 static const size_t MAX_INPUT_LENGTH = 50;
 
@@ -19,48 +20,48 @@ Login::Login(sf::RenderWindow &win) : window(win), waitingForCode(false), inputA
     titleText.setFont(titleFont);
     titleText.setString("Welcome to Ariadne!");
     titleText.setCharacterSize(72);
-    titleText.setFillColor(sf::Color::Red);
+    titleText.setFillColor(Colors::Text);
     titleText.setPosition(60, 60);
 
     buttonBox.setSize(sf::Vector2f(320, 60));
     buttonBox.setPosition(245, 340);
-    buttonBox.setFillColor(sf::Color(100, 100, 100, 200));
+    buttonBox.setFillColor(Colors::TerminalBackground);
 
     loginButton.setFont(titleFont);
     loginButton.setString("GitHub Login");
     loginButton.setCharacterSize(42);
-    loginButton.setFillColor(sf::Color::White);
+    loginButton.setFillColor(Colors::Text);
     loginButton.setPosition(285, 343);
 
     inputBox.setSize(sf::Vector2f(400, 40));
     inputBox.setPosition(180, 430);
-    inputBox.setFillColor(sf::Color(50, 50, 50, 200));
+    inputBox.setFillColor(Colors::TerminalBackground);
     inputBox.setOutlineThickness(2);
-    inputBox.setOutlineColor(sf::Color(100, 100, 100));
+    inputBox.setOutlineColor(Colors::Text);
 
     inputText.setFont(textFont);
     inputText.setCharacterSize(20);
-    inputText.setFillColor(sf::Color::White);
+    inputText.setFillColor(Colors::Text);
     inputText.setPosition(190, 440);
 
     promptText.setFont(textFont);
     promptText.setCharacterSize(20);
-    promptText.setFillColor(sf::Color::White);
+    promptText.setFillColor(Colors::Text);
     promptText.setPosition(180, 400);
 
     submitButton.setSize(sf::Vector2f(40, 40));
     submitButton.setPosition(590, 430);
-    submitButton.setFillColor(sf::Color(0, 150, 0, 200));
+    submitButton.setFillColor(Colors::Player);
 
     submitButtonText.setFont(titleFont);
     submitButtonText.setString(">");
     submitButtonText.setCharacterSize(20);
-    submitButtonText.setFillColor(sf::Color::White);
+    submitButtonText.setFillColor(Colors::Background);
     submitButtonText.setPosition(600, 435);
 
     errorText.setFont(textFont);
     errorText.setCharacterSize(18);
-    errorText.setFillColor(sf::Color::Red);
+    errorText.setFillColor(Colors::Danger);
     errorText.setPosition(200, 500);
 
     inputString = "";
@@ -68,7 +69,7 @@ Login::Login(sf::RenderWindow &win) : window(win), waitingForCode(false), inputA
 
 void Login::draw()
 {
-    window.clear(sf::Color::Black);
+    window.clear(Colors::PrimaryBackground);
     window.draw(titleText);
 
     if (!waitingForCode)
@@ -190,7 +191,7 @@ void Login::handleTextInput(const sf::Event::TextEvent &text)
 void Login::setInputActive(bool active)
 {
     inputActive = active;
-    inputBox.setOutlineColor(active ? sf::Color::White : sf::Color(100, 100, 100));
+    inputBox.setOutlineColor(active ? Colors::Text : Colors::TerminalBackground);
 }
 
 void Login::pasteFromClipboard()
