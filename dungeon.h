@@ -30,8 +30,8 @@ private:
     int current_x;
     int current_y;
     Room *current_room;
-    int boss_room_x; // not sure i need this
-    int boss_room_y; // not sure i need this
+    int boss_room_x;
+    int boss_room_y;
     bool move(int dx, int dy);
     std::string capitalizeFirstLetter(const std::string &input) const;
     bool pathExists(int start_x, int start_y, int end_x, int end_y, const std::vector<std::vector<bool>> &blocked) const;
@@ -48,6 +48,7 @@ public:
     std::vector<std::vector<int>> dungeonMap() const;
     int getCurrentX() const;
     int getCurrentY() const;
+    int getDifficulty() const;
     bool isBossRoom() const; // not sure i need this
     int getWordLength() const { return word_length; }
     int getWords() const { return words; }

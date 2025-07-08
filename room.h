@@ -19,13 +19,12 @@ class Room
 {
 private:
     std::unique_ptr<Chest> chest;
-    std::optional<int> engraving;
     std::unique_ptr<Trap> trap;
     std::unique_ptr<Monster> monster;
     RoomType room_type;
 
 public:
-    Room(int difficulty, int chest_type, int engraving, int trap_type, int monster_type, RoomType type);
+    Room(int difficulty, int chest_type, int trap_type, int monster_type, RoomType type);
     Monster *getMonster() const;
     int killMonster();
     int openChest();

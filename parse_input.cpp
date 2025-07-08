@@ -24,9 +24,9 @@ bool parse_input(const std::string &input, Action &action, GameMode mode)
     {
     case GameMode::DUNGEON:
     {
-        std::vector<std::string> valid_verbs = {"go", "rest", "investigate", "search", "open", "pray", "exit"}; // lowkey don't need this?
+        std::vector<std::string> valid_verbs = {"go", "open", "exit"}; // lowkey don't need this?
         std::vector<std::string> valid_directions = {"north", "west", "east", "south"};
-        std::vector<std::string> valid_objects = {"chest", "engraving", "corpse"};
+        std::vector<std::string> valid_objects = {"chest"};
 
         if (std::find(valid_verbs.begin(), valid_verbs.end(), words[0]) == valid_verbs.end()) // like is it really worth doing this check?
             return false;
@@ -37,18 +37,12 @@ bool parse_input(const std::string &input, Action &action, GameMode mode)
             action = Action(words[0], words[1]);
             return true;
         }
-        else if (words[0] == "investigate" && words.size() == 2 &&
-                 std::find(valid_objects.begin(), valid_objects.end(), words[1]) != valid_objects.end())
-        {
-            action = Action(words[0], std::nullopt, words[1]);
-            return true;
-        }
         else if (words[0] == "open" && words.size() == 2 && words[1] == "chest")
         {
             action = Action(words[0], std::nullopt, words[1]);
             return true;
         }
-        else if ((words[0] == "search" || words[0] == "rest" || words[0] == "pray" || words[0] == "exit") && words.size() == 1)
+        else if ((words[0] == "exit") && words.size() == 1)
         {
             action = Action(words[0]);
             return true;

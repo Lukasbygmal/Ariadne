@@ -109,14 +109,8 @@ bool handle_action(const Action &action, Game &game)
                 return false;
             }
         }
-        else if (action.verb == "investigate" && action.object)
-        {
-            std::cout << "Investigate(" << *action.object << ")" << std::endl;
-            return true;
-        }
         else if (action.verb == "open" && action.object)
         {
-            std::cout << "Open(" << *action.object << ")" << std::endl;
             if (game.getDungeon().getCurrentRoom().getChest())
             {
                 int gold = game.getDungeon().getCurrentRoom().openChest();
@@ -126,30 +120,13 @@ bool handle_action(const Action &action, Game &game)
             }
             return false;
         }
-        else if (action.verb == "search")
-        {
-            std::cout << "Search()" << std::endl;
-            return true;
-        }
-        else if (action.verb == "rest")
-        {
-            std::cout << "Rest()" << std::endl;
-            return true;
-        }
-        else if (action.verb == "pray")
-        {
-            std::cout << "Pray()" << std::endl;
-            return true;
-        }
         else if (action.verb == "exit")
         {
             game.leaveDungeon();
-            std::cout << "ExitDungeon()" << std::endl;
             return true;
         }
         else
         {
-            std::cout << "This should never happen!" << std::endl;
             return false;
         }
 
@@ -157,6 +134,5 @@ bool handle_action(const Action &action, Game &game)
         game.handleBattleInput(action.verb);
         return true;
     }
-    std::cout << "This should never happen!" << std::endl;
     return false; // this should never happen, if it does handle or parse is wrong
 }

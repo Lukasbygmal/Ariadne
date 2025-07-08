@@ -82,6 +82,8 @@ private:
     void healMaxPlayer();
     void renderMap();
 
+    void showErrorAndExit(const std::string &message);
+
 public:
     Game(int user_id, sf::RenderWindow &window);
 

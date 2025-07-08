@@ -1,17 +1,12 @@
 #include "trap.h"
 
-Trap::Trap(int difficulty) : damage(0), avoidance(0), name("")
+Trap::Trap(int difficulty) : damage(0), name("")
 {
 }
 
 int Trap::getDamage() const
 {
     return damage;
-}
-
-int Trap::getAvoidance() const
-{
-    return avoidance;
 }
 
 std::string Trap::to_string() const
@@ -22,25 +17,20 @@ std::string Trap::to_string() const
 WallArrows::WallArrows(int difficulty) : Trap(difficulty)
 {
     name = "Wall Arrows";
-    damage = 5; // TODO revisit these numbers
-    avoidance = 10;
-    adjustForDifficulty(difficulty);
-}
-
-void WallArrows::adjustForDifficulty(int difficulty)
-{
-    damage = damage + 0.3 *difficulty;
+    damage = 5; 
+    damage = damage *difficulty;
 }
 
 SwingingAxe::SwingingAxe(int difficulty) : Trap(difficulty)
 {
     name = "Swinging Axe";
-    damage = 5; // TODO revisit these numbers
-    avoidance = 10;
-    adjustForDifficulty(difficulty);
+    damage = 5;
+    damage = damage *difficulty;
 }
 
-void SwingingAxe::adjustForDifficulty(int difficulty)
+RollingBoulder::RollingBoulder(int difficulty) : Trap(difficulty)
 {
-    damage = damage + 0.3 *difficulty;
+    name = "RollingBoulder";
+    damage = 10;
+    damage = damage *difficulty;
 }
