@@ -179,8 +179,7 @@ void Game::processEvents()
         {
             if (!apiClient.savePlayer(player, user_id))
             {
-                // showErrorAndExit("Failed to save player data!\n Sadly exiting");
-                std::cout << "Player data saved unsuccessfully when closing!" << std::endl;
+                showErrorAndExit("Failed to save player data!\n Unlucky!");
             }
             window.close();
         }
@@ -482,8 +481,7 @@ void Game::leaveDungeon()
 {
     if (!apiClient.savePlayer(player, user_id))
     {
-        // showErrorAndExit("Failed to save player data!\n Sadly exiting");
-        std::cout << "Player data saved unsuccessfully when exiting!" << std::endl;
+        showErrorAndExit("Failed to save player data!\n Sadly exiting");
     }
     changeMode(GameMode::MENU);
     healMaxPlayer();
@@ -725,9 +723,9 @@ void Game::showErrorAndExit(const std::string &message)
     errorText.setFillColor(Colors::Danger);
     errorText.setPosition(50, 200);
 
-    // Show error for 3 seconds
+    // Show error for 5 seconds
     sf::Clock timer;
-    while (timer.getElapsedTime().asSeconds() < 3.0f)
+    while (timer.getElapsedTime().asSeconds() < 5.0f)
     {
         sf::Event event;
         while (window.pollEvent(event))
