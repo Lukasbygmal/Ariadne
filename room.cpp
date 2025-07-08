@@ -1,9 +1,8 @@
 #include "room.h"
 #include <iostream>
-Room::Room(int difficulty, int chest_type, int engraving, int trap_type, int monster_type, RoomType room_type)
+Room::Room(int difficulty, int chest_type, int trap_type, int monster_type, RoomType room_type)
 {
     this->room_type = room_type;
-    this->engraving = engraving;
     switch (chest_type)
     {
     case 0:
@@ -32,6 +31,9 @@ Room::Room(int difficulty, int chest_type, int engraving, int trap_type, int mon
     case 2:
         trap = std::make_unique<SwingingAxe>(difficulty);
         break;
+    case 3:
+        trap = std::make_unique<RollingBoulder>(difficulty);
+        break;
     }
     if (monster_type != 0)
     {
@@ -58,7 +60,6 @@ int Room::killMonster()
 
 int Room::openChest()
 {
-    std::cout << "I get into open chest\n";
     int gold = chest->getGold();
     chest.reset();
     return gold;
@@ -103,7 +104,5 @@ std::string Room::to_string() const
     {
         roomInfo += chest->to_string() + "\n";
     }
-    if (engraving)
-        roomInfo += "Engraving \n";
     return roomInfo;
 }

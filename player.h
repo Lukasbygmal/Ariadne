@@ -42,7 +42,6 @@ public:
     int damage();
     int receiveDamage(int damage);
     int receiveDamageParry(int damage);
-    void heal(int amount);
     bool isAlive() const;
     void increaseHP(int amount);
     void increaseStrength(int amount);

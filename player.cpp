@@ -28,7 +28,7 @@ std::string Player::getName() const { return name; }
 
 void Player::dead()
 {
-    xp = 0;
+    xp = xp * 0.9;
     gold = gold / 2;
 }
 
@@ -51,15 +51,15 @@ void Player::decreaseGold(int amount)
 
 int Player::damage()
 {
-    int damage = (strength + agility * 0.2); // balancing, and should agility be used here at all?
+    int damage = (lvl * lvl) * (strength + agility * 0.1);
     return damage;
 }
 
 int Player::receiveDamage(int damage)
 {
-    float scaling_constant = 75.0f; // balancing?
+    float scaling_constant = 75.0f;
     float percent_multiplier = scaling_constant / (scaling_constant + armor);
-    float flat_factor = 0.2f; // balancing?
+    float flat_factor = 0.2f;
     int flat_reduction = static_cast<int>(armor * flat_factor);
 
     int reduced_damage = static_cast<int>(damage * percent_multiplier) - flat_reduction;
@@ -70,14 +70,9 @@ int Player::receiveDamage(int damage)
 
 int Player::receiveDamageParry(int damage)
 {
-    int damage_after_parry = static_cast<int>(damage * 0.9); // balancing?
+    int damage_after_parry = static_cast<int>(damage * 0.9);
     receiveDamage(damage_after_parry);
     return damage_after_parry;
-}
-
-void Player::heal(int amount)
-{
-    current_hp = std::min(max_hp, current_hp + amount);
 }
 
 void Player::healToMax()
@@ -112,7 +107,7 @@ void Player::increaseArmor(int amount)
 
 void Player::updateXpToMax()
 {
-    xp_to_max = (lvl + 1) * (lvl + 100); // temporarily decreased, was xp_to_max = (lvl + 1) * (lvl + 100) * 5; before
+    xp_to_max = (lvl + 1) * (lvl + 100) * 4;
 }
 
 bool Player::checkLevelUp()
@@ -138,8 +133,8 @@ bool Player::checkLevelUp()
 void Player::levelUpBenefits()
 {
     int scaling = std::ceil(lvl / 5.0);
-    increaseHP(25 * scaling);
-    increaseStrength(scaling);
-    increaseAgility(scaling);
-    increaseArmor(scaling);
+    increaseHP(50 * scaling);
+    increaseStrength(2*scaling);
+    increaseAgility(2*scaling);
+    increaseArmor(4*scaling);
 }

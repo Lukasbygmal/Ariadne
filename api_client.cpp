@@ -200,7 +200,6 @@ bool APIClient::createPlayer(const Player &player)
             return false;
         }
 
-        std::cout << "Player created with ID: " << json_response["user_id"].get<int>() << std::endl;
         return true;
     }
     catch (const std::exception &e)

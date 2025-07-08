@@ -19,11 +19,7 @@ Game::Game(int user_id_, sf::RenderWindow &win)
 {
     if (!apiClient.loadPlayer(player, user_id))
     {
-        std::cout << "Failed to load player data!" << std::endl;
-    }
-    else
-    {
-        std::cout << "Player data loaded successfully!" << std::endl;
+        showErrorAndExit("Failed to load player data!\nPlease check your connection and try again.");
     }
 
     initializeUI();
@@ -181,7 +177,11 @@ void Game::processEvents()
     {
         if (event.type == sf::Event::Closed)
         {
-            apiClient.savePlayer(player, user_id);
+            if (!apiClient.savePlayer(player, user_id))
+            {
+                // showErrorAndExit("Failed to save player data!\n Sadly exiting");
+                std::cout << "Player data saved unsuccessfully when closing!" << std::endl;
+            }
             window.close();
         }
 
@@ -214,12 +214,7 @@ void Game::handleCommand(const std::string &command)
     Action result("null");
     if (parse_input(command, result, mode))
     {
-        std::cout << "Passed parse_input\n";
-        if (handle_action(result, *this))
-        {
-            std::cout << "Passed handle_action\n";
-        }
-        else
+        if (!handle_action(result, *this))
         {
             addMessage("Can't " + command + " now");
         }
@@ -227,7 +222,6 @@ void Game::handleCommand(const std::string &command)
     else
     {
         addMessage("Invalid: " + command);
-        std::cout << "Invalid command. Try again.\n";
     }
 }
 
@@ -488,11 +482,8 @@ void Game::leaveDungeon()
 {
     if (!apiClient.savePlayer(player, user_id))
     {
-        std::cout << "Failed to save player data!" << std::endl;
-    }
-    else
-    {
-        std::cout << "Player data saved successfully!" << std::endl;
+        // showErrorAndExit("Failed to save player data!\n Sadly exiting");
+        std::cout << "Player data saved unsuccessfully when exiting!" << std::endl;
     }
     changeMode(GameMode::MENU);
     healMaxPlayer();
@@ -522,7 +513,6 @@ void Game::checkRoomHazards()
 
 void Game::startBattle()
 {
-    std::cout << "startBattle()\n";
     // start timer
     battleClock.restart();
     battle_mode = true;
@@ -533,7 +523,8 @@ void Game::startBattle()
     parrys = attacks - 2;
     correct_attacks = 0;
     correct_parrys = 0;
-    round_time = 5.0 + player.getAgility() * 0.05; // should depend on monster, and needs balancing
+    float round_time_scaling = (dungeon.getDifficulty() / 30) * 3;
+    round_time = 3 - round_time_scaling + (player.getAgility() * 0.05);
     resetWordQueue(attacks, word_length_attack);
 }
 
@@ -575,7 +566,6 @@ std::string Game::createWord(int length)
     {
         new_word += characters[dist(rng)];
     }
-    std::cout << "new_word == " << new_word << "\n";
     return new_word;
 }
 
@@ -607,7 +597,6 @@ void Game::damageMonster(int damage)
 
 void Game::endRound()
 {
-    std::cout << "EndRound() \n";
     userInput.clear();                                      // clear terminal input
     std::uniform_real_distribution<float> dist(0.5f, 1.5f); // might want to make 1 for attack and one for def, if perks affect this
     float amplifier = 1;
@@ -620,8 +609,6 @@ void Game::endRound()
         amplifier = dist(rng);
         hit = player_damage * amplifier;
         total_player_damage += hit;
-        std::cout << "amplifier " << amplifier << "\n";
-        std::cout << "hit(player) " << hit << "\n";
 
         damageMonster(hit);
     }
@@ -639,18 +626,14 @@ void Game::endRound()
     {
         amplifier = dist(rng);
         hit = monster_damage * amplifier;
-        std::cout << "amplifier " << amplifier << "\n";
-        std::cout << "hit(monster) " << hit << "\n";
         if (i < correct_parrys)
         {
             actual_damage = player.receiveDamageParry(hit);
-            std::cout << "Parried -" << actual_damage << "\n";
             total_monster_damage += actual_damage;
         }
         else
         {
             actual_damage = player.receiveDamage(hit);
-            std::cout << "Not parried -" << actual_damage << "\n";
             total_monster_damage += actual_damage;
         }
     }
@@ -685,8 +668,6 @@ void Game::endRound()
 
 void Game::endBattle()
 {
-    std::cout << "EndBattle() correct_attack:" << correct_attacks << "\n";
-    std::cout << "EndBattle() correct_parry:" << correct_parrys << "\n";
     changeMode(GameMode::DUNGEON);
     int xp_reward = dungeon.getCurrentRoom().killMonster();
     bool did_level = player.receiveXP(xp_reward);
@@ -730,4 +711,38 @@ Player &Game::getPlayer()
 Dungeon &Game::getDungeon()
 {
     return dungeon;
+}
+
+void Game::showErrorAndExit(const std::string &message)
+{
+    window.clear(Colors::Background);
+
+    // Create error text
+    sf::Text errorText;
+    errorText.setFont(textFont); // Use default font if loading fails
+    errorText.setString(message);
+    errorText.setCharacterSize(24);
+    errorText.setFillColor(Colors::Danger);
+    errorText.setPosition(50, 200);
+
+    // Show error for 3 seconds
+    sf::Clock timer;
+    while (timer.getElapsedTime().asSeconds() < 3.0f)
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+            {
+                window.close();
+                exit(1);
+            }
+        }
+
+        window.clear(Colors::Background);
+        window.draw(errorText);
+        window.display();
+    }
+
+    exit(1);
 }

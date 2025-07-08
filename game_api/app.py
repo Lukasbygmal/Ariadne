@@ -166,10 +166,20 @@ def update_player(user_id):
             return jsonify({'error': 'No JSON data provided'}), 400
         
         cursor = connection.cursor()
+
+        cursor.execute("SELECT user_id FROM Users WHERE user_id = %s", (user_id,))
+        user_exists = cursor.fetchone()
+        
+        if not user_exists:
+            return jsonify({
+                'success': False,
+                'error': f'Player with user_id {user_id} not found'
+            }), 404
+
         query = """
-            UPDATE Users 
-            SET name = %s, lvl = %s, xp = %s, gold = %s, max_hp = %s, 
-                strength_stat = %s, agility_stat = %s, armor_stat = %s 
+            UPDATE Users
+            SET name = %s, lvl = %s, xp = %s, gold = %s, max_hp = %s,
+                strength_stat = %s, agility_stat = %s, armor_stat = %s
             WHERE user_id = %s
         """
         
@@ -187,16 +197,10 @@ def update_player(user_id):
         
         connection.commit()
         
-        if cursor.rowcount > 0:
-            return jsonify({
-                'success': True,
-                'message': f'Player {user_id} updated successfully'
-            })
-        else:
-            return jsonify({
-                'success': False,
-                'error': f'Player with user_id {user_id} not found'
-            }), 404
+        return jsonify({
+            'success': True,
+            'message': f'Player {user_id} updated successfully'
+        })
             
     except Error as e:
         return jsonify({'error': f'Database error: {str(e)}'}), 500

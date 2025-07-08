@@ -26,7 +26,7 @@ const std::map<std::string, DungeonConfig> dungeon_configs = {
     {"blen", {7, 9, 6, {6, 7, 8, 9, 10, 11}, 6, 37}},                    // Imp reused
     {"xoth", {8, 5, 3, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}, 7, 40}}, // Wraith reused
     {"merk", {6, 10, 6, {4, 5, 6, 7, 8, 9, 10, 11}, 12, 43}},            // Dragonling reused
-    {"zenk", {7, 10, 7, {1, 2, 3, 4, 5, 6, 7, 8}, 3, 46}}                // Skeleton reused
+    {"zenk", {7, 10, 7, {1, 2, 3, 4, 5, 6, 7, 8}, 8, 46}}                // Minotaur reused
 };
 
 // BFS function to check if a path exists between two points
@@ -89,20 +89,20 @@ Dungeon::Dungeon(std::string dungeon_name, std::string string_difficulty)
     words = config.words;
     word_length = config.word_length;
     int base_difficulty = config.base_difficulty;
-    int int_difficulty = difficulty_level + base_difficulty;
+    difficulty = difficulty_level + base_difficulty;
 
     std::uniform_int_distribution<int> roomDist(0, size - 1);
     std::uniform_int_distribution<int> treasureRoomDist(1, size - 2);
-    std::uniform_int_distribution<int> chestDist(0, 1);
+    std::uniform_int_distribution<int> chestDist(1, 3);
     std::uniform_int_distribution<int> optionalDist(0, 2);
     std::uniform_int_distribution<int> monsterDist(0, config.monster_pool.size() - 1);
-    std::uniform_int_distribution<int> trapDist(0, 1);
+    std::uniform_int_distribution<int> trapDist(1, 3);
 
     int start_x = roomDist(rng);
-    int start_y = 0;
+    int start_y = size - 1;
 
     int boss_x = roomDist(rng);
-    int boss_y = size - 1;
+    int boss_y = 0;
 
     int treasure_x = roomDist(rng);
     int treasure_y = treasureRoomDist(rng);
@@ -161,7 +161,6 @@ Dungeon::Dungeon(std::string dungeon_name, std::string string_difficulty)
         for (int x = 0; x < size; ++x)
         {
             int chest_type = 0;
-            int engraving = 0;
             int trap_type = 0;
             int monster_type = 0;
             RoomType room_type = RoomType::NORMAL;
@@ -177,6 +176,7 @@ Dungeon::Dungeon(std::string dungeon_name, std::string string_difficulty)
             else if (y == boss_y && x == boss_x)
             {
                 room_type = RoomType::BOSS;
+                chest_type = 3;
                 monster_type = config.boss_monster_type;
             }
             else if (y == treasure_y && x == treasure_x)
@@ -189,12 +189,12 @@ Dungeon::Dungeon(std::string dungeon_name, std::string string_difficulty)
             else
             {
                 room_type = RoomType::NORMAL;
-                chest_type = chestDist(rng);
-                trap_type = (optionalDist(rng) == 1) ? trapDist(rng) : 0;
-                monster_type = (optionalDist(rng) == 1) ? config.monster_pool[monsterDist(rng)] : 0;
+                chest_type = (optionalDist(rng) == 0) ? chestDist(rng) : 0;
+                trap_type = (optionalDist(rng) == 0) ? trapDist(rng) : 0;
+                monster_type = (optionalDist(rng) == 0) ? config.monster_pool[monsterDist(rng)] : 0;
             }
 
-            rooms[y].emplace_back(int_difficulty, chest_type, engraving, trap_type, monster_type, room_type);
+            rooms[y].emplace_back(difficulty, chest_type, trap_type, monster_type, room_type);
         }
     }
 
@@ -204,18 +204,6 @@ Dungeon::Dungeon(std::string dungeon_name, std::string string_difficulty)
 
     boss_room_x = boss_x;
     boss_room_y = boss_y;
-
-    // For debuging todo remove
-    auto map = dungeonMap();
-        std::cout << "Map:" << std::endl;
-        for (int y = 0; y < map.size(); ++y)
-        {
-            for (int x = 0; x < map[y].size(); ++x)
-            {
-                std::cout << map[y][x] << " ";
-            }
-            std::cout << std::endl;
-        }
 }
 
 bool Dungeon::move(int dx, int dy)
@@ -274,6 +262,11 @@ int Dungeon::getCurrentY() const
     return current_y;
 }
 
+int Dungeon::getDifficulty() const
+{
+    return difficulty;
+}
+
 std::string Dungeon::capitalizeFirstLetter(const std::string &input) const
 {
     if (input.empty())
@@ -291,23 +284,24 @@ std::vector<std::vector<int>> Dungeon::dungeonMap() const
     {
         for (int j = 0; j < size; ++j)
         {
-            switch (rooms[i][j].getRoomType()) {
-                case RoomType::NORMAL:
-                    map[i][j] = 0;
-                    break;
-                case RoomType::BOSS:
-                    map[i][j] = 1;
-                    break;
-                case RoomType::TREASURE:
-                    map[i][j] = 2;
-                    break;
-                case RoomType::BLOCKED:
-                    map[i][j] = 3;
-                    break;
+            switch (rooms[i][j].getRoomType())
+            {
+            case RoomType::NORMAL:
+                map[i][j] = 0;
+                break;
+            case RoomType::BOSS:
+                map[i][j] = 1;
+                break;
+            case RoomType::TREASURE:
+                map[i][j] = 2;
+                break;
+            case RoomType::BLOCKED:
+                map[i][j] = 3;
+                break;
             }
         }
     }
-    map[getCurrentY()][getCurrentX()] = 4; //player position
+    map[getCurrentY()][getCurrentX()] = 4; // player position
     return map;
 }
 
