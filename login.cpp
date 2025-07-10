@@ -1,5 +1,4 @@
 #include "login.h"
-#include <iostream>
 #include "auth.h"
 #include <SFML/Window/Clipboard.hpp>
 #include "Colors.hpp"

@@ -4,7 +4,6 @@
 #include <stdexcept>
 #include <queue>
 #include <set>
-#include <iostream> //TODO should remove later
 
 std::random_device Dungeon::rd;
 std::mt19937 Dungeon::rng(Dungeon::rd());

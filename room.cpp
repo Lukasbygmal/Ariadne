@@ -1,5 +1,4 @@
 #include "room.h"
-#include <iostream>
 Room::Room(int difficulty, int chest_type, int trap_type, int monster_type, RoomType room_type)
 {
     this->room_type = room_type;

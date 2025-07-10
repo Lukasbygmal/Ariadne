@@ -1,6 +1,5 @@
 #include "game.h"
 #include "handle_action.h"
-#include <iostream>
 #include <string>
 #include <cctype>
 #include "parse_input.h"

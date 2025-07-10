@@ -1,5 +1,4 @@
 #include <SFML/Graphics.hpp>
-#include <iostream>
 #include "game.h"
 #include "login.h"
 
@@ -24,7 +23,6 @@ int main()
     }
     catch (const std::exception &e)
     {
-        std::cerr << "Error: " << e.what() << std::endl;
         // Exit code 2: Exception occurred
         return 2;
     }

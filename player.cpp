@@ -1,5 +1,4 @@
 #include "player.h"
-#include <algorithm>
 #include <cmath>
 
 Player::Player(const std::string &player_name, int init_lvl, int init_xp, int init_gold, int init_max_hp, int init_strength, int init_agility, int init_armor) : name(player_name),
