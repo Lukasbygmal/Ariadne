@@ -4,7 +4,6 @@
 #include <cstdlib>
 #include <thread>
 #include <chrono>
-#include <iostream>
 #ifdef _WIN32
 #include <windows.h>
 #endif

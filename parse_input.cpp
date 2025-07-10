@@ -1,8 +1,6 @@
 #include "parse_input.h"
-#include <iostream>
 #include <vector>
 #include <sstream>
-#include <algorithm>
 #include <cctype>
 
 bool parse_input(const std::string &input, Action &action, GameMode mode)
