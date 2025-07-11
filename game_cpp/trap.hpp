@@ -1,5 +1,5 @@
 /**
- * @file trap.h
+ * @file trap.hpp
  * @brief Trap system for dungeon encounters with difficulty scaling
  */
 #ifndef TRAP_H

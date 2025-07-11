@@ -1,13 +1,13 @@
 /**
- * @file handle_action.h
+ * @file handle_action.hpp
  * @brief Action execution system for game commands
  */
 #ifndef HANDLE_ACTION_H
 #define HANDLE_ACTION_H
 
-#include "action.h"
-#include "dungeon.h"
-#include "game.h"
+#include "action.hpp"
+#include "dungeon.hpp"
+#include "game.hpp"
 
 /**
  * @brief Execute a parsed action based on current game state

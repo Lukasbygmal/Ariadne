@@ -1,9 +1,9 @@
-#include "game.h"
-#include "handle_action.h"
+#include "game.hpp"
+#include "handle_action.hpp"
 #include <string>
 #include <cctype>
 #include <chrono>
-#include "parse_input.h"
+#include "parse_input.hpp"
 #include "Colors.hpp"
 
 std::random_device Game::rd;
@@ -304,7 +304,7 @@ void Game::updateUI()
 
         else
         {
-            std::string highscoreDisplay = "\nHighscores:\n";
+            std::string highscoreDisplay = "\nLeaderboard:\n";
             for (size_t i = 0; i < cachedHighscores.size() && i < 10; ++i) // Show top 10
             {
                 try
@@ -321,7 +321,7 @@ void Game::updateUI()
             }
             if (cachedHighscores.empty())
             {
-                highscoreDisplay += "No highscores available\n";
+                highscoreDisplay += "Leaderboard not available\n";
             }
             subTitleText.setString(highscoreDisplay);
         }

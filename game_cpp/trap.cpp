@@ -1,4 +1,4 @@
-#include "trap.h"
+#include "trap.hpp"
 
 Trap::Trap(int difficulty) : damage(0), name("")
 {

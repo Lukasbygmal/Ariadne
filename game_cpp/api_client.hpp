@@ -1,5 +1,5 @@
 /**
- * @file api_client.h
+ * @file api_clientpp
  * @brief HTTP client for player data management via REST API
  */
 #pragma once

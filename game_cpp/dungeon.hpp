@@ -1,5 +1,5 @@
 /**
- * @file dungeon.h
+ * @file dungeon.hpp
  * @brief Dungeon generation and handling
  */
 #ifndef DUNGEON_H
@@ -7,7 +7,7 @@
 
 #include <random>
 #include <vector>
-#include "room.h"
+#include "room.hpp"
 
 /**
  * @brief Configuration parameters for dungeon generation
