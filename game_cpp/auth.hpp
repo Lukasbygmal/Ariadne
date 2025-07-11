@@ -52,5 +52,5 @@ namespace auth
      * @param delay_ms Delay between polling attempts in milliseconds (default: 1000)
      * @return true if user authenticated within attempt limit, false if timed out
      */
-    bool pollForUserId(int &user_id, int max_attempts = 30, int delay_ms = 1000);
+    bool pollForUserId(int &user_id, int max_attempts = 30, int delay_ms = 4000);
 }

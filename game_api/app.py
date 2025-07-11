@@ -343,6 +343,10 @@ def oauth_exchange():
         return jsonify({'user_id': user_id})
     else:
         return jsonify({'error': 'Invalid or expired code'}), 400
+    
+@app.route('/')
+def home():
+    return jsonify({'message': 'Game API Server is running', 'status': 'healthy'})
 
 if __name__ == '__main__':
     print('Registered routes:')
