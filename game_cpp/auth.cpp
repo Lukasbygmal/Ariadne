@@ -1,4 +1,5 @@
 #include "auth.hpp"
+#define CPPHTTPLIB_OPENSSL_SUPPORT
 #include "httplib.h"
 #include <nlohmann/json.hpp>
 #include <cstdlib>
@@ -15,14 +16,14 @@ namespace auth
     void startGithubLogin()
     {
         // Open the GitHub OAuth login URL in the user's browser
-        std::string url = "http://localhost:5000/login/github";
-        system("cmd.exe /c start firefox \"-private-window\" http://localhost:5000/login/github");
+        std::string url = "https://ariadne-t99a.onrender.com/";
+        system("cmd.exe /c start firefox \"-private-window\" https://ariadne-t99a.onrender.com/");
     }
 
     bool exchangeCodeForUserId(const std::string &code, int &user_id)
     {
-        // Send the code/token to the backend to exchange for user_id
-        httplib::Client cli("localhost", 5000);
+        httplib::SSLClient cli("ariadne-t99a.onrender.com", 443);
+        cli.set_follow_location(true);
         json req_body = {{"code", code}};
         auto res = cli.Post("/api/oauth/exchange", req_body.dump(), "application/json");
         if (res && res->status == 200)
@@ -39,7 +40,8 @@ namespace auth
 
     bool pollForUserId(int &user_id, int max_attempts, int delay_ms)
     {
-        httplib::Client cli("localhost", 5000);
+        httplib::SSLClient cli("ariadne-t99a.onrender.com", 443);
+        cli.set_follow_location(true);
         for (int attempt = 0; attempt < max_attempts; ++attempt)
         {
             auto res = cli.Get("/api/session");

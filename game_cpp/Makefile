@@ -2,10 +2,10 @@
 CXX = g++
 
 # Compiler flags
-CXXFLAGS = -c -Wall -g -I/usr/include/mysql-cppconn
+CXXFLAGS = -c -Wall -g
 
 # Linker flags
-LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -lmysqlcppconn -lcurl
+LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -lmysqlcppconn -lcurl -lssl -lcrypto
 
 # Source files
 SRCS = main.cpp parse_input.cpp room.cpp handle_action.cpp player.cpp monster.cpp trap.cpp chest.cpp dungeon.cpp game.cpp api_client.cpp login.cpp auth.cpp
