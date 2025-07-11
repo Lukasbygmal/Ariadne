@@ -520,8 +520,8 @@ void Game::startBattle()
     parrys = attacks - 2;
     correct_attacks = 0;
     correct_parrys = 0;
-    float round_time_scaling = (dungeon.getDifficulty() / 30) * 3;
-    round_time = 3 - round_time_scaling + (player.getAgility() * 0.05);
+    float round_time_scaling = (dungeon.getDifficulty() / 30) * 3;      // Scale: 0.1-0.3 seconds per difficulty point
+    round_time = 3 - round_time_scaling + (player.getAgility() * 0.05); // Base 3s, reduced by difficulty, increased by agility
     resetWordQueue(attacks, word_length_attack);
 }
 

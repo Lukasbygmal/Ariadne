@@ -130,8 +130,8 @@ bool handle_action(const Action &action, Game &game)
         }
 
     case GameMode::BATTLE:
-        game.handleBattleInput(action.verb);
-        return true;
+        game.handleBattleInput(action.verb); // All input treated as typing for battle system
+        return true;                         // Battle input always "succeeds"
     }
     return false; // this should never happen, if it does handle or parse is wrong
 }
