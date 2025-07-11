@@ -1,5 +1,5 @@
 /**
- * @file player.h
+ * @file player.hpp
  * @brief Player character system with stats, leveling, and combat mechanics
  */
 #ifndef PLAYER_H

@@ -1,4 +1,4 @@
-#include "chest.h"
+#include "chest.hpp"
 
 Chest::Chest(int difficulty) : difficulty(difficulty), base_gold(0), name("")
 {

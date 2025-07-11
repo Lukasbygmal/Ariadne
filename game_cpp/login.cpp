@@ -1,5 +1,5 @@
-#include "login.h"
-#include "auth.h"
+#include "login.hpp"
+#include "auth.hpp"
 #include <SFML/Window/Clipboard.hpp>
 #include "Colors.hpp"
 

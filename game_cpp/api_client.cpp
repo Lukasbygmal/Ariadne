@@ -1,5 +1,5 @@
-#include "api_client.h"
-#include "player.h"
+#include "api_client.hpp"
+#include "player.hpp"
 
 APIClient::APIClient(const std::string &base_url, const std::string &api_key)
     : base_url(base_url), api_key(api_key), curl(nullptr)

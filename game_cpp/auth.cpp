@@ -1,4 +1,4 @@
-#include "auth.h"
+#include "auth.hpp"
 #include "httplib.h"
 #include <nlohmann/json.hpp>
 #include <cstdlib>

@@ -2,8 +2,8 @@
 #define PARSE_INPUT_H
 
 #include <string>
-#include "game.h"
-#include "action.h"
+#include "game.hpp"
+#include "action.hpp"
 
 // Forward declaration of GameMode enum class
 enum class GameMode;

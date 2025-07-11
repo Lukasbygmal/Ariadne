@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
-#include "game.h"
-#include "login.h"
+#include "game.hpp"
+#include "login.hpp"
 
 int main()
 {

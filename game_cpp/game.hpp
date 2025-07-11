@@ -1,7 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 /**
- * @file game.h
+ * @file game.hp
  * @brief Core game engine managing UI, state, and gameplay mechanics
  */
 
@@ -10,9 +10,9 @@
 #include <vector>
 #include <optional>
 #include <deque>
-#include "player.h"
-#include "dungeon.h"
-#include "api_client.h"
+#include "player.hpp"
+#include "dungeon.hpp"
+#include "api_client.hpp"
 
 /**
  * @enum GameMode

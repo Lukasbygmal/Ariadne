@@ -1,5 +1,5 @@
 /**
- * @file monster.h
+ * @file monster.hpp
  * @brief Monster handling
  */
 #ifndef MONSTER_H

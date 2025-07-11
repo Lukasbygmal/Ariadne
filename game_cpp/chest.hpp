@@ -1,5 +1,5 @@
 /**
- * @file chest.h
+ * @file chest.hpp
  * @brief Treasure chest system with quadratic gold scaling based on difficulty
  */
 

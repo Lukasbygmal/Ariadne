@@ -1,5 +1,5 @@
 /**
- * @file auth.h
+ * @file auth.hpp
  * @brief GitHub OAuth authentication functionality for desktop applications
  *
  * This module provides OAuth authentication with GitHub through a local web server.

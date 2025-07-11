@@ -1,5 +1,5 @@
 /**
- * @file login.h
+ * @file login.hpp
  * @brief User authentication interface for GitHub OAuth login
  * @author [Your Name]
  * @date [Current Date]
@@ -11,7 +11,7 @@
  * codes, and processing authentication tokens.
  *
  * @note Requires SFML graphics library and a valid GitHub OAuth application
- * @depends SFML/Graphics.hpp, auth.h, Colors.hpp
+ * @depends SFML/Graphics.hpp, auth.hpp, Colors.hpp
  */
 #ifndef LOGIN_H
 #define LOGIN_H

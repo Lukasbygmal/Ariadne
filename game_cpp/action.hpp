@@ -1,5 +1,5 @@
 /**
- * @file action.h
+ * @file action.hpp
  * @brief Action structure for representing parsed game commands
  */
 #ifndef ACTION_H

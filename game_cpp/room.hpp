@@ -1,5 +1,5 @@
 /**
- * @file room.h
+ * @file room.hpp
  * @brief Room system
  */
 
@@ -7,9 +7,9 @@
 #define ROOM_H
 #include <string>
 #include <memory>
-#include "monster.h"
-#include "trap.h"
-#include "chest.h"
+#include "monster.hpp"
+#include "trap.hpp"
+#include "chest.hpp"
 
 /**
  * @brief Defines the functional type of a room within the dungeon

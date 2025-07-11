@@ -1,4 +1,4 @@
-#include "handle_action.h"
+#include "handle_action.hpp"
 #include <stdexcept>
 
 bool handle_action(const Action &action, Game &game)
