@@ -36,6 +36,7 @@ enum class GameMode
  * - Game state transitions (menu, dungeon, battle)
  * - Real-time typing-based combat system
  * - Dungeon exploration mechanics
+ * - Highscore display and caching
  *
  * The game uses a command-line style interface within an SFML window,
  * with different UI layouts for each game mode.
@@ -75,8 +76,8 @@ private:
     // UI Background shapes
     sf::RectangleShape roomBackground;
     sf::RectangleShape statsBackground;
-    sf::RectangleShape perksBackground;
-    sf::RectangleShape yetToDecideBackground;
+    sf::RectangleShape helpBackground;
+    sf::RectangleShape leaderboardBackground;
     sf::RectangleShape terminalBackground;
     sf::RectangleShape inputBox;
 
@@ -90,8 +91,8 @@ private:
     sf::Text strengthText;
     sf::Text agilityText;
     sf::Text armorText;
-    sf::Text perksText;
-    sf::Text yetToDecideText;
+    sf::Text helpText;
+    sf::Text leaderboardText;
     sf::Text listDungeonsText;
     sf::Text terminalText;
     sf::Text inputText;
@@ -100,6 +101,11 @@ private:
     sf::RectangleShape mapBackground;
     std::vector<std::vector<sf::RectangleShape>> mapTiles;
     const float MAP_DISPLAY_SIZE = 310.0f;
+
+    // Highscore/Help
+    std::vector<nlohmann::json> cachedHighscores;
+    std::chrono::steady_clock::time_point lastHighscoreUpdate;
+    bool showingHelp = true; // Start with help displayed
 
     // XP bar constants
     const int totalSegments = 20;
@@ -123,6 +129,15 @@ private:
      * @brief Initialize map display based on current dungeon
      */
     void initializeMap();
+
+    /**
+     * @brief Updates the highscore display with cached data or fetches new data if needed
+     *
+     * Implements a caching mechanism that only fetches fresh highscore data from the API
+     * if more than 30 seconds have passed since the last update, or if no cached data exists.
+     * This prevents excessive API calls while ensuring reasonably current data.
+     */
+    void updateHighscoreDisplay();
 
     /**
      * @brief Update UI text content based on current game state

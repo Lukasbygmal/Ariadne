@@ -7,11 +7,6 @@ APIClient::APIClient(const std::string &base_url, const std::string &api_key)
 
     curl_global_init(CURL_GLOBAL_DEFAULT);
     curl = curl_easy_init();
-
-    if (!curl)
-    {
-        std::cerr << "Failed to initialize CURL" << std::endl;
-    }
 }
 
 APIClient::~APIClient()
@@ -72,7 +67,6 @@ std::string APIClient::makeRequest(const std::string &url, const std::string &me
 
     if (res != CURLE_OK)
     {
-        std::cerr << "CURL request failed: " << curl_easy_strerror(res) << std::endl;
         return "";
     }
 
@@ -86,7 +80,6 @@ bool APIClient::loadPlayer(Player &player, int user_id)
 
     if (response.empty())
     {
-        std::cerr << "Failed to get response from API" << std::endl;
         return false;
     }
 
@@ -96,7 +89,6 @@ bool APIClient::loadPlayer(Player &player, int user_id)
 
         if (!json_response["success"].get<bool>())
         {
-            std::cerr << "API Error: " << json_response["error"].get<std::string>() << std::endl;
             return false;
         }
 
@@ -120,7 +112,6 @@ bool APIClient::loadPlayer(Player &player, int user_id)
     }
     catch (const std::exception &e)
     {
-        std::cerr << "Error parsing JSON response: " << e.what() << std::endl;
         return false;
     }
 }
@@ -144,7 +135,6 @@ bool APIClient::savePlayer(const Player &player, int user_id)
 
     if (response.empty())
     {
-        std::cerr << "Failed to get response from API" << std::endl;
         return false;
     }
 
@@ -154,7 +144,6 @@ bool APIClient::savePlayer(const Player &player, int user_id)
 
         if (!json_response["success"].get<bool>())
         {
-            std::cerr << "API Error: " << json_response["error"].get<std::string>() << std::endl;
             return false;
         }
 
@@ -162,7 +151,6 @@ bool APIClient::savePlayer(const Player &player, int user_id)
     }
     catch (const std::exception &e)
     {
-        std::cerr << "Error parsing JSON response: " << e.what() << std::endl;
         return false;
     }
 }
@@ -186,7 +174,6 @@ bool APIClient::createPlayer(const Player &player)
 
     if (response.empty())
     {
-        std::cerr << "Failed to get response from API" << std::endl;
         return false;
     }
 
@@ -196,7 +183,6 @@ bool APIClient::createPlayer(const Player &player)
 
         if (!json_response["success"].get<bool>())
         {
-            std::cerr << "API Error: " << json_response["error"].get<std::string>() << std::endl;
             return false;
         }
 
@@ -204,7 +190,6 @@ bool APIClient::createPlayer(const Player &player)
     }
     catch (const std::exception &e)
     {
-        std::cerr << "Error parsing JSON response: " << e.what() << std::endl;
         return false;
     }
 }
@@ -216,7 +201,6 @@ bool APIClient::doesPlayerExist(const std::string &playerName)
 
     if (response.empty())
     {
-        std::cerr << "Failed to get response from API" << std::endl;
         return false;
     }
 
@@ -227,7 +211,6 @@ bool APIClient::doesPlayerExist(const std::string &playerName)
     }
     catch (const std::exception &e)
     {
-        std::cerr << "Error parsing JSON response: " << e.what() << std::endl;
         return false;
     }
 }
@@ -240,7 +223,6 @@ std::vector<nlohmann::json> APIClient::getAllPlayers(int page, int per_page)
 
     if (response.empty())
     {
-        std::cerr << "Failed to get response from API" << std::endl;
         return players;
     }
 
@@ -249,7 +231,6 @@ std::vector<nlohmann::json> APIClient::getAllPlayers(int page, int per_page)
         nlohmann::json json_response = nlohmann::json::parse(response);
         if (!json_response["success"].get<bool>())
         {
-            std::cerr << "API Error: " << json_response["error"].get<std::string>() << std::endl;
             return players;
         }
         players = json_response["players"].get<std::vector<nlohmann::json>>();
@@ -257,7 +238,6 @@ std::vector<nlohmann::json> APIClient::getAllPlayers(int page, int per_page)
     }
     catch (const std::exception &e)
     {
-        std::cerr << "Error parsing JSON response: " << e.what() << std::endl;
         return players;
     }
 }
@@ -270,7 +250,6 @@ std::vector<nlohmann::json> APIClient::getHighscore()
 
     if (response.empty())
     {
-        std::cerr << "Failed to get response from API" << std::endl;
         return highscores;
     }
 
@@ -279,7 +258,6 @@ std::vector<nlohmann::json> APIClient::getHighscore()
         nlohmann::json json_response = nlohmann::json::parse(response);
         if (!json_response["success"].get<bool>())
         {
-            std::cerr << "API Error: " << json_response["error"].get<std::string>() << std::endl;
             return highscores;
         }
         highscores = json_response["highscores"].get<std::vector<nlohmann::json>>();
@@ -287,7 +265,6 @@ std::vector<nlohmann::json> APIClient::getHighscore()
     }
     catch (const std::exception &e)
     {
-        std::cerr << "Error parsing JSON response: " << e.what() << std::endl;
         return highscores;
     }
 }

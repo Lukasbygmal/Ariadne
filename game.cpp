@@ -2,6 +2,7 @@
 #include "handle_action.h"
 #include <string>
 #include <cctype>
+#include <chrono>
 #include "parse_input.h"
 #include "Colors.hpp"
 
@@ -35,6 +36,8 @@ void Game::initializeUI()
         throw std::runtime_error("Failed to load titleFont");
     }
 
+    lastHighscoreUpdate = std::chrono::steady_clock::time_point{};
+
     roomBackground.setSize(sf::Vector2f(460.f, 400.f));
     roomBackground.setFillColor(Colors::PrimaryBackground);
     roomBackground.setPosition(10.f, 30.f);
@@ -43,13 +46,13 @@ void Game::initializeUI()
     statsBackground.setFillColor(Colors::PrimaryBackground);
     statsBackground.setPosition(480.f, 440.f);
 
-    perksBackground.setSize(sf::Vector2f(150.f, 80.f));
-    perksBackground.setFillColor(Colors::TerminalBackground);
-    perksBackground.setPosition(640.f, 350.f);
+    helpBackground.setSize(sf::Vector2f(150.f, 80.f));
+    helpBackground.setFillColor(Colors::TerminalBackground);
+    helpBackground.setPosition(640.f, 350.f);
 
-    yetToDecideBackground.setSize(sf::Vector2f(150.f, 80.f));
-    yetToDecideBackground.setFillColor(Colors::Treasure); // TODO
-    yetToDecideBackground.setPosition(480.f, 350.f);
+    leaderboardBackground.setSize(sf::Vector2f(150.f, 80.f));
+    leaderboardBackground.setFillColor(Colors::Treasure);
+    leaderboardBackground.setPosition(480.f, 350.f);
 
     terminalBackground.setSize(sf::Vector2f(460.f, 160.f));
     terminalBackground.setFillColor(Colors::TerminalBackground);
@@ -115,15 +118,15 @@ void Game::initializeText()
     listDungeonsText.setFillColor(Colors::Text);
     listDungeonsText.setPosition(490.f, 30.f);
 
-    perksText.setFont(textFont);
-    perksText.setCharacterSize(20);
-    perksText.setFillColor(Colors::Text);
-    perksText.setPosition(650.f, 360.f);
+    helpText.setFont(textFont);
+    helpText.setCharacterSize(20);
+    helpText.setFillColor(Colors::Text);
+    helpText.setPosition(650.f, 360.f);
 
-    yetToDecideText.setFont(textFont);
-    yetToDecideText.setCharacterSize(20);
-    yetToDecideText.setFillColor(Colors::Text);
-    yetToDecideText.setPosition(490.f, 360.f);
+    leaderboardText.setFont(textFont);
+    leaderboardText.setCharacterSize(20);
+    leaderboardText.setFillColor(Colors::Text);
+    leaderboardText.setPosition(490.f, 360.f);
 
     terminalText.setFont(textFont);
     terminalText.setCharacterSize(18);
@@ -205,6 +208,25 @@ void Game::handleInput(const sf::Event &event)
             userInput += static_cast<char>(event.text.unicode);
         }
     }
+    else if (event.type == sf::Event::MouseButtonPressed)
+    {
+        if (event.mouseButton.button == sf::Mouse::Left && mode == GameMode::MENU)
+        {
+            sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+
+            // Check if help button was clicked
+            if (helpBackground.getGlobalBounds().contains(mousePos.x, mousePos.y))
+            {
+                showingHelp = true;
+            }
+            // Check if leaderboard button was clicked
+            else if (leaderboardBackground.getGlobalBounds().contains(mousePos.x, mousePos.y))
+            {
+                showingHelp = false;
+                updateHighscoreDisplay();
+            }
+        }
+    }
 }
 
 void Game::handleCommand(const std::string &command)
@@ -270,11 +292,39 @@ void Game::updateUI()
     else if (mode == GameMode::MENU)
     {
         battleText.setString("");
-        subTitleText.setString("\nHow to play:\nIn tavern:\nbuy [amount] [hp/strength/agility/armor]\nenter [dungeon name] [easy/medium/hard]\nIn dungeon:\ngo [west/north/south/east]\nopen chest\nexit\nIn battle:\nType the green text to attack\nType the red text backwards to parry\n");
         titleText.setString("The Ink & Anvil Tavern \nBuy stats or enter a dungeon! \n");
         // Kinda ugly way to display dungeons, but it works for now
         std::string list_dungeons = "Dungeons:\nThal            Vorn\nEzra            Kurn \nZamo            Druv \nMalq            Xelv \nOrmh            Griv \nFend            Quar \nBlen            Xoth \nMerk            Zenk";
         listDungeonsText.setString(list_dungeons);
+
+        if (showingHelp)
+        {
+            subTitleText.setString("\nHow to play:\nIn tavern:\nbuy [amount] [hp/strength/agility/armor]\nenter [dungeon name] [easy/medium/hard]\nIn dungeon:\ngo [west/north/south/east]\nopen chest\nexit\nIn battle:\nType the green text to attack\nType the red text backwards to parry\n");
+        }
+
+        else
+        {
+            std::string highscoreDisplay = "\nHighscores:\n";
+            for (size_t i = 0; i < cachedHighscores.size() && i < 10; ++i) // Show top 10
+            {
+                try
+                {
+                    std::string name = cachedHighscores[i]["name"].get<std::string>();
+                    int lvl = cachedHighscores[i]["lvl"].get<int>();
+                    int xp = cachedHighscores[i]["xp"].get<int>();
+                    highscoreDisplay += std::to_string(i + 1) + ". " + name + " - lvl: " + std::to_string(lvl) + " - XP: " + std::to_string(xp) + "\n";
+                }
+                catch (const std::exception &e)
+                {
+                    highscoreDisplay += std::to_string(i + 1) + ". Error\n";
+                }
+            }
+            if (cachedHighscores.empty())
+            {
+                highscoreDisplay += "No highscores available\n";
+            }
+            subTitleText.setString(highscoreDisplay);
+        }
     }
     else if (mode == GameMode::BATTLE)
     {
@@ -302,8 +352,8 @@ void Game::updateUI()
         }
     }
 
-    yetToDecideText.setString("Leaderboard \ncoming...");
-    perksText.setString("Perks \ncoming...");
+    leaderboardText.setString("Leaderboard");
+    helpText.setString("Help");
 
     levelText.setString("Lvl " + std::to_string(player.getLevel()));
     goldText.setString(std::to_string(player.getGold()) + " G");
@@ -332,6 +382,19 @@ void Game::renderXPBar()
         segment.setPosition(10.f + i * segmentWidth, 10.f);
         segment.setFillColor(i < filledSegments ? Colors::Player : Colors::PrimaryBackground);
         window.draw(segment);
+    }
+}
+
+void Game::updateHighscoreDisplay()
+{
+    auto now = std::chrono::steady_clock::now();
+    auto timeSinceLastUpdate = std::chrono::duration_cast<std::chrono::seconds>(now - lastHighscoreUpdate);
+
+    // Only fetch if more than 30 seconds have passed or if we have no cached data
+    if (timeSinceLastUpdate.count() >= 30 || cachedHighscores.empty())
+    {
+        cachedHighscores = apiClient.getHighscore();
+        lastHighscoreUpdate = now;
     }
 }
 
@@ -391,16 +454,16 @@ void Game::render()
     window.draw(subTitleText);
     window.draw(battleText);
     window.draw(statsBackground);
-    window.draw(perksBackground);
-    window.draw(yetToDecideBackground);
+    window.draw(helpBackground);
+    window.draw(leaderboardBackground);
     window.draw(levelText);
     window.draw(goldText);
     window.draw(hpText);
     window.draw(strengthText);
     window.draw(agilityText);
     window.draw(armorText);
-    window.draw(perksText);
-    window.draw(yetToDecideText);
+    window.draw(helpText);
+    window.draw(leaderboardText);
     window.draw(listDungeonsText);
     window.draw(terminalBackground);
     window.draw(terminalText);
