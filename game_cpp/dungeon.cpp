@@ -10,22 +10,22 @@ std::mt19937 Dungeon::rng(Dungeon::rd());
 // DungeonConfig order: size, words, word_length, monster_pool, boss_monster_type, difficulty
 const std::map<std::string, DungeonConfig> dungeon_configs = {
     // Bosses:
-    {"thal", {4, 4, 3, {1, 2, 3}, 1, 1}},                                // Goblin
-    {"vorn", {4, 4, 3, {1, 2, 3}, 2, 4}},                                // Slime
-    {"ezra", {5, 4, 3, {1, 2, 3}, 3, 7}},                                // Skeleton
-    {"kurn", {4, 5, 3, {1, 2, 3}, 4, 10}},                               // Zombie
-    {"zamo", {6, 6, 4, {2, 3, 4, 5}, 5, 13}},                            // Wolf
-    {"druv", {5, 6, 4, {2, 3, 4, 5, 6}, 6, 16}},                         // Imp
-    {"malq", {5, 7, 4, {3, 4, 5, 6, 7, 8}, 7, 19}},                      // Wraith
-    {"xelv", {6, 8, 4, {4, 5, 6, 7, 8, 9, 10}, 8, 22}},                  // Minotaur
-    {"ormh", {5, 8, 5, {5, 6, 7, 8, 9, 10}, 9, 25}},                     // Orc
-    {"griv", {6, 9, 5, {6, 7, 8, 9, 10, 11}, 10, 28}},                   // Troll
-    {"fend", {5, 9, 6, {7, 8, 9, 10, 11}, 11, 31}},                      // Vampire
-    {"quar", {7, 9, 5, {8, 9, 10, 11, 12}, 12, 34}},                     // Dragonling
-    {"blen", {7, 9, 6, {6, 7, 8, 9, 10, 11}, 6, 37}},                    // Imp reused
-    {"xoth", {8, 5, 3, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}, 7, 40}}, // Wraith reused
-    {"merk", {6, 10, 6, {4, 5, 6, 7, 8, 9, 10, 11}, 12, 43}},            // Dragonling reused
-    {"zenk", {7, 10, 7, {1, 2, 3, 4, 5, 6, 7, 8}, 8, 46}}                // Minotaur reused
+    {"thyra", {4, 4, 3, {1, 2, 3}, 1, 1}},                                // Hydra
+    {"nykos", {4, 4, 3, {1, 2, 3}, 2, 4}},                                // Cyclops
+    {"kalon", {5, 4, 3, {1, 2, 3}, 3, 7}},                                // Cerberus
+    {"draka", {4, 5, 3, {1, 2, 3}, 4, 10}},                               // Chimera
+    {"zarex", {6, 6, 4, {2, 3, 4, 5}, 5, 13}},                            // Scylla
+    {"lethi", {5, 6, 4, {2, 3, 4, 5, 6}, 6, 16}},                         // Harpy
+    {"teren", {5, 7, 4, {3, 4, 5, 6, 7, 8}, 7, 19}},                      // Satyr
+    {"xenor", {6, 8, 4, {4, 5, 6, 7, 8, 9, 10}, 8, 22}},                  // Gorgon
+    {"myros", {5, 8, 5, {5, 6, 7, 8, 9, 10}, 9, 25}},                     // Empusa
+    {"velor", {6, 9, 5, {6, 7, 8, 9, 10, 11}, 10, 28}},                   // Lamia
+    {"elvon", {5, 9, 6, {7, 8, 9, 10, 11}, 11, 31}},                      // Echidna
+    {"oryne", {7, 9, 5, {8, 9, 10, 11, 12}, 12, 34}},                     // Minotaur
+    {"phyra", {7, 9, 6, {6, 7, 8, 9, 10, 11}, 8, 37}},                    // Gorgon reused
+    {"voran", {8, 5, 3, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}, 7, 40}}, // Satyr reused
+    {"eriph", {6, 10, 6, {4, 5, 6, 7, 8, 9, 10, 11}, 12, 43}},            // Echidna reused
+    {"zeryn", {7, 10, 7, {1, 2, 3, 4, 5, 6, 7, 8}, 8, 46}}                // Minotaur reused
 };
 
 // BFS function to check if a path exists between two points

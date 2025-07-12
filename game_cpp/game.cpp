@@ -13,7 +13,7 @@ Game::Game(int user_id_, sf::RenderWindow &win)
     : apiClient("http://localhost:5000", "local-test-key-123"),
       player("", 1, 1, 1, 1, 1, 1, 1),
       user_id(user_id_),
-      dungeon("thal"),
+      dungeon("thyra"),
       mode(GameMode::MENU),
       window(win)
 {
@@ -290,16 +290,16 @@ void Game::updateUI()
     else if (mode == GameMode::MENU)
     {
         battleText.setString("");
-        titleText.setString("The Ink & Anvil Tavern \nBuy stats or enter a dungeon! \n");
+        titleText.setString("Hall of Knossos \nSanctuary of the Chosen");
         // Kinda ugly way to display dungeons, but it works for now
-        std::string list_dungeons = "Dungeons:\nThal            Vorn\nEzra            Kurn \nZamo            Druv \nMalq            Xelv \nOrmh            Griv \nFend            Quar \nBlen            Xoth \nMerk            Zenk";
+        std::string list_dungeons = "Labyrinths:\nThyra           Nykos\nKalon           Draka \nZarex           Lethi \nTeren           Xenor \nMyros           Velor \nElvon           Oryne \nPhyra           Voran \nEriph           Zeryn";
         listDungeonsText.setString(list_dungeons);
 
         if (showingHelp)
         {
             leaderboardText.setColor(Colors::PrimaryBackground);
             helpText.setColor(Colors::Text);
-            subTitleText.setString("\nHow to play:\n\nIn tavern:\nbuy [amount] [hp/strength/agility/armor]\nenter [dungeon name] [easy/medium/hard]\n\nIn dungeon:\ngo [west/north/south/east]\nopen chest\nexit\n\nIn battle:\nType the green text to attack\nType the red text backwards to parry\n");
+            subTitleText.setString("\nHow to play:\n\nIn Hall of Knossos:\nbuy [amount] [hp/strength/agility/armor]\nenter [labyrinth name]\n\nIn Labyrinth:\ngo [west/north/south/east]\nopen chest\nexit\n\nIn battle:\nType the green text to attack\nType the red text backwards to parry\n");
         }
 
         else
@@ -549,7 +549,7 @@ void Game::leaveDungeon()
     }
     changeMode(GameMode::MENU);
     healMaxPlayer();
-    addMessage("You escaped the dungeon");
+    addMessage("You escaped the labyrinth!");
 }
 
 void Game::checkRoomHazards()
