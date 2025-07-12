@@ -137,7 +137,40 @@ def github_code():
         print(f"Generated code: {code} for user_id: {user_id}")
         
         # Show code to user
-        return f"<h2>Login successful!</h2><p>Copy this code and paste it in the game:</p><pre>{code}</pre>"
+        return f"""
+        <html>
+        <head>
+            <style>
+                body {{
+                    background-color: #63595c;
+                    color: white;
+                    font-family: Arial, sans-serif;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+                    margin: 0;
+                    text-align: center;
+                }}
+                h2 {{ font-size: 2em; }}
+                p {{ font-size: 1.2em; }}
+                pre {{ 
+                    font-size: 1.5em; 
+                    background-color: #34495e;
+                    padding: 20px;
+                    border-radius: 8px;
+                    border: 2px solid #3498db;
+                }}
+            </style>
+        </head>
+        <body>
+            <h2>Login successful!</h2>
+            <p>Copy this code and paste it in the game:</p>
+            <pre>{code}</pre>
+        </body>
+        </html>
+        """
     except psycopg2.Error as e:
         print(f"Database error: {str(e)}")
         return f'Database error: {str(e)}', 500
