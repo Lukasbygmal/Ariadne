@@ -16,8 +16,8 @@ namespace auth
     void startGithubLogin()
     {
         // Open the GitHub OAuth login URL in the user's browser
-        std::string url = "https://ariadne-t99a.onrender.com/";
-        system("cmd.exe /c start firefox \"-private-window\" https://ariadne-t99a.onrender.com/");
+        std::string url = "https://ariadne-t99a.onrender.com/login/github";
+        system("cmd.exe /c start firefox \"-private-window\" https://ariadne-t99a.onrender.com/login/github");
     }
 
     bool exchangeCodeForUserId(const std::string &code, int &user_id)
