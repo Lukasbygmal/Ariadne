@@ -7,7 +7,7 @@
 
 std::random_device Dungeon::rd;
 std::mt19937 Dungeon::rng(Dungeon::rd());
-// DungeonConfig order: size, words, word_length, monster_pool, boss_monster_type, base_difficulty
+// DungeonConfig order: size, words, word_length, monster_pool, boss_monster_type, difficulty
 const std::map<std::string, DungeonConfig> dungeon_configs = {
     // Bosses:
     {"thal", {4, 4, 3, {1, 2, 3}, 1, 1}},                                // Goblin
@@ -67,15 +67,9 @@ bool Dungeon::pathExists(int start_x, int start_y, int end_x, int end_y, const s
     return false;
 }
 
-Dungeon::Dungeon(std::string dungeon_name, std::string string_difficulty)
+Dungeon::Dungeon(std::string dungeon_name)
 {
     name = dungeon_name;
-    difficulty_string = string_difficulty;
-    int difficulty_level = 1;
-    if (string_difficulty == "medium")
-        difficulty_level = 2;
-    else if (string_difficulty == "hard")
-        difficulty_level = 3;
 
     auto it = dungeon_configs.find(dungeon_name);
     if (it == dungeon_configs.end())
@@ -87,8 +81,7 @@ Dungeon::Dungeon(std::string dungeon_name, std::string string_difficulty)
     size = config.size;
     words = config.words;
     word_length = config.word_length;
-    int base_difficulty = config.base_difficulty;
-    difficulty = difficulty_level + base_difficulty;
+    difficulty = config.difficulty;
 
     std::uniform_int_distribution<int> roomDist(0, size - 1);
     std::uniform_int_distribution<int> treasureRoomDist(1, size - 2);
@@ -307,6 +300,6 @@ std::vector<std::vector<int>> Dungeon::dungeonMap() const
 std::string Dungeon::to_string() const
 {
     std::string dungeonInfo;
-    dungeonInfo = capitalizeFirstLetter(name) + " - " + capitalizeFirstLetter(difficulty_string) + "\n";
+    dungeonInfo = capitalizeFirstLetter(name) + "\n";
     return dungeonInfo;
 }

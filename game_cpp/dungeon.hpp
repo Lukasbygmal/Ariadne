@@ -19,7 +19,7 @@ struct DungeonConfig
     int word_length; // needs to be >2, since defend words are -1
     std::vector<int> monster_pool;
     int boss_monster_type;
-    int base_difficulty;
+    int difficulty;
 };
 
 /**
@@ -36,7 +36,6 @@ private:
     static std::random_device rd;
     std::vector<std::vector<Room>> rooms;
     std::string name;
-    std::string difficulty_string;
     int size;
     int words;       // needs to be >4, since defend words are -2
     int word_length; // needs to be >2, since defend words are -1
@@ -54,10 +53,9 @@ public:
     /**
      * @brief Constructs a new dungeon with specified configuration
      * @param dungeon_name Name identifier for the dungeon configuration
-     * @param string_difficulty Difficulty level ("easy", "medium", "hard")
      * @throws std::invalid_argument if dungeon_name is not found in configurations
      */
-    Dungeon(std::string dungeon_name, std::string string_difficulty);
+    Dungeon(std::string dungeon_name);
 
     /**
      * @brief Attempts to move player [direction], north: -y, south: +y, east: +x, west: -x
@@ -93,8 +91,8 @@ public:
     int getCurrentY() const;
 
     /**
-     * @brief Gets the calculated difficulty level for this dungeon
-     * @return Total difficulty (base difficulty + difficulty modifier)
+     * @brief Gets difficulty level for this dungeon
+     * @return Difficulty
      */
     int getDifficulty() const;
 
@@ -112,7 +110,7 @@ public:
 
     /**
      * @brief Generates a string representation of the dungeon
-     * @return Formatted string with dungeon name and difficulty
+     * @return Formatted string with dungeon name
      */
     std::string to_string() const;
 };

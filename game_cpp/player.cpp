@@ -106,7 +106,7 @@ void Player::increaseArmor(int amount)
 
 void Player::updateXpToMax()
 {
-    xp_to_max = (lvl + 1) * (lvl + 100) * 4;
+    xp_to_max = (lvl + 1) * (lvl + 10) * 12;
 }
 
 bool Player::checkLevelUp()
@@ -133,7 +133,7 @@ void Player::levelUpBenefits()
 {
     int scaling = std::ceil(lvl / 5.0);
     increaseHP(50 * scaling);
-    increaseStrength(2*scaling);
-    increaseAgility(2*scaling);
-    increaseArmor(4*scaling);
+    increaseStrength(2 * scaling);
+    increaseAgility(2 * scaling);
+    increaseArmor(4 * scaling);
 }
