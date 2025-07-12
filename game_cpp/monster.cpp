@@ -4,18 +4,18 @@
 
 // MonsterConfig order: name, base_hp, base_strength, base_xp
 const std::map<int, MonsterConfig> monster_configs = {
-    {1, {"Goblin", 25, 1, 60}},
-    {2, {"Slime", 50, 1, 80}},
-    {3, {"Skeleton", 25, 3, 100}},
-    {4, {"Zombie", 200, 4, 120}},
-    {5, {"Wolf", 100, 5, 80}},
-    {6, {"Imp", 100, 6, 70}},
-    {7, {"Wraith", 250, 9, 140}},
-    {8, {"Minotaur", 700, 10, 150}},
-    {9, {"Orc", 400, 12, 130}},
-    {10, {"Troll", 500, 15, 180}},
-    {11, {"Vampire", 450, 18, 200}},
-    {12, {"Dragonling", 550, 20, 195}}};
+    {1, {"Hydra", 25, 1, 60}},
+    {2, {"Cyclops", 50, 1, 80}},
+    {3, {"Cerberus", 25, 3, 100}},
+    {4, {"Chimera", 200, 4, 120}},
+    {5, {"Scylla", 100, 5, 80}},
+    {6, {"Harpy", 100, 6, 70}},
+    {7, {"Satyr", 250, 9, 140}},
+    {8, {"Gorgon", 700, 10, 150}},
+    {9, {"Empusa", 400, 12, 130}},
+    {10, {"Lamia", 500, 15, 180}},
+    {11, {"Echidna", 450, 18, 200}},
+    {12, {"Minotaur", 550, 20, 195}}};
 
 Monster::Monster(const int type, int difficulty, bool is_boss)
 {
