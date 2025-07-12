@@ -10,6 +10,17 @@ from threading import Lock
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'supersecretkey')
 
+# Simple API key authentication
+API_KEY = os.getenv('API_KEY', 'your-secret-api-key')
+
+def require_api_key(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if request.headers.get('X-API-Key') != API_KEY:
+            return jsonify({'error': 'Invalid API key'}), 401
+        return f(*args, **kwargs)
+    return decorated_function
+
 # Database configuration for PostgreSQL
 DATABASE_URL = os.getenv('DATABASE_URL')
 
@@ -39,6 +50,10 @@ def get_db_connection():
             print(f"DATABASE_URL starts with: {DATABASE_URL[:20]}...")
         return None
 
+# In-memory code-to-user_id mapping (for demo/dev)
+code_user_map = {}
+code_user_map_lock = Lock()
+
 # --- GitHub OAuth Setup ---
 github_bp = make_github_blueprint(
     client_id=os.getenv('GITHUB_OAUTH_CLIENT_ID'),
@@ -47,6 +62,21 @@ github_bp = make_github_blueprint(
     redirect_url="/login/github/code"
 )
 app.register_blueprint(github_bp, url_prefix="/login")
+
+# Root route
+@app.route('/')
+def home():
+    """Root endpoint"""
+    return jsonify({
+        'message': 'Game API Server is running',
+        'status': 'healthy',
+        'endpoints': {
+            'health': '/health',
+            'github_login': '/login/github',
+            'session_info': '/api/session',
+            'oauth_exchange': '/api/oauth/exchange'
+        }
+    })
 
 @app.route('/login/github')
 def login_github():
@@ -121,11 +151,64 @@ def logout():
     session.clear()
     return jsonify({'success': True, 'message': 'Logged out'})
 
-# For testing purpose
 @app.route('/health', methods=['GET'])
 def health_check():
     """Health check endpoint"""
     return jsonify({'status': 'healthy', 'message': 'Game API is running'})
+
+@app.route('/test-db')
+def test_db_connection():
+    """Test database connection endpoint"""
+    connection = get_db_connection()
+    if not connection:
+        return jsonify({
+            'status': 'error',
+            'message': 'Database connection failed',
+            'database_url_configured': bool(DATABASE_URL)
+        }), 500
+    
+    try:
+        cursor = connection.cursor()
+        cursor.execute("SELECT version();")
+        db_version = cursor.fetchone()[0]
+        cursor.close()
+        connection.close()
+        
+        return jsonify({
+            'status': 'success',
+            'message': 'Database connection successful',
+            'db_version': db_version
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': f'Database query failed: {str(e)}'
+        }), 500
+
+@app.route('/api/session', methods=['GET'])
+def get_session_info():
+    """Return info about the currently logged-in user (from session)"""
+    if 'user_id' in session and 'github_username' in session:
+        return jsonify({
+            'logged_in': True,
+            'user_id': session['user_id'],
+            'github_username': session['github_username']
+        })
+    else:
+        return jsonify({'logged_in': False}), 401
+
+@app.route('/api/oauth/exchange', methods=['POST'])
+def oauth_exchange():
+    data = request.get_json()
+    code = data.get('code')
+    if not code:
+        return jsonify({'error': 'No code provided'}), 400
+    with code_user_map_lock:
+        user_id = code_user_map.pop(code, None)
+    if user_id:
+        return jsonify({'user_id': user_id})
+    else:
+        return jsonify({'error': 'Invalid or expired code'}), 400
 
 @app.route('/api/player/<int:user_id>', methods=['GET'])
 @require_api_key
@@ -301,43 +384,16 @@ def not_found(error):
 def internal_error(error):
     return jsonify({'error': 'Internal server error'}), 500
 
-@app.route('/api/session', methods=['GET'])
-def get_session_info():
-    """Return info about the currently logged-in user (from session)"""
-    if 'user_id' in session and 'github_username' in session:
-        return jsonify({
-            'logged_in': True,
-            'user_id': session['user_id'],
-            'github_username': session['github_username']
-        })
-    else:
-        return jsonify({'logged_in': False}), 401
-
-# In-memory code-to-user_id mapping (for demo/dev)
-code_user_map = {}
-code_user_map_lock = Lock()
-
-@app.route('/api/oauth/exchange', methods=['POST'])
-def oauth_exchange():
-    data = request.get_json()
-    code = data.get('code')
-    if not code:
-        return jsonify({'error': 'No code provided'}), 400
-    with code_user_map_lock:
-        user_id = code_user_map.pop(code, None)
-    if user_id:
-        return jsonify({'user_id': user_id})
-    else:
-        return jsonify({'error': 'Invalid or expired code'}), 400
-    
-@app.route('/')
-def home():
-    return jsonify({'message': 'Game API Server is running', 'status': 'healthy'})
-
 if __name__ == '__main__':
+    print('=== Game API Server Starting ===')
+    print(f'Port: {os.getenv("PORT", 5000)}')
+    print(f'Database URL configured: {"Yes" if DATABASE_URL else "No"}')
+    print(f'GitHub OAuth configured: {"Yes" if os.getenv("GITHUB_OAUTH_CLIENT_ID") else "No"}')
     print('Registered routes:')
     for rule in app.url_map.iter_rules():
-        print(rule)
+        print(f'  {rule.rule} -> {rule.endpoint}')
+    print('=== Starting server ===')
+    
     # Use environment variable for port (Render.com sets this)
     port = int(os.getenv('PORT', 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
