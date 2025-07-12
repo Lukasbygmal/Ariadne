@@ -5,9 +5,8 @@
 #include <cstdlib>
 #include <thread>
 #include <chrono>
-#ifdef _WIN32
 #include <windows.h>
-#endif
+#include <shellapi.h>
 
 using json = nlohmann::json;
 
@@ -17,7 +16,14 @@ namespace auth
     {
         // Open the GitHub OAuth login URL in the user's browser
         std::string url = "https://ariadne-t99a.onrender.com/login/github";
-        system("cmd.exe /c start firefox \"-private-window\" https://ariadne-t99a.onrender.com/login/github");
+        ShellExecuteA(
+            NULL,         // Parent window handle
+            "open",       // Action to perform
+            url.c_str(),  // URL to open
+            NULL,         // Parameters (none needed)
+            NULL,         // Working directory (use default)
+            SW_SHOWNORMAL // Show command
+        );
     }
 
     bool exchangeCodeForUserId(const std::string &code, int &user_id)
