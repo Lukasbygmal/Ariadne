@@ -35,5 +35,6 @@ sfml-app
 
 # Virtual Environment
 game_api/game_api_env/
+windows-libs/
 
 *.env
