@@ -6,8 +6,13 @@ int main()
 {
     const unsigned int window_width = 800;
     const unsigned int window_height = 660;
-    sf::RenderWindow window(sf::VideoMode(window_width, window_height), "Ariadne");
+    sf::RenderWindow window(sf::VideoMode(window_width, window_height), "Ariadne", sf::Style::Close);
     int user_id = -1;
+
+    sf::Image icon;
+    if (icon.loadFromFile("WoA.png")) {
+        window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+    }
 
     Login login(window);
     if (!login.run(user_id))
