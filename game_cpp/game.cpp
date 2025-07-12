@@ -214,12 +214,10 @@ void Game::handleInput(const sf::Event &event)
         {
             sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 
-            // Check if help button was clicked
             if (helpBackground.getGlobalBounds().contains(mousePos.x, mousePos.y))
             {
                 showingHelp = true;
             }
-            // Check if leaderboard button was clicked
             else if (leaderboardBackground.getGlobalBounds().contains(mousePos.x, mousePos.y))
             {
                 showingHelp = false;
@@ -299,11 +297,15 @@ void Game::updateUI()
 
         if (showingHelp)
         {
-            subTitleText.setString("\nHow to play:\nIn tavern:\nbuy [amount] [hp/strength/agility/armor]\nenter [dungeon name] [easy/medium/hard]\nIn dungeon:\ngo [west/north/south/east]\nopen chest\nexit\nIn battle:\nType the green text to attack\nType the red text backwards to parry\n");
+            leaderboardText.setColor(Colors::PrimaryBackground);
+            helpText.setColor(Colors::Text);
+            subTitleText.setString("\nHow to play:\n\nIn tavern:\nbuy [amount] [hp/strength/agility/armor]\nenter [dungeon name] [easy/medium/hard]\n\nIn dungeon:\ngo [west/north/south/east]\nopen chest\nexit\n\nIn battle:\nType the green text to attack\nType the red text backwards to parry\n");
         }
 
         else
         {
+            helpText.setColor(Colors::PrimaryBackground);
+            leaderboardText.setColor(Colors::Text);
             std::string highscoreDisplay = "\nLeaderboard:\n";
             for (size_t i = 0; i < cachedHighscores.size() && i < 10; ++i) // Show top 10
             {

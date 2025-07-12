@@ -17,7 +17,7 @@ Login::Login(sf::RenderWindow &win) : window(win), waitingForCode(false), inputA
     }
 
     titleText.setFont(titleFont);
-    titleText.setString("Welcome to Ariadne!");
+    titleText.setString("The Wake of Ariadne");
     titleText.setCharacterSize(72);
     titleText.setFillColor(Colors::Text);
     titleText.setPosition(60, 60);
