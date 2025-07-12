@@ -4,10 +4,10 @@
 
 // MonsterConfig order: name, base_hp, base_strength, base_xp
 const std::map<int, MonsterConfig> monster_configs = {
-    {1, {"Goblin", 50, 1, 50}},
-    {2, {"Slime", 200, 2, 60}},
-    {3, {"Skeleton", 150, 3, 70}},
-    {4, {"Zombie", 150, 4, 90}},
+    {1, {"Goblin", 25, 1, 60}},
+    {2, {"Slime", 50, 1, 80}},
+    {3, {"Skeleton", 25, 3, 100}},
+    {4, {"Zombie", 200, 4, 120}},
     {5, {"Wolf", 100, 5, 80}},
     {6, {"Imp", 100, 6, 70}},
     {7, {"Wraith", 250, 9, 140}},
