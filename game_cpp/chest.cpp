@@ -17,23 +17,23 @@ std::string Chest::to_string() const
 SmallChest::SmallChest(int difficulty) : Chest(difficulty)
 {
     name = "Small Chest";
-    base_gold = 1;
+    base_gold = 4;
 }
 
 MediumChest::MediumChest(int difficulty) : Chest(difficulty)
 {
     name = "Medium Chest";
-    base_gold = 2;
+    base_gold = 8;
 }
 
 LargeChest::LargeChest(int difficulty) : Chest(difficulty)
 {
     name = "Large Chest";
-    base_gold = 4;
+    base_gold = 12;
 }
 
 Artifact::Artifact(int difficulty) : Chest(difficulty)
 {
     name = "Artifact";
-    base_gold = 10;
+    base_gold = 40;
 }

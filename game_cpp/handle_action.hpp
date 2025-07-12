@@ -16,7 +16,7 @@
  * to appropriate game systems based on the current GameMode. It handles:
  *
  * **Menu Mode:**
- * - "enter [dungeon] [difficulty]" - Enter specified dungeon
+ * - "enter [dungeon]" - Enter specified dungeon
  * - "buy [amount] [stat]" - Purchase stat improvements (hp/strength/armor/agility)
  *
  * **Dungeon Mode:**

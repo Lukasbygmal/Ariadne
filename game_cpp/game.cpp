@@ -13,7 +13,7 @@ Game::Game(int user_id_, sf::RenderWindow &win)
     : apiClient("http://localhost:5000", "local-test-key-123"),
       player("", 1, 1, 1, 1, 1, 1, 1),
       user_id(user_id_),
-      dungeon("thal", "easy"),
+      dungeon("thal"),
       mode(GameMode::MENU),
       window(win)
 {
@@ -533,9 +533,9 @@ bool Game::buyAgility(int amount)
     return false;
 }
 
-void Game::enterDungeon(std::string dungeon_name, std::string string_difficulty)
+void Game::enterDungeon(std::string dungeon_name)
 {
-    dungeon = Dungeon(dungeon_name, string_difficulty);
+    dungeon = Dungeon(dungeon_name);
     initializeMap();
     healMaxPlayer();
     changeMode(GameMode::DUNGEON);

@@ -266,9 +266,8 @@ public:
     /**
      * @brief Enter specified dungeon with difficulty
      * @param dungeon_name Name of dungeon to enter
-     * @param string_difficulty Difficulty level ("easy", "medium", "hard")
      */
-    void enterDungeon(std::string dungeon_name, std::string string_difficulty);
+    void enterDungeon(std::string dungeon_name);
 
     /**
      * @brief Exit current dungeon and return to menu

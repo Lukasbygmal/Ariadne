@@ -69,15 +69,13 @@ bool parse_input(const std::string &input, Action &action, GameMode mode)
             "merk",
             "zenk"};
 
-        std::vector<std::string> valid_difficulties = {"easy", "medium", "hard"};
         std::vector<std::string> valid_items = {"strength", "hp", "armor", "agility"};
 
-        if (words.size() == 3 &&
+        if (words.size() == 2 &&
             words[0] == "enter" &&
-            std::find(valid_dungeons.begin(), valid_dungeons.end(), words[1]) != valid_dungeons.end() &&
-            std::find(valid_difficulties.begin(), valid_difficulties.end(), words[2]) != valid_difficulties.end())
+            std::find(valid_dungeons.begin(), valid_dungeons.end(), words[1]) != valid_dungeons.end())
         {
-            action = Action(words[0], words[1], words[2]);
+            action = Action(words[0], words[1]);
             return true;
         }
         else if (words.size() == 3 && words[0] == "buy" && std::find(valid_items.begin(), valid_items.end(), words[2]) != valid_items.end())

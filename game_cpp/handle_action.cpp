@@ -6,10 +6,10 @@ bool handle_action(const Action &action, Game &game)
     switch (game.getMode())
     {
     case GameMode::MENU:
-        if (action.verb == "enter" && action.direction && action.object)
+        if (action.verb == "enter" && action.direction)
         {
-            game.enterDungeon(*action.direction, *action.object);
-            game.addMessage("You enter " + *action.direction + " " + *action.object);
+            game.enterDungeon(*action.direction);
+            game.addMessage("You enter " + *action.direction);
             return true;
         }
         else if (action.verb == "buy" && action.direction && action.object)
