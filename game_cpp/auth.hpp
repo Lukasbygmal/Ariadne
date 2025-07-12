@@ -21,10 +21,10 @@ namespace auth
     /**
      * @brief Initiates GitHub OAuth login by opening browser to authentication URL
      *
-     * Opens Firefox in private browsing mode to the GitHub OAuth login endpoint.
+     * Opens browser to the GitHub OAuth login endpoint.
      * This starts the OAuth flow for user authentication.
      *
-     * @note Support for all browsers and os is implemented, but not verified
+     * @note Support for only windows
      */
     void startGithubLogin();
 
