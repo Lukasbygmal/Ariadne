@@ -86,6 +86,11 @@
         "mutex": "cpp",
         "semaphore": "cpp",
         "stop_token": "cpp",
-        "thread": "cpp"
+        "thread": "cpp",
+        "any": "cpp",
+        "codecvt": "cpp",
+        "filesystem": "cpp",
+        "ranges": "cpp",
+        "valarray": "cpp"
     }
 }

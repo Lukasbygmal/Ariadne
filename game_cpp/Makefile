@@ -5,7 +5,6 @@ CXX = g++
 CXXFLAGS = -c -Wall -g
 
 # Linker flags
-# also need to link against: shell32.lib
 LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -lmysqlcppconn -lcurl -lssl -lcrypto
 
 # Source files

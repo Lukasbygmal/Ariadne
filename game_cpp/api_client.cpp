@@ -45,6 +45,8 @@ std::string APIClient::makeRequest(const std::string &url, const std::string &me
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_string);
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
+    curl_easy_setopt(curl, CURLOPT_CAINFO, "cacert.pem");
+
     // Set HTTP method
     if (method == "POST")
     {
@@ -76,7 +78,7 @@ std::string APIClient::makeRequest(const std::string &url, const std::string &me
 bool APIClient::loadPlayer(Player &player, int user_id)
 {
     std::string url = base_url + "/api/player/" + std::to_string(user_id);
-    std::string response = makeRequest(url, "GET");
+    std::string response = makeRequest(url, "GET", "");
 
     if (response.empty())
     {
