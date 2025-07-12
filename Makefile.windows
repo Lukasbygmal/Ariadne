@@ -1,0 +1,71 @@
+# Cross-compilation Makefile for Windows
+CXX = x86_64-w64-mingw32-g++
+STRIP = x86_64-w64-mingw32-strip
+
+# Paths to Windows libraries
+LIBS_PATH = ./windows-libs
+SFML_PATH = $(LIBS_PATH)/sfml
+CURL_PATH = $(LIBS_PATH)/curl
+OPENSSL_PATH = $(LIBS_PATH)/openssl
+
+# Path to source files
+SRC_DIR = game_cpp
+
+# Compiler flags
+CXXFLAGS = -std=c++17 -Wall -O2 -static-libgcc -static-libstdc++ \
+           -I$(SFML_PATH)/include \
+           -I$(CURL_PATH)/include \
+           -I$(OPENSSL_PATH)/include \
+           -I$(SRC_DIR) \
+           -I$(SRC_DIR)/thirdparty \
+           -DSFML_STATIC
+
+# Linker flags
+LDFLAGS = -L$(SFML_PATH)/lib \
+          -L$(CURL_PATH)/lib \
+          -L$(OPENSSL_PATH)/lib64 \
+          -lsfml-graphics-s -lsfml-window-s -lsfml-system-s \
+          $(CURL_PATH)/lib/libcurl.dll.a \
+          -lnghttp2 -lnghttp3 -lngtcp2 -lngtcp2_crypto_quictls \
+          -lssh2 \
+          -lssl -lcrypto \
+          -lbrotlidec -lbrotlicommon \
+          -lzstd \
+          -lws2_32 -lwsock32 -liphlpapi -lwinmm -lgdi32 -lopengl32 -lfreetype \
+          -lbcrypt -lcrypt32 -ladvapi32 -luser32 -lkernel32 \
+          -lz \
+          -static
+
+# Source files
+SRCS = $(addprefix $(SRC_DIR)/, \
+    main.cpp parse_input.cpp room.cpp handle_action.cpp player.cpp \
+    monster.cpp trap.cpp chest.cpp dungeon.cpp game.cpp api_client.cpp \
+    login.cpp auth.cpp)
+
+# Object files
+OBJS = $(SRCS:.cpp=.o)
+
+# Target executable
+TARGET = sfml-app.exe
+
+# Default target
+all: $(TARGET)
+
+# Link
+$(TARGET): $(OBJS)
+	$(CXX) $(OBJS) -o $(TARGET) $(LDFLAGS)
+	$(STRIP) $(TARGET)
+
+# Compile
+$(SRC_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Clean
+clean:
+	rm -f $(OBJS) $(TARGET)
+
+# Test on Windows (if Wine is available)
+test: $(TARGET)
+	wine $(TARGET)
+
+.PHONY: all clean test
