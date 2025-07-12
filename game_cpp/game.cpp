@@ -583,8 +583,8 @@ void Game::startBattle()
     parrys = attacks - 2;
     correct_attacks = 0;
     correct_parrys = 0;
-    float round_time_scaling = (dungeon.getDifficulty() / 30) * 3;      // Scale: 0.1-0.3 seconds per difficulty point
-    round_time = 3 - round_time_scaling + (player.getAgility() * 0.05); // Base 3s, reduced by difficulty, increased by agility
+    float round_time_scaling = (dungeon.getDifficulty() / 30) * 6;      // Scale: 0.2 seconds per difficulty point
+    round_time = 5 - round_time_scaling + (player.getAgility() * 0.06); // Base 5s, reduced by difficulty, increased by agility
     resetWordQueue(attacks, word_length_attack);
 }
 
@@ -661,7 +661,7 @@ void Game::endRound()
     std::uniform_real_distribution<float> dist(0.5f, 1.5f); // might want to make 1 for attack and one for def, if perks affect this
     float amplifier = 1;
     int hit;
-    int player_damage = player.damage(); // should make it random eventually
+    int player_damage = player.damage();
     int total_player_damage = 0;
     for (int i = 0; i < correct_attacks; i++)
     {

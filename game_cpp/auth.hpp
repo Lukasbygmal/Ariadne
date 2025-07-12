@@ -21,11 +21,10 @@ namespace auth
     /**
      * @brief Initiates GitHub OAuth login by opening browser to authentication URL
      *
-     * Opens Firefox in private browsing mode to the GitHub OAuth login endpoint
-     * running on localhost:5000. This starts the OAuth flow for user authentication.
+     * Opens Firefox in private browsing mode to the GitHub OAuth login endpoint.
+     * This starts the OAuth flow for user authentication.
      *
-     * @note Currently hardcoded to use Firefox on Windows systems
-     * @todo Add cross-platform browser detection and support
+     * @note Support for all browsers and os is implemented, but not verified
      */
     void startGithubLogin();
 
@@ -49,7 +48,7 @@ namespace auth
      *
      * @param user_id Reference to store the authenticated user ID when found
      * @param max_attempts Maximum number of polling attempts (default: 30)
-     * @param delay_ms Delay between polling attempts in milliseconds (default: 1000)
+     * @param delay_ms Delay between polling attempts in milliseconds (default: 4000)
      * @return true if user authenticated within attempt limit, false if timed out
      */
     bool pollForUserId(int &user_id, int max_attempts = 30, int delay_ms = 4000);
