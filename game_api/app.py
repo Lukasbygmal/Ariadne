@@ -12,45 +12,31 @@ app.secret_key = os.getenv('FLASK_SECRET_KEY', 'supersecretkey')
 
 # Database configuration for PostgreSQL
 DATABASE_URL = os.getenv('DATABASE_URL')
-if DATABASE_URL:
-    # Parse DATABASE_URL for cloud deployment
-    import urllib.parse
-    result = urllib.parse.urlparse(DATABASE_URL)
-    DB_CONFIG = {
-        'host': result.hostname,
-        'database': result.path[1:],  # Remove leading slash
-        'user': result.username,
-        'password': result.password,
-        'port': result.port or 5432
-    }
-else:
-    # Fallback to individual environment variables
-    DB_CONFIG = {
-        'host': os.getenv('DB_HOST', 'localhost'),
-        'database': os.getenv('DB_NAME', 'your_game_db'),
-        'user': os.getenv('DB_USER', 'your_username'),
-        'password': os.getenv('DB_PASSWORD', 'your_password'),
-        'port': os.getenv('DB_PORT', '5432')
-    }
-
-# Simple API key authentication
-API_KEY = os.getenv('API_KEY', 'your-secret-api-key')
-
-def require_api_key(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if request.headers.get('X-API-Key') != API_KEY:
-            return jsonify({'error': 'Invalid API key'}), 401
-        return f(*args, **kwargs)
-    return decorated_function
 
 def get_db_connection():
     """Create and return a database connection"""
     try:
-        connection = psycopg2.connect(**DB_CONFIG)
+        if DATABASE_URL:
+            # Use the connection string directly
+            print(f"Connecting using DATABASE_URL...")
+            connection = psycopg2.connect(DATABASE_URL)
+        else:
+            # Fallback to individual environment variables
+            print("Connecting using individual environment variables...")
+            connection = psycopg2.connect(
+                host=os.getenv('DB_HOST', 'localhost'),
+                database=os.getenv('DB_NAME', 'your_game_db'),
+                user=os.getenv('DB_USER', 'your_username'),
+                password=os.getenv('DB_PASSWORD', 'your_password'),
+                port=int(os.getenv('DB_PORT', '5432'))
+            )
+        
+        print("Database connection successful!")
         return connection
     except psycopg2.Error as e:
         print(f"Error connecting to PostgreSQL: {e}")
+        if DATABASE_URL:
+            print(f"DATABASE_URL starts with: {DATABASE_URL[:20]}...")
         return None
 
 # --- GitHub OAuth Setup ---
