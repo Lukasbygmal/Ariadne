@@ -27,11 +27,11 @@ Game::Game(int user_id_, sf::RenderWindow &win)
 
 void Game::initializeUI()
 {
-    if (!textFont.loadFromFile("Fredoka-Regular.ttf"))
+    if (!textFont.loadFromFile("assets/Fredoka-Regular.ttf"))
     {
         throw std::runtime_error("Failed to load textFont");
     }
-    if (!titleFont.loadFromFile("Fredoka-Medium.ttf"))
+    if (!titleFont.loadFromFile("assets/Fredoka-Medium.ttf"))
     {
         throw std::runtime_error("Failed to load titleFont");
     }

@@ -21,7 +21,8 @@ CXXFLAGS = -std=c++17 -Wall -O2 -static-libgcc -static-libstdc++ \
            -DSFML_STATIC
 
 # Linker flags
-LDFLAGS = -L$(SFML_PATH)/lib \
+LDFLAGS =  -mwindows \
+           -L$(SFML_PATH)/lib \
           -L$(CURL_PATH)/lib \
           -L$(OPENSSL_PATH)/lib64 \
           -lsfml-graphics-s -lsfml-window-s -lsfml-system-s \
@@ -63,9 +64,5 @@ $(SRC_DIR)/%.o: $(SRC_DIR)/%.cpp
 # Clean
 clean:
 	rm -f $(OBJS) $(TARGET)
-
-# Test on Windows (if Wine is available)
-test: $(TARGET)
-	wine $(TARGET)
 
 .PHONY: all clean test

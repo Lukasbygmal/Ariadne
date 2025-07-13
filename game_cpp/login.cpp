@@ -7,11 +7,11 @@ static const size_t MAX_INPUT_LENGTH = 50;
 
 Login::Login(sf::RenderWindow &win) : window(win), waitingForCode(false), inputActive(false)
 {
-    if (!textFont.loadFromFile("Fredoka-Regular.ttf"))
+    if (!textFont.loadFromFile("assets/Fredoka-Regular.ttf"))
     {
         throw std::runtime_error("Failed to load textFont");
     }
-    if (!titleFont.loadFromFile("Fredoka-Medium.ttf"))
+    if (!titleFont.loadFromFile("assets/Fredoka-Medium.ttf"))
     {
         throw std::runtime_error("Failed to load titleFont");
     }
